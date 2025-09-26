@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performa360 - Transform Performance Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #2d3748;
+            line-height: 1.7;
+        }
+        header {
+            background: linear-gradient(135deg, #2c5282, #3182ce);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
+        header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section {
+            margin-bottom: 4rem;
+        }
+        .section h2 {
+            color: #2c5282;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section h2::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: #3182ce;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        .feature-card i {
+            color: #3182ce;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .visual-container, .video-container {
+            background: #f1f3f5;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .visual-placeholder, .video-placeholder {
+            background: #e2e8f0;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #718096;
+        }
+        .cta-button {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(56, 161, 105, 0.3);
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-style: italic;
+        }
+        .accordion {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        .accordion-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c5282;
+        }
+        .accordion-content {
+            padding: 0 1.5rem 1.5rem;
+            display: none;
+        }
+        .accordion.active .accordion-content {
+            display: block;
+        }
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            width: 100%;
+        }
+        footer a {
+            color: #48bb78;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .feature-grid, .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Performa360: Redefining Performance Management</h1>
+        <p>Empower your workforce with SMART goals, RACI-driven accountability, and a feedback-rich culture.</p>
+        <a href="https://x.ai/performa360" class="cta-button">Schedule a Demo</a>
+    </header>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <div class="section">
+            <h2>Why Performa360?</h2>
+            <p>Performa360 is a next-generation performance management platform that unifies goal-setting, feedback, and analytics to drive organizational success. Designed for multigenerational, hybrid, and global teams, it simplifies HR processes while fostering engagement and accountability. With customizable workflows and real-time insights, Performa360 empowers organizations to align individual contributions with strategic objectives.</p>
+            <div class="visual-container">
+                <h3>Interactive Dashboard Preview</h3>
+                <div class="visual-placeholder">Insert Dashboard Screenshot or Animated GIF Here</div>
+            </div>
+        </div>
+
+        <!-- Market Context Section -->
+        <div class="section">
+            <h2>The Future of Performance Management</h2>
+            <p>The modern workplace demands agile, inclusive, and data-driven HR solutions. With 70% of employees feeling disengaged due to outdated performance reviews, and a growing need to manage multigenerational teams, organizations require tools that adapt to change. Performa360 addresses these challenges with a unified platform that scales with your business.</p>
+            <div class="visual-container">
+                <h3>Infographic: HR Tech Trends 2025</h3>
+                <div class="visual-placeholder">Insert Market Trends Infographic Here</div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="section">
+            <h2>Powerful Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Self-Assessment & Competence Areas</h3>
+                    <p>Employees reflect on key skills like Managing Multigenerational Teams and Strengths-Based Leadership, fostering self-awareness and growth.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Configurable Peer Reviews</h3>
+                    <p>Design 360-degree feedback cycles with tailored questions and response types, promoting collaboration and trust.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Custom Feedback Cycles</h3>
+                    <p>Focus on Job Satisfaction, Work-Life Balance, and Growth & Development with flexible review frequencies.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>SMART Goal Management</h3>
+                    <p>Align individual objectives with organizational priorities using intuitive drag-and-drop tools and progress trackers.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-database"></i>
+                    <h3>Real-Time Analytics</h3>
+                    <p>Access dynamic dashboards and exportable reports to monitor performance trends and make data-driven decisions.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-plug"></i>
+                    <h3>Seamless Integrations</h3>
+                    <p>Connect with HRIS, communication tools, and xAI’s API for custom workflows (see <a href="https://x.ai/api">x.ai/api</a>).</p>
+                </div>
+            </div>
+            <div class="video-container">
+                <h3>Video: Performa360 in Action</h3>
+                <div class="video-placeholder">Insert Demo Video or Interactive Walkthrough Here</div>
+            </div>
+        </div>
+
+        <!-- RACI Framework Section -->
+        <div class="section">
+            <h2>RACI Framework: Clarity in Action</h2>
+            <p>Performa360 uses the RACI framework to ensure every stakeholder knows their role, streamlining workflows and enhancing accountability:</p>
+            <ul>
+                <li><strong>Responsible</strong>: HR Admins configure settings; Employees complete assessments; IT manages integrations.</li>
+                <li><strong>Accountable</strong>: Managers approve goals and reviews; HR oversees adoption.</li>
+                <li><strong>Consulted</strong>: Team Leads refine criteria; Employees shape feedback; Consultants align with best practices.</li>
+                <li><strong>Informed</strong>: Executives receive reports; Team Members get updates; Compliance teams ensure regulatory adherence.</li>
+            </ul>
+            <div class="visual-container">
+                <h3>Visual: RACI Workflow Diagram</h3>
+                <div class="visual-placeholder">Insert Animated RACI Diagram Here</div>
+            </div>
+        </div>
+
+        <!-- Case Study Section -->
+        <div class="section">
+            <h2>Success Stories</h2>
+            <p>See how organizations are transforming performance management with Performa360.</p>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>“Performa360 reduced our review cycles by 75% and improved employee satisfaction by 25%. It’s a game-changer for our HR team.”</p>
+                    <p><strong>— Jane Doe, HR Director, TechCorp</strong></p>
+                </div>
+                <div class="testimonial-card">
+                    <p>“The SMART goal tools helped align our global teams with company priorities, boosting productivity across regions.”</p>
+                    <p><strong>— John Smith, CEO, HealthInnovate</strong></p>
+                </div>
+                <div class="testimonial-card">
+                    <p>“The multigenerational focus addressed our diverse workforce needs, fostering inclusivity and collaboration.”</p>
+                    <p><strong>— Sarah Lee, Team Lead, EduSolutions</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Overview Section -->
+        <div class="section">
+            <h2>Pricing Plans</h2>
+            <p>Choose a plan that fits your organization’s needs. Visit <a href="https://x.ai/grok">x.ai/grok</a> for SuperGrok details or <a href="https://x.ai/api">x.ai/api</a> for enterprise solutions.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Free Plan</h3>
+                    <p>Basic features for small teams, including self-assessments and quarterly reviews.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>SuperGrok Plan</h3>
+                    <p>Advanced analytics, higher quotas, and API access for growing organizations.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Enterprise Plan</h3>
+                    <p>Custom configurations, multi-language support, and dedicated onboarding.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="accordion">
+                <div class="accordion-header">How does Performa360 support hybrid teams?<i class="fas fa-chevron-down"></i></div>
+                <div class="accordion-content">
+                    <p>Performa360 offers flexible review cycles, anonymous feedback, and integrations with tools like Slack and Teams, ensuring seamless collaboration for remote and in-office employees.</p>
+                </div>
+            </div>
+            <div class="accordion">
+                <div class="accordion-header">Can I customize feedback questions?<i class="fas fa-chevron-down"></i></div>
+                <div class="accordion-content">
+                    <p>Yes, HR admins can add, edit, or delete questions via a modal interface, with support for multiple response types like Rating Scale or Text.</p>
+                </div>
+            </div>
+            <div class="accordion">
+                <div class="accordion-header">Is Performa360 compliant with data regulations?<i class="fas fa-chevron-down"></i></div>
+                <div class="accordion-content">
+                    <p>Performa360 adheres to GDPR, CCPA, and other regional standards, with secure data storage and compliance reporting features.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="section" style="text-align: center;">
+            <h2>Ready to Elevate Your Workforce?</h2>
+            <p>Join leading organizations using Performa360 to drive performance, engagement, and growth.</p>
+            <a href="https://x.ai/performa360" class="cta-button">Schedule a Demo</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 xAI. All rights reserved. Explore our API at <a href="https://x.ai/api">x.ai/api</a> or learn about SuperGrok at <a href="https://x.ai/grok">x.ai/grok</a>.</p>
+    </footer>
+
+    <script>
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const accordion = header.parentElement;
+                const isActive = accordion.classList.contains('active');
+                document.querySelectorAll('.accordion').forEach(acc => acc.classList.remove('active'));
+                if (!isActive) {
+                    accordion.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Performance Management</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+
+    <style>
+        html, body {
+            height: 100%; /* Ensure html and body take full height */
+            margin: 0; /* Remove default margin */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px; /* You can adjust this padding as needed */
+            background-color: black; /* Fallback color */
+            font-size: 10px;
+            overflow-y: auto;
+            background-size: cover; /* Ensure the image covers the entire area */
+            background-repeat: repeat-y; /* Repeat vertically */
+            background-position: center; /* Center the image */
+            min-height: 80vh; /* Ensures at least full height of viewport */
+        }
+
+        .container {
+            width: 90%;
+            background: rgba(0, 0, 0, 0.8); /* Adjust the alpha value (0.5) for the desired transparency */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 40px 60px;
+            position: relative;
+        }
+    
+        .username-input {
+    padding: 6px;
+    font-size: 12px;
+    width: 15%;
+    border: none; /* Removes the border */
+    border-radius: 5px;
+    color: white; /* Ensures the text is visible */
+    text-align: left;
+    display: block;
+    margin: 0 auto; /* Centers the element horizontally */
+    background-color: transparent !important; /* Keeps the background transparent */
+    outline: none; /* Removes the default focus outline */
+    appearance: none; /* Prevents browser-specific styles */
+}
+
+.username-input:focus {
+    background-color: transparent !important; /* Ensures transparency when focused */
+    color: white; /* Keeps the text color visible */
+    outline: none; /* Removes the focus outline */
+    box-shadow: none; /* Removes any box shadow applied on focus */
+}
+
+.username-input:active {
+    background-color: transparent !important; /* Ensures transparency when active */
+    color: white; /* Keeps the text color visible */
+    outline: none; /* Removes the active outline */
+}
+
+.username-section {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    background-color: transparent; /* Ensures the section background is transparent */
+}
+
+/* Placeholder text styling */
+.username-input::placeholder {
+    color: rgba(255, 255, 255, 0.5); /* Adds semi-transparent placeholder text */
+}
+
+    
+        .form-group {
+            margin-bottom: 30px;
+        }
+    
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: white;
+        }
+    
+        .kpi-input, .deliverable-input, .doc-evidence-input, .score-input, .yes-no-dropdown, .comment-input {
+            width: 99.5%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 10px;  
+        }
+    
+        .common-container {
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: black;
+            font-size: 1.4em;
+            /*background-image: url("{% static 'admin/img/ai_bg.png' %}");*/
+            background-color: black;
+        }
+    
+        .comment-input {
+            margin-top: 10px;
+            font-size: 10px; /* Changed from 1.2em to 10px */
+        }
+    
+    .button-container {
+    display: flex; /* Use flexbox for horizontal alignment */
+    gap: 10px; /* Optional: adds space between buttons */
+    justify-content: center; /* Center the buttons horizontally */ 
+     
+    }
+    .save-button {
+        /* You can keep your existing styles or add new ones here */
+        padding: 10px;
+        background-color: teal;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        text-align: center;
+        cursor: pointer; /* Changes cursor to pointer on hover */
+    }    
+    .welcome-message {
+        background-color: #FFD54F; /* Mustard color */
+        padding: 20px; /* Add padding for better spacing */
+        border-radius: 5px; /* Optional: rounded corners */
+        margin-bottom: 20px; /* Space below the message */
+        text-align: center; /* Center text */
+        width: 100%;
+    }
+    h1 {
+  color: aqua;
+  text-align: center;
+  position: relative;
+  top: -0.7cm;
+}
+
+/* Circular Image Styling */
+.circular-image-container {
+    position: absolute; /* Ensures it can be placed relative to the closest positioned ancestor */
+    top: 0; /* Adjust as needed */
+    left: 5px; /* Position 5px from the left margin */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-image {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image fits well inside the circular container */
+    border: 2px solid black; /* Optional: Add a border around the image */
+}
+
+@media (max-width: 600px) {
+    .circular-image-container {
+        width: 40px;
+        height: 40px;
+    }
+
+    .circular-image {
+        width: 90%;
+        height: 90%;
+    }
+}
+    </style>
+</head>
+<body>
+    <br>
+    <div class="button-container-top" style="background-color: white; height: 2.2cm; position: absolute;width:100%; top: 0%; left: 0px;">
+        <div class="username-section" style="background-color: transparent;">
+            <input type="text" id="username-input" name="username" class="username-input" style="position: absolute;color: white; top: 1.3cm; right: 28.4cm;" placeholder="username" required>
+          </div>
+
+        <!-- Circular Image Container -->
+     <div class="circular-image-container">
+        <img src="{{ profile_image }}" alt="" class="circular-image">
+    </div>    
+
+        <div class="content" id="form-content"> 
+            <form id="kpi-form" action="/submit-kpis" method="POST">
+                {% csrf_token %}
+                <div id="kpi-section"></div>
+
+            </form>            
+        </div>        
+    </div>   
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const usernameInput = document.getElementById("username-input");
+    const kpiSection = document.getElementById("kpi-section");
+
+    usernameInput.addEventListener("blur", function () {
+        const username = usernameInput.value;
+        if (username) {
+            fetch(`/fetch-kpi?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    if (data.kpis) {
+                        kpiSection.innerHTML = '';
+                        Object.entries(data.kpis).forEach(([kpi_number, kpiItem], kpiIndex) => {
+                            const kpiField = document.createElement("div");
+                            kpiField.className = "form-group";
+                            kpiField.innerHTML = `
+                                <label class="kpi-title">KPI ${kpiIndex + 1} ${kpiItem.kpi}</label>
+                                <input type="hidden" name="kpi_${kpiIndex}" value="${kpiItem.kpi}">
+                            `;
+                            kpiSection.appendChild(kpiField);
+
+                            kpiItem.deliverables.forEach((deliverableItem, delIndex) => {
+                                const deliverableField = document.createElement("div");
+                                deliverableField.className = "common-container";
+                                const docEvidenceValue = deliverableItem.doc_evidence || "n/a"; // Set default to "n/a"
+                                const isDocEvidenceNull = deliverableItem.doc_evidence === null || deliverableItem.doc_evidence === "";
+
+                                // Set the input style based on the doc evidence value
+                                const docEvidenceStyle = isDocEvidenceNull ? 'background-color: black; color: white; pointer-events: none;' : '';
+
+                                deliverableField.innerHTML = `
+                                    <div class="deliverable-container">
+                                        <label style="color: #A57C27; font-weight: normal;">Deliverable ${kpiIndex + 1}.${delIndex + 1}</label>
+                                        <input type="text" class="deliverable-input" value="${deliverableItem.deliverable}" readonly name="deliverable_${kpiIndex}_${delIndex}">
+
+                                        <div class="score-options">
+                                            <label>Score:</label>
+                                            <div>
+                                                <input type="radio" id="score_1_${kpiIndex}_${delIndex}" name="score_${kpiIndex}_${delIndex}" value="1" onchange="updateColor(this, ${kpiIndex}, ${delIndex})">
+                                                <label for="score_1_${kpiIndex}_${delIndex}">1 - I need significant improvement</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="score_2_${kpiIndex}_${delIndex}" name="score_${kpiIndex}_${delIndex}" value="2" onchange="updateColor(this, ${kpiIndex}, ${delIndex})">
+                                                <label for="score_2_${kpiIndex}_${delIndex}">2 - I am below expectations</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="score_3_${kpiIndex}_${delIndex}" name="score_${kpiIndex}_${delIndex}" value="3" onchange="updateColor(this, ${kpiIndex}, ${delIndex})">
+                                                <label for="score_3_${kpiIndex}_${delIndex}">3 - I am meeting expectations</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="score_4_${kpiIndex}_${delIndex}" name="score_${kpiIndex}_${delIndex}" value="4" onchange="updateColor(this, ${kpiIndex}, ${delIndex})">
+                                                <label for="score_4_${kpiIndex}_${delIndex}">4 - I am exceeding expectations</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="score_5_${kpiIndex}_${delIndex}" name="score_${kpiIndex}_${delIndex}" value="5" onchange="updateColor(this, ${kpiIndex}, ${delIndex})">
+                                                <label for="score_5_${kpiIndex}_${delIndex}">5 - I am exceptional</label>
+                                            </div>
+                                        </div>
+                                        <label style="color: turquoise; font-weight: normal;">Document Evidence ${kpiIndex + 1}.${delIndex + 1}</label>
+                                        <input type="text" class="doc-evidence-input" name="doc_evidence_${kpiIndex}_${delIndex}" value="${docEvidenceValue}" readonly style="${docEvidenceStyle}">
+
+                                        <!-- Yes-No Select Box -->
+                                        <label style="color: turquoise; font-weight: normal;">Did you provide document evidence for your work?</label>
+                                        <select class="yes-no-dropdown" name="doc_evidence_valid_${kpiIndex}_${delIndex}" ${isDocEvidenceNull ? 'style="background-color: black; color: white;" disabled' : ''}>
+                                            <option value="n/a">n/a</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+
+                                        <form id="self-assessment-form">
+                                            <div>
+                                                <label style="color: red; font-weight: normal; margin-bottom: 5px;">Comments / Reasons for Low Self-Assessment</label>
+                                                <select class="comment-input" name="comments_${kpiIndex}_${delIndex}" onchange="handleCommentChange(this)" style="margin-top: 0;">
+                                                    <option value="">Select a reason...</option>
+                                                    <option value="Poor Communication">Poor Communication: I realize that I struggle to effectively communicate my achievements and challenges, which has likely led to an incomplete picture of my contributions.</option>
+                                                    <option value="Focus on Negatives">Focus on Negatives: I often find myself dwelling on my shortcomings instead of recognizing my strengths, which skews my self-assessment and contributes to my low score.</option>
+                                                    <option value="Fear of Overconfidence">Fear of Overconfidence: I worry that acknowledging my successes might come off as arrogant, so I tend to downplay my achievements during the appraisal.</option>
+                                                    <option value="Overwhelmed by Responsibilities">Overwhelmed by Responsibilities: With my heavy workload, I sometimes feel too busy to focus on my individual contributions, making this appraisal feel like just another task rather than a meaningful reflection.</option>
+                                                    <option value="Inconsistency in Performance">Inconsistency in Performance: I’ve experienced fluctuations in my performance, which makes me question my overall contributions and leads to a lower self-appraisal.</option>
+                                                    <option value="Lack of Self-Reflection">Lack of Self-Reflection: I haven’t taken enough time to reflect on my progress and accomplishments throughout the evaluation period, resulting in a rushed and incomplete appraisal.</option>
+                                                    <option value="Feeling Undervalued">Feeling Undervalued: At times, I feel that my contributions aren’t appreciated, which diminishes my motivation and skews my self-assessment negatively.</option>
+                                                    <option value="Imposter Syndrome">Imposter Syndrome: I often feel like a fraud, despite my accomplishments, which leads me to underestimate my performance and abilities.</option>
+                                                    <option value="Lack of Professional Development">Lack of Professional Development: I haven’t engaged in enough training or skill development opportunities, affecting my ability to evaluate my growth and progress accurately.</option>
+                                                    <option value="Discomfort with Self-Promotion">Discomfort with Self-Promotion: I feel uncomfortable discussing my achievements or promoting my successes, which likely results in an undervalued self-appraisal.</option>
+                                                    <option value="Siloed Work Environment">Siloed Work Environment: Working in isolation can hinder my ability to gauge my contributions relative to team goals, making it hard to assess my performance accurately.</option>
+                                                    <option value="Inconsistent Evaluation Criteria">Inconsistent Evaluation Criteria: The criteria for self-appraisal seem to change frequently, creating confusion and making it challenging for me to assess my performance.</option>
+                                                    <option value="Cognitive Overload">Cognitive Overload: Managing multiple tasks and responsibilities overwhelms me, affecting my ability to reflect on my performance critically.</option>
+                                                    <option value="Personal Bias">Personal Bias: I recognize that my subjective views or biases may lead me to inaccurately assess my performance, whether too harshly or too leniently.</option>
+                                                    <option value="Avoidance of Difficult Topics">Avoidance of Difficult Topics: I tend to shy away from addressing areas where I struggled, which results in an incomplete appraisal.</option>
+                                                    <option value="Competing Priorities">Competing Priorities: Balancing multiple projects distracts me from focusing on my performance in areas relevant to this appraisal.</option>
+                                                    <option value="Inability to Set Goals">Inability to Set Goals: Without clear goals, I struggle to measure my achievements accurately, impacting my self-assessment.</option>
+                                                    <option value="Lack of Motivation">Lack of Motivation: A general lack of enthusiasm for my role affects my effort in self-reflection and appraisal.</option>
+                                                    <option value="Unaddressed Issues">Unaddressed Issues: I have unresolved workplace conflicts that impact my overall mindset and hinder my ability to perform well in self-appraisals.</option>
+                                                    <option value="Cultural or Organizational Influences">Cultural or Organizational Influences: The company culture may discourage self-promotion or honest assessments, which affects how I view my contributions.</option>
+                                                    <option value="Skepticism about the Appraisal Process">Skepticism about the Appraisal Process: Doubts about the fairness or relevance of the appraisal process impact how I view my performance and contributions.</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                `;
+                                kpiField.appendChild(deliverableField);
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching KPI data:", error);
+                    alert("An error occurred while fetching KPI data. Please try again later.");
+                });
+        } else {
+            kpiSection.innerHTML = ''; // Clear KPI section if no username is provided
+        }
+    });
+});
+
+</script>   
+</body>
+<a href="http://127.0.0.1:8002/" style="position: fixed; font-size: 10px; top: 5px; right: 5px;font-weight: bold; color: teal; display: flex; flex-direction: column; align-items: center;">
+    <i class="fa fa-home"></i>
+    Home
+  </a>
+</html>
+
+

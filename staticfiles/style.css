@@ -1,0 +1,58 @@
+/* Apply background image to the entire body */
+
+
+body {
+    background-image: url('{% static "admin/img/ai_background.png" %}');
+    background-size: cover; /* Ensures the image covers the whole page */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the background image */
+    height: 100vh; /* Ensures the body takes up the entire viewport height */
+    margin: 0; /* Removes any default margins */
+}
+
+/* Optional: additional styling for the body */
+html, body {
+    height: 100%; /* Ensure that the background covers the entire page */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#employee-info-section {
+    margin: 20px 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"] {
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px; /* You can adjust the width as needed */
+}
+
+
+
+
+

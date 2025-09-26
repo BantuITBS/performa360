@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Performance Management</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add Font Awesome to your head section -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+<style>
+
+:root {
+            --primary-dark: #1e3c72;
+            --secondary-dark: #2a5298;
+            --accent-dark: #ffd700;
+            --text-dark: #e6e6fa;
+            --bg-dark: #0f0c29;
+            --card-dark: #1a1a3d;
+            --primary-light: #f8f9fa;
+            --secondary-light: #e3f2fd;
+            --accent-light: #4a90e2;
+            --text-light: #2c3e50;
+            --bg-light: #ffffff;
+            --card-light: #f8f9fa;
+            --transition: 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --accent: var(--accent-dark);
+            --text: var(--text-dark);
+            --bg: var(--bg-dark);
+            --card: var(--card-dark);
+        }
+
+        [data-theme="light"] {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --accent: var(--accent-light);
+            --text: var(--text-light);
+            --bg: var(--bg-light);
+            --card: var(--card-light);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--card);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle i {
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 2rem;
+        }
+
+        .brand-logo {
+            position: fixed;
+            top: 5px;
+            left: 5px;
+            width: 50px;
+            height: 50px;
+            background: url('/static/admin/img/pmh_3.png') center/cover no-repeat;
+            border-radius: 8px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        /* Form */
+        .alert-box {
+            background: rgba(255, 75, 75, 0.1);
+            color: #ff4c4c;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ff4c4c;
+            width: fit-content;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .field-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-label {
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .input-small {
+            width: 120px;
+            padding: 5px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: 1px solid var(--accent);
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .checkbox-label {
+            font-size: 12px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .checkbox-label input {
+            margin-right: 5px;
+        }
+
+        /* Royal Header */
+        .royal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 2rem auto;
+            max-width: 95%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .identity-portal {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .executive-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            transition: transform var(--transition);
+        }
+
+        .executive-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .assessment-crown h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .imperative-guidance {
+            background: rgba(0,0,0,0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text);
+        }
+
+        /* Competency Grid */
+        .competency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .competency-vault {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid var(--accent);
+        }
+
+        .competency-vault:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .vault-icon-container {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .vault-icon {
+            font-size: 1.8rem;
+            color: var(--text);
+        }
+
+        .competency-vault h3 {
+            color: var(--text);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .competency-vault p {
+            color: var(--text);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .self-modal, .diplomat-modal, .peer-assessment-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .self-content, .diplomat-content, .peer-assessment-modal-content {
+            background: var(--card);
+            margin: auto;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all var(--transition);
+        }
+
+        .self-modal.show .self-content,
+        .diplomat-modal.show .diplomat-content,
+        .peer-assessment-overlay.show .peer-assessment-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .self-modal-header, .modal-scepter, .peer-assessment-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .self-close, .regal-close, .peer-assessment-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: color var(--transition);
+        }
+
+        .self-close:hover, .regal-close:hover, .peer-assessment-close:hover {
+            color: var(--text);
+        }
+
+        /* Feedback Tile */
+        .royal-feedback-tile, .self-feedback-tile, .peer-assessment-feedback-tile {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .feedback-tile {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: var(--card);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .feedback-tile:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--secondary);
+        }
+
+        /* Rating */
+        .rating-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            padding: 0.5rem;
+        }
+
+        .rating-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .rating-btn:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
+        .rating-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .selected-rating-btn {
+            background: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+        }
+
+        /* Factor Container */
+        .factor-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            padding: 1rem;
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .factor-type {
+            flex: 1 1 180px;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: var(--secondary);
+            border: 1px solid var(--accent);
+            font-size: 0.9rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .factor-type:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .factor-type.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Animations */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .competency-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .self-content, .diplomat-content, .peer-assessment-modal-content {
+                width: 95%;
+            }
+
+            .factor-type {
+                flex-basis: 160px;
+                font-size: 0.85rem;
+            }
+        }
+
+
+    /* Base Styles */
+    body {
+        margin: 0;
+
+        background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+        padding: 0;
+        color: var(--dark-text);
+        font-size: 0.75rem;
+        font-family: 'Roboto', sans-serif;
+    }
+        /* Root Variables */
+        :root {
+        --primary-color: #2A3F54;
+        --secondary-color: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+        --accent-color: #e74c3c;
+        --light-bg: #f8f9fa;
+        --dark-text: #2A3F54;
+        --card-bg: rgba(255, 255, 255, 0.98);
+        --input-border: #dee2e6;
+        --transition-speed: 0.3s;
+    }
+
+    /* Unified Metric Styles */
+    .metric-container {
+        margin: 20px 0;
+        padding: 10px;
+        border-radius: var(--radius);
+    }
+
+    .metric-row {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        margin: 8px 0;
+        padding: 8px;
+        transition: var(--transition);
+    }
+
+    .metric-weight {
+        width: 30px;
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
+        border-right: 1px solid var(--secondary);
+    }
+
+    .metric-content {
+        flex-grow: 1;
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Strategic Goals Specific */
+    .strategic-goals {
+        background: #000;
+        color: white;
+    }
+
+    .strategic-goals .metric-row {
+        background: var(--dark);
+        color: aqua;
+    }
+
+    /* KPI Specific */
+    .kpi-container .metric-row {
+        background: white;
+        color: var(--dark);
+    }
+
+    /* Unified Modal Styles */
+    .modal-grid {
+        display: grid;
+        grid-template-columns: 80px 1fr 120px 120px;
+        gap: 15px;
+        padding: 12px;
+        align-items: center;
+    }
+
+    .modal-cell {
+        padding: 10px;
+        font-size: 0.8rem;
+        border: 1px solid var(--border);
+    }
+
+    /* Navigation & Header */
+    .performa-nav {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        height: 80px;
+        box-shadow: var(--shadow);
+    }
+
+    .nav-input {
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-bottom: 2px solid var(--secondary);
+        color: white;
+        transition: var(--transition);
+    }
+
+    /* Tiles & Quotes */
+    .tiles-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 70px 16px 24px;
+    }
+
+    .tile {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 20px;
+        border-radius: var(--radius);
+        transition: var(--transition);
+    }
+
+    .quote {
+        font-style: italic;
+        position: relative;
+        padding-left: 24px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .metric-container {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        
+        .nav-input {
+            width: 140px;
+            padding: 6px 10px;
+        }
+    }    
+    
+
+/* Strategic Goals Color Changes */
+.strategic-goals-container, #kpi-container {
+    margin-top: calc(90px - 3cm); /* Moved up 3cm */
+}
+
+:root {
+    --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Modal Alignment Fixes */
+.modal-body {
+    table-layout: fixed;
+}
+
+.modal-header-cell, .modal-deliverable-cell {
+    width: 16.66%; /* Equal column widths for 6 columns */
+    vertical-align: middle;
+    padding: 12px;
+    text-align: center;
+    word-wrap: break-word;
+}   
+
+    
+    .horizontal-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 120px;
+    }
+    
+    .input-container {
+        position: absolute;
+        top: 1px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        flex: 1;
+        background-color: teal;
+    }
+    
+    .username-input {
+        width: 100%;
+        padding: 6px;
+        font-size: 12px;
+        text-align: center;
+        border: none;
+        background-color: white;
+    }
+    
+    /* Strategic Goals & KPI Containers */
+    .strategic-goals-container, #kpi-container {
+        margin-top: 90px;
+        padding: 10px;
+    }
+    
+    .sg-row, .kpi-row {
+        display: flex;
+        align-items: center;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        background-color: black;
+        padding: 5px;
+        transition: background-color var(--transition-speed);
+        color: aqua;
+    }
+    
+    .sg-row:hover, .kpi-row:hover {
+        background-color: #e0f7fa;
+    }
+    
+    .sg-weight-tile, .kpi-weight-tile {
+        background-color: black;
+        padding: 5px;
+        width: 30px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        border-right: 1px solid teal;
+    }
+    
+    .sg-goal-tile, .kpi-goal-tile {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        padding: 5px;
+        border-left: 1px solid lightgrey;
+        font-size: 12px;
+        text-align: left;
+        background-color: white;
+    }
+    
+    /* Tooltip */
+    .tooltip {
+        display: none;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 10px;
+        max-width: 280px;
+        text-align: center;
+        z-index: 100;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-top: 100px;
+    }
+    
+    /* Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+    
+    .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: aqua;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        max-width: 100%;
+        width: 800px;
+        box-sizing: border-box;
+    }
+    
+    .modal-header {
+        background-color: teal;
+        padding: 10px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        margin: -20px -20px 20px -20px;
+    }
+    
+    .modal-close-btn {
+        background: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: white;
+    }
+    
+    .modal-body {
+        font-size: 12px;
+        line-height: 1.6;
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .modal-header-cell, .modal-deliverable-cell {
+        display: table-cell;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 12px;
+    }
+    
+    .modal-header-cell {
+        font-weight: bold;
+        background-color: #f0f0f0;
+    }
+    
+    .modal-deliverable-cell {
+        background-color: white;
+    }
+    
+    .modal-footer {
+        display: flex;
+        justify-content: center;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+    }
+    
+    .modal-footer .save-btn {
+        padding: 5px 8px;
+        font-size: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: goldenrod;
+        color: black;
+        transition: background-color var(--transition-speed);
+    }
+    
+    .modal-footer .save-btn:hover {
+        background-color: white;
+    }
+    
+    /* Card & Button Enhancements */
+    .card {
+        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-header {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    
+    .btn {
+        transition: all var(--transition-speed);
+        border-radius: 8px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .navbar-custom {
+    background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+}
+
+/* Navbar Styling */
+.performa-nav {
+  background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+  height: 80px;
+  padding: 0 2rem;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styling */
+.performa-logo {
+  font-size: 1.8rem;
+  color: #1ABB9C !important;
+  transition: transform 0.3s ease;
+  margin-left: 20px;
+}
+
+.performa-logo:hover {
+  transform: scale(1.1);
+}
+
+/* Title Styling */
+.main-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #1ABB9C 30%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Right-Aligned Input & Profile */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Input Styling */
+.nav-input {
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 2px solid #1ABB9C;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  width: 160px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.username-input,.nav-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.username-input,.nav-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-bottom-color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(26, 187, 156, 0.2);
+}
+
+/* Profile Avatar Styling */
+.profile-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #1ABB9C;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(26, 187, 156, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .main-title {
+      font-size: 1.2rem;
+  }
+  
+  .username-input,.nav-input {
+      width: 140px;
+      padding: 6px 10px;
+  }
+}
+
+.custom-modal {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 120%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  0% {
+    top: -100%;
+  }
+  100% {
+    top: 0;
+  }
+}
+    .custom-modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 100%;
+      border-radius: 8px;
+    }
+  
+    .custom-close-btn {
+      color: #aaa;
+      float: right;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  
+    .custom-close-btn:hover,
+    .custom-close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  
+    table {
+      width: 98%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+  
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+  
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .custom-close-btn{
+      left:50px;
+    }
+
+    .tiles-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows tiles to wrap to the next line if necessary */
+    gap: 2px; /* Adjusts the space between tiles */
+    margin-top: 90px;
+}
+
+.tile {
+    background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+    color: black; /* Ensures text is readable */
+    padding: 20px;
+    border-radius: 0px;
+    margin-top: 10px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.sgs {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.3rem;
+    color: #2A3F54;
+    background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(240,250,247,0.97) 100%);
+    padding: 15px 40px;
+    border-radius: 0px;
+    box-shadow: 0 5px 15px rgba(42,63,84,0.15);
+    z-index: 1000;
+    border: none;
+    animation: fadeIn 0.5s ease-in;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(26,187,156,0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sgs::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(145deg, #2A3F54 0%, #1ABB9C 100%);
+    z-index: -1;
+    border-radius: 0px;
+    animation: gradientShift 4s ease infinite;
+}
+
+.sgs:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+    box-shadow: 0 8px 25px rgba(42,63,84,0.2);
+}
+
+  .sgs i {
+      font-size: 1.6rem;
+      color: black;
+      transform: rotate(45deg) scaleY(-1);
+      animation: pointBounce 1.5s ease-in-out infinite;
+      margin-right: 10px;
+  }
+  
+  @keyframes pointBounce {
+      0%, 100% {
+          transform: rotate(45deg) scaleY(-1) translate(0, 0);
+      }
+      50% {
+          transform: rotate(45deg) scaleY(-1) translate(-5px, 5px);
+      }
+  }
+
+  .strategic-goals-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 24px;
+    background: #ffffff;
+}
+
+.sg-tile {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.2s ease;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 200px;
+}
+
+.sg-tile:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+}
+
+.sg-icon {
+    font-size: 1.2rem;
+    color: #4a5568;
+}
+
+.sg-weight {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 500;
+}
+
+.sg-content {
+    margin: 16px 0;
+    line-height: 1.5;
+    color: #2d3748;
+    font-size: 15px;
+}
+
+.sg-due-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4a5568;
+    padding-top: 16px;
+    border-top: 1px solid #edf2f7;
+}
+
+/* Status Indicators */
+.due-date-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.due-date-urgent { background: #e53e3e; }
+.due-date-warning { background: #dd6b20; }
+.due-date-normal { background: #38a169; }
+
+/* Selected State */
+.sg-tile.selected {
+    border-color: #4299e1;
+    background-color: #f8fafc;
+}
+
+@media (max-width: 640px) {
+    .strategic-goals-container {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+    
+    .sg-tile {
+        min-height: auto;
+        
+    }
+}
+
+.sgs {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background-color: black;
+      margin: 1.5rem 0;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      margin-top: 100px;
+  }
+  
+  .sgs:hover {
+      border-color: #cbd5e1;
+      background-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .sgs i {
+      font-size: 1.5rem;
+      color: aqua;
+      padding: 0.75rem;
+      background-color: black;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .sgs div {
+      font-size: 0.925rem;
+      color: black;
+      line-height: 1.4;
+  }
+  
+  .sgs div span {
+      font-size: 0.875rem;
+      color: white;
+      display: block;
+      margin-top: 0.25rem;
+  }
+  
+  .sgs:hover i {
+      background-color: #cbd5e1;
+      color: aqua;
+  }
+
+  .metrics-header {
+    margin: 100px auto 30px;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.tiles-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    justify-content: center;
+}
+
+.metric-tile {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.metric-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tile-icon {
+    margin-bottom: 15px;
+}
+
+.metric-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.tile-label {
+    display: block;
+    font-size: 1.1rem;
+    color: #2A3F54;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Color Utilities */
+.text-red { color: #ff4757; }
+.text-goldenrod { color: #e1b12c; }
+.text-green { color: #2ed573; }
+.text-blue { color: #3742fa; }
+
+@media (max-width: 768px) {
+    .tiles-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .metric-icon {
+        font-size: 2rem;
+    }
+    
+    .tile-label {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tiles-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .metrics-header {
+        margin-top: 60px;
+    }
+}
+
+
+
+
+
+
+
+.alert-box {
+  background-color: #ffe6e6;
+  color: #ff4c4c;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ff4c4c;
+  width: fit-content;
+}
+
+.form-row {
+  font-size: 10px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  font-size: 10px;
+  margin-bottom: 2px;
+  color: #fff;
+}
+
+.input-small {
+  width: 100px;
+  padding: 3px;
+  font-size: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-label {
+  font-size: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.checkbox-label input {
+  margin-right: 3px;
+}
+body{
+  background-color: black;
+}
+</style>
+
+<body data-theme="light">
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" onclick="toggleTheme()">
+      <i class="fas fa-moon"></i>
+  </div>
+
+
+<div style="position: absolute; top: 5px; right: 10px;color: purple;">
+  <ul class="navbar-nav ms-auto">
+      <li>
+          <a class="dropdown-item menu-item hover-glow" href="#" onclick="handleLogout()">
+              <div class="icon-wrapper me-3" style="color: purple;">
+                  <i class="fas fa-sign-out-alt text-gradient-icon" style="color: purple;"></i>
+              </div>
+              <span class="menu-label" style="color: purple;">Log Out</span>
+              <i class="fas fa-chevron-right ms-auto menu-arrow" style="color: purple;"></i>
+          </a>
+      </li>
+  </ul>
+  <li class="input-container" style="font-size: 16px; position: absolute; top: -5px; margin-left: -60px; background-color: transparent;">
+    <div class="user-status small text-gradient" style="font-size: 12px;">Welcome</div>
+    <strong id="username-input" class="username-display">{{ username }}</strong>
+  </li>
+</div>
+
+<div class="sgs1" style="background-color: transparent;margin-top: -10px;">
+  <i class="fas fa-arrow-pointer"></i> <!-- Updated icon -->
+  <div>
+      <span>
+      </span>
+  </div>
+</div>
+<div style="position: absolute; top: 5px; left: 5px; width: 55px; height: 46px; background-image: url('/static/admin/img/pmh_3.png');background-size: cover; background-position: center; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);border: 2px solid #ffffff;"></div>
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm performa-nav position-relative" style="height: 70px;">
+<div class="container-fluid">
+   <h1 class="main-title mx-auto">
+       <span class="gradient-text" style="font-size: 28px; margin-left: 40px;">
+           Performa360 SelfAppraisal
+       </span>
+   </h1>
+   <div class="nav-controls position-absolute top-0 end-0 d-flex align-items-center p-2">
+    <div class="header" style="margin-top: 2.8cm; margin-right: 20px;">
+      <div class="input-container" style="position: fixed; top: 5px; z-index: 1000;display: none;">
+        <input type="text" id="username-input" class="nav-input" value="{{ username }}" placeholder="Username" required>
+    </div>
+  </div>
+ </div>
+</div>
+</nav>
+
+
+
+
+
+  
+  <form id="my-form">
+    <div class="form-row">
+      <div class="field-container">
+        <label class="field-label" for="username">Employee Name:</label>
+        <input class="input-small" type="text" id="username" name="username" placeholder="Name">
+      </div>
+  
+      <div class="field-container">
+        <label class="field-label" for="employee-password">Password:</label>
+        <input class="input-small" type="password" id="employee-password" name="employee_password" placeholder="Password">
+        <label class="checkbox-label">
+          <input type="checkbox" id="show-password"> Show
+        </label>
+      </div>   
+  
+      <div class="field-container">
+        <label class="field-label" for="company_code">Company Code:</label>
+        <input class="input-small" type="text" id="company_code" name="company_code" placeholder="Company Code">
+      </div>
+  
+      <div class="field-container">
+        <label class="field-label" for="branch_code">Branch Code:</label>
+        <input class="input-small" type="text" id="branch_code" name="branch_code" placeholder="Branch Code">
+      </div>
+  
+      <!-- ✅ New Region Branch Field -->
+      <div class="field-container">
+        <label class="field-label" for="region_branch">Region Branch:</label>
+        <input class="input-small" type="text" id="region_branch" name="region_branch" placeholder="Region Branch">
+      </div>
+  
+    </div>
+  </form>
+  <script>
+  // Fetch company code from employee password input
+  function fetchCompanyCode() {
+    const employeeCode = document.getElementById('employee-password').value.trim();
+    console.log("Fetching company code for:", employeeCode);
+  
+    if (!employeeCode) {
+        document.getElementById('company_code').value = '';
+        return;
+    }
+  
+    fetch(`/get_company_code/?employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            if (data.company_code) {
+                document.getElementById('company_code').value = data.company_code;
+                fetchRegionBranch(data.company_code, employeeCode); // Fetch branch_code right after company_code
+            } else {
+                console.error('Company code not found:', data);
+                document.getElementById('company_code').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            document.getElementById('company_code').value = '';
+        });
+  }
+  
+  // Fetch region branch using company_code and employee_code
+  function fetchRegionBranch(companyCode, employeeCode) {
+    if (!companyCode || !employeeCode) {
+        document.getElementById('branch_code').value = '';
+        document.getElementById('region_branch').value = '';
+        return;
+    }
+  
+    fetch(`/get-region-branch/?company_code=${encodeURIComponent(companyCode)}&employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.region_code) {
+                document.getElementById('branch_code').value = data.region_code;  // ✅ Set region_code to branch_code field
+            } else {
+                console.warn(data.message || "No region code found.");
+                document.getElementById('branch_code').value = '';
+            }
+  
+            if (data.region_branch) {
+                document.getElementById('region_branch').value = data.region_branch;  // ✅ Set region_branch to new input
+            } else {
+                document.getElementById('region_branch').value = '';
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching region data:", error);
+            document.getElementById('branch_code').value = '';
+            document.getElementById('region_branch').value = '';
+        });
+  }
+  // Handle password visibility toggle
+  function handleShowPasswordToggle(e) {
+    const passwordInput = document.getElementById('employee-password');
+    passwordInput.type = e.target.checked ? 'text' : 'password';
+  }
+  // Attach all listeners once DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    // Trigger company code fetch when employee-password changes
+    document.getElementById('employee-password').addEventListener('input', fetchCompanyCode);
+    // Toggle password visibility
+    const toggle = document.getElementById('show-password');
+    if (toggle) toggle.addEventListener('change', handleShowPasswordToggle);
+  
+    // Trigger once on page load for autofill compatibility
+    setTimeout(fetchCompanyCode, 200);
+  });
+  </script>
+
+
+
+
+<!-- Header -->
+
+  <div class="tiles-container" style="margin-top: 20px;">
+      <!-- Strategic Goal -->
+      <div class="metric-tile">
+          <div class="tile-icon">
+              <i class="fas fa-bullseye metric-icon text-red"></i>
+          </div>
+          <span class="tile-label">Strategic Goal</span>
+      </div>
+
+      <!-- Key Performance Indicator -->
+      <div class="metric-tile">
+          <div class="tile-icon">
+              <i class="fas fa-chart-line metric-icon text-goldenrod"></i>
+          </div>
+          <span class="tile-label">Key Performance Indicator</span>
+      </div>
+
+      <!-- Deliverable -->
+      <div class="metric-tile">
+          <div class="tile-icon">
+              <i class="fas fa-tasks metric-icon text-green"></i>
+          </div>
+          <span class="tile-label">Deliverable</span>
+      </div>
+
+      <!-- Document Evidence -->
+      <div class="metric-tile">
+          <div class="tile-icon">
+              <i class="fas fa-file-alt metric-icon text-blue"></i>
+          </div>
+          <span class="tile-label">Document Evidence</span>
+      </div>
+  </div>
+
+
+<!-- Modal Structure -->
+<div id="deliverable-modal" class="modal-overlay">
+    <div class="modal-content" style="top:5.7cm;">
+        <div class="modal-header">
+            <span class="modal-title">Deliverables</span>
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+            <!-- Deliverables will be dynamically injected here -->
+        </div>
+    </div>
+</div>
+
+<!-- Document Evidence Modal Structure -->
+<div id="document-evidence-modal" class="modal-overlay">
+    <div class="modal-content" style="top: calc(45% + 4.2cm); left: calc(77% - 3cm);">
+      <div class="modal-header">
+        <span class="modal-title">Document Evidence</span>
+        <button class="modal-close-btn" onclick="closeDocumentEvidenceModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="document-evidence-content">
+        <!-- Document Evidence will be dynamically injected here -->
+      </div>
+<!-- Trigger Button -->
+    <div class="modal-footer">
+      <button class="save-btn" onclick="showCustomModal()">Save</button>
+        </div>
+    </div>
+  </div>
+  
+<!-- Custom Modal Structure -->
+<div id="customModal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content"style="top: calc(45% + 10.2cm);">
+      <h4>Self Appraisal</h4>    
+      <table id="assessmentTable">
+        <thead>
+          <tr>
+            <th>Review Cycle Number</th>
+            <th>Employee Username</th>
+            <th>Employee Name</th>
+            <th>Manager Name</th>
+            <th>Manager Username</th>
+            <th>Date Created</th>
+            <th>Date Modified</th>
+            <th>Strategic Goal</th>
+            <th>KPI</th>
+            <th>Deliverable</th>
+            <th>Self Score</th>
+            <th>Assessor Score</th>
+            <th>Document Evidence</th>
+            <th>Self Confirmation</th>
+            <th>Assessor Confirmation</th>
+            <th>delete</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  
+
+  <div class="tiles-container" style="margin-top: -25px;">
+  <div class="tile" style="background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);">
+      <p class="quote">"The biggest room in the world is the room for improvement."</p>
+      <p class="author">Helmut Schmidt</p>
+  </div>
+  <div class="tile">
+      <p class="quote">"The biggest research of all when I do a character is self-examination."</p>
+      <p class="author">Vera Farmiga</p>
+  </div>
+  <div class="tile">
+      <p class="quote">"Self-evaluation is the key to self-enlightenment."</p>
+      <p class="author">Kilroy J. Oldster</p>
+  </div>
+  <div class="tile">
+      <p class="quote">"Without proper self-evaluation, failure is inevitable."</p>
+      <p class="author">John Wooden</p>
+  </div>
+</div>
+
+<style>
+  .strategic-guide {
+      padding: 1.25rem;
+      border-left: 4px solid #3b82f6;
+      background-color: #f8fafc;
+      border-radius: 6px;
+      margin: 1rem 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+  }
+  
+  .strategic-guide:hover {
+      background-color: #f1f5f9;
+      transform: translateX(4px);
+  }
+  
+  .strategic-guide > span {
+      display: block;
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+  }
+  
+  .strategic-guide::before {
+      content: "➤";
+      color: #3b82f6;
+      margin-right: 0.75rem;
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+  }
+  
+  .strategic-guide:hover::before {
+      transform: translateX(2px);
+  }
+  </style>
+  
+  <div class="strategic-guide">
+      Select Strategic Goals
+      <span>Click to view associated Key Performance Indicators</span>
+  </div>
+<!-- <div class="tile tile-gradient"></div>-->
+  
+<!-- Strategic Goals Container -->
+<div class="strategic-goals-container" id="strategic-goals-list">
+    <!-- Dynamic content will be added here -->
+</div>
+
+<!-- KPI Container -->
+<div id="kpi-container" style="margin-top: 10px;">
+    <!-- KPIs will be displayed here -->
+</div>
+
+<script>
+
+  function handleLogout() {
+      if (confirm('Are you sure you want to log out?')) {
+          fetch('/logout/', {  // ✅ Updated logout URL
+              method: 'POST',
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Content-Type': 'application/json'
+              }
+          })
+          .then(response => {
+              if (response.ok) {
+                  window.location.href = "{% url 'main' %}";  // ✅ Ensure 'main' exists in urls.py
+              } else {
+                  console.error('Logout failed:', response.statusText);
+              }
+          })
+          .catch(error => {
+              console.error('Logout error:', error);
+          });
+      }
+  }
+
+// Function to display the custom modal by setting its display style to 'block'
+    function showCustomModal() {
+      document.getElementById("customModal").style.display = "block";
+    }
+  
+// Function to hide the custom modal by setting its display style to 'none'
+    function closeCustomModal() {
+      document.getElementById("customModal").style.display = "none";
+    }
+  
+// Array of tooltip messages to be displayed for each tile header
+    const tooltips = [
+      'Click on any strategic goal to view the related KPI(s).',
+      'Click on any KPI to view the related Deliverable(s).',
+      'Click on any Deliverable to view required Document Evidence that proves task completion.',
+      'Click on any Document Evidence to appraise yourself on it. If the due date has lapsed, offer an explanation.'
+    ];
+  
+
+// Loop through all elements with the class 'tile-header' and attach tooltips
+    document.querySelectorAll('.tile-header').forEach((header, index) => {
+      // Create a new div element for the tooltip
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip'; // Assign the class 'tooltip' to the div
+      tooltip.textContent = tooltips[index]; // Set the tooltip text from the array
+      header.appendChild(tooltip); // Append the tooltip to the header
+  
+// Add a mouseover event listener to show the tooltip
+      header.addEventListener('mouseover', function() {
+        tooltip.style.display = 'block'; // Make the tooltip visible
+        tooltip.style.top = '50%'; // Position the tooltip vertically at 50%
+        tooltip.style.left = '50%'; // Position the tooltip horizontally at 50%
+        tooltip.style.transform = 'translate(-50%, -50%)'; // Center the tooltip
+      });
+  
+// Add a mouseout event listener to hide the tooltip
+      header.addEventListener('mouseout', function() {
+        tooltip.style.display = 'none'; // Hide the tooltip
+      });
+    });
+  
+// Add an event listener to the username input field
+    document.getElementById('username-input').addEventListener('change', function() {
+      // Get the username value from the input field
+      var username = this.value;
+
+// Fetch strategic goals data from the server based on the username
+      fetch('/get_strategic_goals/?username=' + encodeURIComponent(username))
+        .then(response => response.json()) // Parse the response as JSON
+        .then(data => {
+// Get the container for strategic goals
+          var listContainer = document.getElementById('strategic-goals-list');
+          listContainer.innerHTML = ''; // Clear the container
+  
+// Variable to track the previously selected goal
+          let previousSelectedGoal = null;
+  
+// Loop through each strategic goal in the data
+          data.strategic_goals.forEach(function(item) {
+// Create a new row for the strategic goal
+            var row = document.createElement('div');
+            row.className = 'sg-row';
+  
+// Create an icon for the goal
+            var icon = document.createElement('i');
+            icon.className = 'fas fa-check-circle sg-icon';
+            icon.style.color = 'teal'; // Set the default icon color
+  
+// Create a tile for the goal weight
+            var weightTile = document.createElement('div');
+            weightTile.className = 'sg-weight-tile';
+            weightTile.textContent = item.strategic_goal_weight ? item.strategic_goal_weight : '-'; // Display weight or '-' if not available
+  
+// Create a tile for the due date with color coding
+            var dueDateTile = document.createElement('div');
+            dueDateTile.className = 'sg-due-date-tile';
+            dueDateTile.style.fontSize = '10px';
+  
+// Check if the due date is available
+            if (item.strategic_goal_due_date) {
+              var dueDate = new Date(item.strategic_goal_due_date); // Convert the due date string to a Date object
+              var workDaysLeft = calculateWorkingDays(new Date(), dueDate); // Calculate working days left
+              var color = getColorForDueDate(workDaysLeft); // Get the color based on the due date
+  
+              dueDateTile.style.backgroundColor = color; // Set the background color
+              dueDateTile.textContent = `${workDaysLeft} work days left - ${item.strategic_goal_due_date}`; // Display work days left and due date
+  
+// If the due date has passed, display 'OVERDUE'
+              if (workDaysLeft < 0) {
+                dueDateTile.textContent = `OVERDUE - ${item.strategic_goal_due_date}`;
+              }
+            } else {
+              dueDateTile.textContent = 'No Due Date'; // Display if no due date is available
+            }
+  
+            // Create a tile for the goal description
+            var goalTile = document.createElement('div');
+            goalTile.className = 'sg-goal-tile';
+            goalTile.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`; // Display goal number and description
+  
+            // Append all elements to the row
+            row.appendChild(icon);
+            row.appendChild(weightTile);
+            row.appendChild(goalTile);
+            row.appendChild(dueDateTile);
+  
+            // Add a click event listener to the row to select the goal
+            row.addEventListener('click', function() {
+              // Reset the color of the previously selected goal's icon
+              if (previousSelectedGoal) {
+                previousSelectedGoal.querySelector('.sg-icon').style.color = 'teal';
+              }
+              icon.style.color = 'red'; // Highlight the selected goal's icon
+              previousSelectedGoal = row; // Update the previously selected goal
+  
+              // Display the KPIs associated with the selected goal
+              displayKPIs(item.kpis);
+            });
+  
+            // Append the row to the strategic goals container
+            listContainer.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error fetching strategic goals:', error)); // Log any errors
+    });
+
+    // Function to display KPIs in the kpi-container
+    function displayKPIs(kpis) {
+      var kpiContainer = document.getElementById('kpi-container');
+      kpiContainer.innerHTML = ''; // Clear the container
+  
+      // Variable to track the previously selected KPI
+      let previousSelectedKPI = null;
+  
+      // Check if there are no KPIs
+      if (kpis.length === 0) {
+        kpiContainer.innerHTML = '<p>No KPIs available.</p>'; // Display a message if no KPIs are available
+        return;
+      }
+  
+      // Loop through each KPI
+      kpis.forEach(function(kpi) {
+        // Create a new row for the KPI
+        var row = document.createElement('div');
+        row.className = 'kpi-row';
+  
+        // Create a tile for the KPI weight
+        var weightTile = document.createElement('div');
+        weightTile.className = 'kpi-weight-tile';
+        weightTile.textContent = kpi.kpi_weight ? kpi.kpi_weight : '-'; // Display weight or '-' if not available
+  
+        // Create a tile for the KPI description
+        var descTile = document.createElement('div');
+        descTile.className = 'kpi-desc-tile';
+        descTile.textContent = kpi.kpi; // Display the KPI description
+  
+        // Create a tile for the KPI due date with color coding
+        var dueDateTile = document.createElement('div');
+        dueDateTile.className = 'kpi-due-date-tile';
+        dueDateTile.style.fontSize = '10px';
+  
+        // Check if the due date is available
+        if (kpi.kpi_due_date) {
+          var dueDate = new Date(kpi.kpi_due_date); // Convert the due date string to a Date object
+          var workDaysLeft = calculateWorkingDays(new Date(), dueDate); // Calculate working days left
+          var color = getColorForDueDate(workDaysLeft); // Get the color based on the due date
+  
+          dueDateTile.style.backgroundColor = color; // Set the background color
+          dueDateTile.textContent = `${workDaysLeft} work days left - ${kpi.kpi_due_date}`; // Display work days left and due date
+  
+          // If the due date has passed, display 'OVERDUE'
+          if (workDaysLeft < 0) {
+            dueDateTile.textContent = `OVERDUE - ${kpi.kpi_due_date}`;
+          }
+        } else {
+          dueDateTile.textContent = 'No Due Date'; // Display if no due date is available
+        }
+  
+        // Append all elements to the KPI row
+        row.appendChild(weightTile);
+        row.appendChild(descTile);
+        row.appendChild(dueDateTile);
+  
+        // Add a click event listener to the KPI row to display deliverables
+        row.addEventListener('click', function() {
+          // Reset the background color of the previously selected KPI
+          if (previousSelectedKPI) {
+            previousSelectedKPI.style.backgroundColor = '';
+          }
+          row.style.backgroundColor = '#f0f8ff'; // Highlight the selected KPI
+          previousSelectedKPI = row; // Update the previously selected KPI
+  
+          // Display the deliverables associated with the selected KPI
+          displayDeliverables(kpi.deliverables);
+        });
+  
+        // Append the row to the KPI container
+        kpiContainer.appendChild(row);
+      });
+    }
+
+// Fetch strategic goals data from the server based on the username
+fetch('/get_strategic_goals/?username=' + encodeURIComponent(username))
+  .then(response => response.json())
+  .then(data => {
+    var listContainer = document.getElementById('strategic-goals-list');
+    listContainer.innerHTML = '';
+
+    // Add Strategic Goals header (new)
+    const sgHeader = document.createElement('div');
+    sgHeader.innerHTML = `
+      <h2 style="color: white; background: black; padding: 8px;
+                margin: -10px -10px 10px -10px; font-size: 14px;">
+        Your Strategic Goals
+      </h2>`;
+    listContainer.appendChild(sgHeader);
+
+    let previousSelectedGoal = null;
+
+    data.strategic_goals.forEach(function(item) {
+      // Original goal creation code
+      var row = document.createElement('div');
+      row.className = 'sg-row';
+
+      var icon = document.createElement('i');
+      icon.className = 'fas fa-check-circle sg-icon';
+      icon.style.color = 'teal';
+
+      var weightTile = document.createElement('div');
+      weightTile.className = 'sg-weight-tile';
+      weightTile.textContent = item.strategic_goal_weight || '-';
+
+      var dueDateTile = document.createElement('div');
+      dueDateTile.className = 'sg-due-date-tile';
+      dueDateTile.style.fontSize = '10px';
+
+      if (item.strategic_goal_due_date) {
+        var dueDate = new Date(item.strategic_goal_due_date);
+        var workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+        var color = getColorForDueDate(workDaysLeft);
+
+        dueDateTile.style.backgroundColor = color;
+        dueDateTile.textContent = workDaysLeft < 0 
+          ? `OVERDUE - ${item.strategic_goal_due_date}`
+          : `${workDaysLeft} work days left - ${item.strategic_goal_due_date}`;
+      } else {
+        dueDateTile.textContent = 'No Due Date';
+      }
+
+      var goalTile = document.createElement('div');
+      goalTile.className = 'sg-goal-tile';
+      goalTile.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`;
+
+      // Original element appending
+      row.appendChild(icon);
+      row.appendChild(weightTile);
+      row.appendChild(goalTile);
+      row.appendChild(dueDateTile);
+
+      // Original click handler
+      row.addEventListener('click', function() {
+        if (previousSelectedGoal) {
+          previousSelectedGoal.querySelector('.sg-icon').style.color = 'teal';
+        }
+        icon.style.color = 'red';
+        previousSelectedGoal = row;
+        displayKPIs(item.kpis);
+      });
+
+      listContainer.appendChild(row);
+    });
+  })
+  .catch(error => console.error('Error fetching strategic goals:', error));
+
+// Function to display KPIs - with original functionality intact
+function displayKPIs(kpis) {
+  var kpiContainer = document.getElementById('kpi-container');
+  kpiContainer.innerHTML = '';
+
+  // Add KPI header (new)
+  const kpiHeader = document.createElement('div');
+  kpiHeader.innerHTML = `
+    <h2 style="color: white; background: black; padding: 8px;
+              margin: -10px -10px 10px -10px; font-size: 14px;">
+      Your Key Performance Indicators
+    </h2>`;
+  kpiContainer.appendChild(kpiHeader);
+
+  let previousSelectedKPI = null;
+
+  if (kpis.length === 0) {
+    kpiContainer.innerHTML += '<p>No KPIs available.</p>';
+    return;
+  }
+
+  kpis.forEach(function(kpi) {
+    // Original KPI creation code
+    var row = document.createElement('div');
+    row.className = 'kpi-row';
+
+    var weightTile = document.createElement('div');
+    weightTile.className = 'kpi-weight-tile';
+    weightTile.textContent = kpi.kpi_weight || '-';
+
+    var descTile = document.createElement('div');
+    descTile.className = 'kpi-desc-tile';
+    descTile.textContent = kpi.kpi;
+
+    var dueDateTile = document.createElement('div');
+    dueDateTile.className = 'kpi-due-date-tile';
+    dueDateTile.style.fontSize = '10px';
+
+    if (kpi.kpi_due_date) {
+      var dueDate = new Date(kpi.kpi_due_date);
+      var workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+      var color = getColorForDueDate(workDaysLeft);
+
+      dueDateTile.style.backgroundColor = color;
+      dueDateTile.textContent = workDaysLeft < 0 
+        ? `OVERDUE - ${kpi.kpi_due_date}`
+        : `${workDaysLeft} work days left - ${kpi.kpi_due_date}`;
+    } else {
+      dueDateTile.textContent = 'No Due Date';
+    }
+
+    // Original element appending
+    row.appendChild(weightTile);
+    row.appendChild(descTile);
+    row.appendChild(dueDateTile);
+
+    // Original click handler
+    row.addEventListener('click', function() {
+      if (previousSelectedKPI) {
+        previousSelectedKPI.style.backgroundColor = '';
+      }
+      row.style.backgroundColor = '#f0f8ff';
+      previousSelectedKPI = row;
+      displayDeliverables(kpi.deliverables);
+    });
+
+    kpiContainer.appendChild(row);
+  });
+}
+
+
+// Fetch strategic goals data from the server based on the username
+fetch('/get_strategic_goals/?username=' + encodeURIComponent(username))
+  .then(response => response.json())
+  .then(data => {
+    var listContainer = document.getElementById('strategic-goals-list');
+    listContainer.innerHTML = '';
+
+    // Add Strategic Goals header (new)
+    const sgHeader = document.createElement('div');
+    sgHeader.innerHTML = `
+      <h2 style="color: white; background: black; padding: 8px;
+                margin: -10px -10px 10px -10px; font-size: 14px;">
+        Your Strategic Goals
+      </h2>`;
+    listContainer.appendChild(sgHeader);
+
+    let previousSelectedGoal = null;
+
+    data.strategic_goals.forEach(function(item) {
+      // Original goal creation code
+      var row = document.createElement('div');
+      row.className = 'sg-row';
+
+      var icon = document.createElement('i');
+      icon.className = 'fas fa-check-circle sg-icon';
+      icon.style.color = 'teal';
+
+      var weightTile = document.createElement('div');
+      weightTile.className = 'sg-weight-tile';
+      weightTile.textContent = item.strategic_goal_weight || '-';
+
+      var dueDateTile = document.createElement('div');
+      dueDateTile.className = 'sg-due-date-tile';
+      dueDateTile.style.fontSize = '10px';
+
+      if (item.strategic_goal_due_date) {
+        var dueDate = new Date(item.strategic_goal_due_date);
+        var workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+        var color = getColorForDueDate(workDaysLeft);
+
+        dueDateTile.style.backgroundColor = color;
+        dueDateTile.textContent = workDaysLeft < 0 
+          ? `OVERDUE - ${item.strategic_goal_due_date}`
+          : `${workDaysLeft} work days left - ${item.strategic_goal_due_date}`;
+      } else {
+        dueDateTile.textContent = 'No Due Date';
+      }
+
+      var goalTile = document.createElement('div');
+      goalTile.className = 'sg-goal-tile';
+      goalTile.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`;
+
+      // Original element appending
+      row.appendChild(icon);
+      row.appendChild(weightTile);
+      row.appendChild(goalTile);
+      row.appendChild(dueDateTile);
+
+      // Original click handler
+      row.addEventListener('click', function() {
+        if (previousSelectedGoal) {
+          previousSelectedGoal.querySelector('.sg-icon').style.color = 'teal';
+        }
+        icon.style.color = 'red';
+        previousSelectedGoal = row;
+        displayKPIs(item.kpis);
+      });
+
+      listContainer.appendChild(row);
+    });
+  })
+  .catch(error => console.error('Error fetching strategic goals:', error));
+
+
+// Updated JavaScript implementation
+data.strategic_goals.forEach(function(item) {
+    const tile = document.createElement('div');
+    tile.className = 'sg-tile';
+
+    // Header Section
+    const header = document.createElement('div');
+    header.className = 'sg-header';
+
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-bullseye sg-icon';
+
+    const weight = document.createElement('div');
+    weight.className = 'sg-weight';
+    weight.textContent = `Weight: ${item.strategic_goal_weight || 'N/A'}`;
+
+    // Content Section
+    const content = document.createElement('div');
+    content.className = 'sg-content';
+    content.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`;
+
+    // Due Date Section
+    const dueDate = document.createElement('div');
+    dueDate.className = 'sg-due-date';
+
+    const statusIndicator = document.createElement('div');
+    statusIndicator.className = 'due-date-indicator';
+
+    const dateText = document.createElement('span');
+
+    if (item.strategic_goal_due_date) {
+        const dueDateObj = new Date(item.strategic_goal_due_date);
+        const workDaysLeft = calculateWorkingDays(new Date(), dueDateObj);
+        
+        if (workDaysLeft < 0) {
+            statusIndicator.classList.add('due-date-urgent');
+            dateText.textContent = `Overdue: ${dueDateObj.toLocaleDateString()}`;
+        } else if (workDaysLeft <= 7) {
+            statusIndicator.classList.add('due-date-warning');
+            dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString()}`;
+        } else {
+            statusIndicator.classList.add('due-date-normal');
+            dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString()}`;
+        }
+    } else {
+        statusIndicator.style.display = 'none';
+        dateText.textContent = 'No due date';
+    }
+
+    // Assembly
+    header.appendChild(icon);
+    header.appendChild(weight);
+    
+    dueDate.appendChild(statusIndicator);
+    dueDate.appendChild(dateText);
+
+    tile.appendChild(header);
+    tile.appendChild(content);
+    tile.appendChild(dueDate);
+
+    // Interaction
+    tile.addEventListener('click', function() {
+        document.querySelectorAll('.sg-tile').forEach(t => t.classList.remove('selected'));
+        tile.classList.add('selected');
+        displayKPIs(item.kpis);
+    });
+
+    listContainer.appendChild(tile);
+});
+
+
+// Function to display KPIs - with original functionality intact
+function displayKPIs(kpis) {
+  var kpiContainer = document.getElementById('kpi-container');
+  kpiContainer.innerHTML = '';
+
+  // Add KPI header (new)
+  const kpiHeader = document.createElement('div');
+  kpiHeader.innerHTML = `
+    <h2 style="color: black; background: white; padding: 8px;
+              margin: -10px -10px 10px -10px; font-size: 18px;text-align:center">
+      Click on Key Performance Indicator to navigate to Deliverables
+    </h2>`;
+  kpiContainer.appendChild(kpiHeader);
+
+  let previousSelectedKPI = null;
+
+  if (kpis.length === 0) {
+    kpiContainer.innerHTML += '<p>No KPIs available.</p>';
+    return;
+  }
+
+  kpis.forEach(function(kpi) {
+    // Original KPI creation code
+    var row = document.createElement('div');
+    row.className = 'kpi-row';
+
+    var weightTile = document.createElement('div');
+    weightTile.className = 'kpi-weight-tile';
+    weightTile.textContent = kpi.kpi_weight || '-';
+
+    var descTile = document.createElement('div');
+    descTile.className = 'kpi-desc-tile';
+    descTile.textContent = kpi.kpi;
+
+    var dueDateTile = document.createElement('div');
+    dueDateTile.className = 'kpi-due-date-tile';
+    dueDateTile.style.fontSize = '10px';
+
+    if (kpi.kpi_due_date) {
+      var dueDate = new Date(kpi.kpi_due_date);
+      var workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+      var color = getColorForDueDate(workDaysLeft);
+
+      dueDateTile.style.backgroundColor = color;
+      dueDateTile.textContent = workDaysLeft < 0 
+        ? `OVERDUE - ${kpi.kpi_due_date}`
+        : `${workDaysLeft} work days left - ${kpi.kpi_due_date}`;
+    } else {
+      dueDateTile.textContent = 'No Due Date';
+    }
+
+    // Original element appending
+    row.appendChild(weightTile);
+    row.appendChild(descTile);
+    row.appendChild(dueDateTile);
+
+    // Original click handler
+    row.addEventListener('click', function() {
+      if (previousSelectedKPI) {
+        previousSelectedKPI.style.backgroundColor = '';
+      }
+      row.style.backgroundColor = '#f0f8ff';
+      previousSelectedKPI = row;
+      displayDeliverables(kpi.deliverables);
+    });
+
+    kpiContainer.appendChild(row);
+  });
+}
+
+    // Function to display deliverables in a modal
+    function displayDeliverables(deliverables) {
+      var modalContent = document.getElementById('modal-body-content');
+      modalContent.innerHTML = ''; // Clear the modal content
+  
+      // Create a header row for the modal
+      var headerRow = document.createElement('div');
+      headerRow.className = 'modal-header-row';
+      // Add header cells for Weight, Deliverable, Self Appraisal Score, and Due Date
+      ['Weight', 'Deliverable', 'Self Appraisal Score', 'Due Date'].forEach(function(headerText) {
+        var headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+      });
+      modalContent.appendChild(headerRow); // Append the header row to the modal content
+  
+      // Variable to track the previously clicked deliverable row
+      let previousClickedRow = null;
+  
+      // Check if there are no deliverables
+      if (deliverables.length === 0) {
+        // Display a message if no deliverables are available
+        var emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="5">No deliverables available.</div>';
+        modalContent.appendChild(emptyRow);
+      } else {
+        // Loop through each deliverable
+        deliverables.forEach(function(deliverable) {
+          // Create a new row for the deliverable
+          var deliverableRow = document.createElement('div');
+          deliverableRow.className = 'modal-deliverable-row';
+  
+          // Create a cell for the deliverable weight
+          var weightCell = document.createElement('div');
+          weightCell.className = 'modal-deliverable-cell';
+          weightCell.textContent = deliverable.deliverable_weight; // Display the weight
+          deliverableRow.appendChild(weightCell);
+  
+          // Create a cell for the deliverable description
+          var descCell = document.createElement('div');
+          descCell.className = 'modal-deliverable-cell';
+          descCell.textContent = deliverable.deliverable; // Display the description
+          deliverableRow.appendChild(descCell);
+  
+          // Create a dropdown for the self-appraisal score
+          var selfAppraisalCell = document.createElement('div');
+          selfAppraisalCell.className = 'modal-deliverable-cell';
+          var selfAppraisalScore = document.createElement('select');
+          selfAppraisalScore.className = 'modal-deliverable-select';
+          selfAppraisalScore.innerHTML = '<option value="">Score</option>';
+          // Add options for scores from 1 to 10
+          for (let i = 1; i <= 10; i++) {
+            selfAppraisalScore.innerHTML += `<option value="${i}">${i}</option>`;
+          }
+          selfAppraisalCell.appendChild(selfAppraisalScore);
+          deliverableRow.appendChild(selfAppraisalCell);
+  
+          // Create a cell for the due date
+          var dueDateCell = document.createElement('div');
+          dueDateCell.className = 'modal-deliverable-cell';
+          dueDateCell.textContent = deliverable.deliverable_due_date ? formatDate(deliverable.deliverable_due_date) : 'No due date'; // Display the due date
+          deliverableRow.appendChild(dueDateCell);
+  
+          // Add a click event listener to the deliverable row
+          deliverableRow.addEventListener('click', function(event) {
+            // Remove the 'clicked' class from the previously clicked row
+            if (previousClickedRow) {
+              previousClickedRow.classList.remove('clicked');
+            }
+  
+            // Add the 'clicked' class to the current row
+            deliverableRow.classList.add('clicked');
+            previousClickedRow = deliverableRow;
+  
+            // Open the Document Evidence Modal
+            var rect = deliverableRow.getBoundingClientRect();
+            var modal = document.getElementById('document-evidence-modal');
+            modal.style.top = (rect.top + rect.height + window.scrollY) + 'px';
+            modal.style.left = (rect.left + window.scrollX - 300) + 'px'; // Shift 3cm to the left
+            displayDocumentEvidence(deliverable.doc_evidence); // Display document evidence
+          });
+  
+          // Append the deliverable row to the modal content
+          modalContent.appendChild(deliverableRow);
+        });
+      }
+  
+      // Open the modal
+      openModal();
+    }
+  
+    // Function to display document evidence in a modal
+    function displayDocumentEvidence(documentEvidence) {
+      var modalContent = document.getElementById('document-evidence-content');
+      modalContent.innerHTML = ''; // Clear the modal content
+  
+      // Create a header row for the modal
+      var headerRow = document.createElement('div');
+      headerRow.className = 'modal-header-row';
+      // Add header cells for Weight, Document Evidence, Self Confirmation, and Due Date
+      ['Weight', 'Document Evidence', 'Self Confirmation', 'Due Date'].forEach(function(headerText) {
+        var headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+      });
+      modalContent.appendChild(headerRow); // Append the header row to the modal content
+  
+      // Check if there is no document evidence
+      if (documentEvidence.length === 0) {
+        // Display a message if no document evidence is available
+        var emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="5">No document evidence available.</div>';
+        modalContent.appendChild(emptyRow);
+      } else {
+        // Loop through each document evidence
+        documentEvidence.forEach(function(doc) {
+          // Create a new row for the document evidence
+          var docRow = document.createElement('div');
+          docRow.className = 'modal-deliverable-row';
+  
+          // Create a cell for the document evidence weight
+          var weightCell = document.createElement('div');
+          weightCell.className = 'modal-deliverable-cell';
+          weightCell.textContent = doc.doc_evidence_weight || 'N/A'; // Display the weight or 'N/A' if not available
+          docRow.appendChild(weightCell);
+  
+          // Create a cell for the document evidence description
+          var descCell = document.createElement('div');
+          descCell.className = 'modal-deliverable-cell';
+          descCell.textContent = doc.doc_evidence || 'No description available'; // Display the description or a default message
+          docRow.appendChild(descCell);
+  
+          // Create a dropdown for self-confirmation
+          var selfConfirmationCell = document.createElement('div');
+          selfConfirmationCell.className = 'modal-deliverable-cell';
+          var selfConfirmationSelect = document.createElement('select');
+          selfConfirmationSelect.className = 'modal-deliverable-select';
+          selfConfirmationSelect.innerHTML = `
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          `;
+          selfConfirmationCell.appendChild(selfConfirmationSelect);
+          docRow.appendChild(selfConfirmationCell);
+  
+          // Create a cell for the due date
+          var dueDateCell = document.createElement('div');
+          dueDateCell.className = 'modal-deliverable-cell';
+          dueDateCell.textContent = doc.doc_evidence_due_date ? formatDate(doc.doc_evidence_due_date) : 'No due date'; // Display the due date or a default message
+          docRow.appendChild(dueDateCell);
+  
+          // Append the document evidence row to the modal content
+          modalContent.appendChild(docRow);
+        });
+      }
+  
+      // Open the document evidence modal
+      openDocumentEvidenceModal();
+    }
+  
+    // Function to open the deliverables modal
+    function openModal() {
+      document.getElementById('deliverable-modal').style.display = 'block';
+    }
+  
+    // Function to close the deliverables modal
+    function closeModal() {
+      document.getElementById('deliverable-modal').style.display = 'none';
+    }
+  
+    // Function to open the document evidence modal
+    function openDocumentEvidenceModal() {
+      document.getElementById('document-evidence-modal').style.display = 'block';
+    }
+  
+    // Function to close the document evidence modal
+    function closeDocumentEvidenceModal() {
+      document.getElementById('document-evidence-modal').style.display = 'none';
+    }
+  
+    // Function to format a date string into a readable format
+    function formatDate(dateString) {
+      var options = { year: 'numeric', month: 'short', day: 'numeric' };
+      var date = new Date(dateString);
+      return date.toLocaleDateString(undefined, options);
+    }
+  
+    // Function to calculate the number of working days between two dates
+    function calculateWorkingDays(startDate, endDate) {
+      var count = 0;
+      var currentDate = new Date(startDate);
+  
+      // Loop through each day between the start and end dates
+      while (currentDate <= endDate) {
+        var dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {  // Skip weekends (Sunday = 0, Saturday = 6)
+          count++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+      }
+  
+      return count; // Return the total number of working days
+    }
+  
+    // Function to determine the color for a due date based on the number of working days left
+
+function getColorForDueDate(workDaysLeft) {
+    if (workDaysLeft >= 20) {
+        return 'green';
+    } else if (workDaysLeft >= 10) {
+        return 'yellow';
+    } else if (workDaysLeft >= 1) {
+        return 'orange';
+    } else {
+        return 'red';
+    }
+}
+
+</script>
+</body>
+<a href="http://127.0.0.1:8002/appraisal/" style="position: fixed; font-size: 10px; top: 5px; right: 5px; color: black; display: flex; flex-direction: column; align-items: center;">
+    <i class="fa fa-home"></i>
+  </a>
+</html>

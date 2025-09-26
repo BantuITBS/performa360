@@ -1,0 +1,3782 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/admin/img/pmh_3.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">   
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/appraisals.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Bootstrap 5 CSS -->
+</head>
+<!-- Add this CSS -->
+<style>
+
+/* Floating Theme Toggle Button */
+.theme-container {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  animation: float 4s ease-in-out infinite;
+}
+#theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+/* Dark Theme Overrides */
+body.dark-theme {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  color: #e6e6e6;
+}
+body.dark-theme .performance-statement {
+    color: #e9ecef !important;
+    background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(40,40,40,0.9)) !important;
+}
+body.dark-theme .platform-name {
+    color: #1ABB9C !important;
+    background: rgba(26, 187, 156, 0.1) !important;
+}
+body.dark-theme .platform-name:hover {
+    background: rgba(26, 187, 156, 0.2) !important;
+}
+body.dark-theme .highlight-word {
+    color: #1ABB9C !important;
+}
+body.dark-theme .decorative-underline::after {
+    background: repeating-linear-gradient(90deg, transparent 0 2px, #1ABB9C 2px 4px) !important;
+}
+/* Video CTA dark mode */
+body.dark-theme .video-cta {
+    background: rgba(30, 30, 30, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+body.dark-theme .cta-sub {
+    color: white !important;
+}
+
+/* Dark theme for side menu and nav text (excluding hamburger icon) */
+body.dark-theme .menu-header,
+body.dark-theme .menu-item,
+body.dark-theme .menu-item .position-relative,
+body.dark-theme .menu-item span,
+body.dark-theme .menu-item i:not(.text-success):not(.text-gradient-primary) {
+    color: var(--primary-gradient) !important;
+}
+/* Existing dark theme hamburger rule - MODIFY THIS */
+body.dark-theme .hamburger-menu .fas.fa-bars {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add contrast shadow */
+}
+
+/* Add these new rules for button background in dark mode */
+body.dark-theme .hamburger-menu .btn-neumorphic {
+    background: rgba(60, 60, 60, 0.9) !important;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3),
+               -5px -5px 10px rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-theme .hamburger-menu:hover .btn-neumorphic {
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.3),
+               inset -5px -5px 10px rgba(255, 255, 255, 0.05) !important;
+}
+        :root {
+            --primary: #2A3F54;
+            --secondary: #1ABB9C;
+            --accent: #3498DB;
+            --light: #F7F9FC;
+            --dark: #1A2A3A;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .feature-tile {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .feature-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .feature-tile:hover::before {
+            left: 100%;
+        }
+
+        .hamburger-menu {
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .hamburger-menu:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-gradient .modal-content {
+            background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);
+            border-radius: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-neumorphic {
+            background: var(--light);
+            border-radius: 10px;
+            box-shadow: 5px 5px 10px #d1d9e6,
+                       -5px -5px 10px #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .btn-neumorphic:hover {
+            box-shadow: inset 5px 5px 10px #d1d9e6,
+                       inset -5px -5px 10px #ffffff;
+        }
+
+        .menu-header {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-header:hover {
+    background: rgba(25, 113, 194, 0.05);
+    transform: translateX(2px);
+}
+
+.menu-item {
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+    background: rgba(25, 113, 194, 0.08);
+    color: #1971c2 !important;
+    padding-left: 1rem !important;
+}
+
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease;
+    opacity: 0;
+}
+
+.submenu.expanded {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.transition-rotate {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[aria-expanded="true"] .transition-rotate {
+    transform: rotate(180deg);
+}
+
+/* Login Modal Container */
+#loginModal .modal-content {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+/* Modal Header */
+#loginModal .modal-header {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Form Elements */
+#loginModal .form-control {
+  font-size: 12px !important;
+  padding: 4px !important;
+  border-radius: 0 !important;
+  border: 1px solid #007bff;
+}
+
+#loginModal .form-label {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+/* Readonly Fields */
+#loginModal .readonly-group .form-control-plaintext {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  border: 1px solid #dee2e6;
+  padding: 4px !important;
+  font-size: 12px !important;
+}
+
+/* Image Upload Section */
+#loginModal #upload-container {
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+#loginModal #image-preview {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #007bff;
+  transition: border-color 0.3s ease;
+}
+
+#loginModal #preview-image {
+  object-fit: cover;
+}
+
+/* Login Button */
+#loginModal #enter-button {
+  font-size: 12px;
+  padding: 4px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive States */
+#loginModal #upload-container:hover {
+  color: #0056b3;
+}
+
+#loginModal #image-preview:hover {
+  border-color: #0056b3;
+}
+
+#loginModal .form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#loginModal #enter-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Footer Styling */
+.custom-footer_1 {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0; /* Reduced padding */
+    margin-top: auto; 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 2.95cm; /* Reduced height by half */
+    display: flex;
+    flex-direction: column; /* Added to stack elements vertically */
+    align-items: center;
+    background: linear-gradient(to top, #1ABB9C 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Footer Sections */
+.footer-section_1 {
+    padding: 0.5rem; /* Reduced padding */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    margin-bottom: 0.25rem; /* Added margin */  
+}
+
+/* Headings */
+.footer-heading_1 {
+    color: #fff;
+    font-size: 0.7rem; /* Reduced font size */
+    margin-bottom: 0.5rem; /* Reduced margin */
+    position: relative;
+    padding-bottom: 0.2rem; /* Reduced padding */
+    background: linear-gradient(to top, #2A3F54 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Copyright */
+.copyright-text_1 {
+    font-size: 0.6rem; /* Reduced font size */
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin-top: 0.5rem; /* Added margin */
+    background: linear-gradient(to top, #2A3F54 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Headings */
+.footer-heading_1 {
+    color: #fff;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-bottom: 0.3rem;
+    background: linear-gradient(to top, #2A3F54 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+.footer-heading_1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: #1ABB9C;
+}
+
+/* Links */
+.footer-link_1 {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.2rem;
+    border-radius: 6px;
+    position: relative; /* Added position relative */
+    top: -0.37cm; /* Added negative top offset */
+    background: linear-gradient(to top, #2A3F54 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+.footer-link_1:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+/* Call to Action */
+.cta-link_1 {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    padding: 0.3rem 0.8rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.cta-link_1:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #1ABB9C;
+    letter-spacing: 0.5px;
+}
+
+/* Social Icons */
+.social-icon_1 {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-icon_1:hover {
+    color: #1ABB9C;
+    transform: translateY(-3px);
+}
+.divider_1 {
+    margin: 0 1rem;
+    opacity: 0.3;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .footer-section_1 {
+        margin-bottom: 1rem;
+    }
+    
+    .footer-heading_1::after {
+        width: 10px;
+    }
+
+    .custom-footer_1 {
+        height: auto;
+        padding: 0.8rem 0;
+    }
+}
+.copyright-text_1 {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 3.0rem; /* Previously 2rem, now reduced by 0.2cm */
+}
+    /* Custom Modal Styling */
+    .modal-custom {
+    max-width: 900vw; /* Increased from 50vw */
+    min-width: 8000px; /* Doubled from 400px */
+    margin: 0 auto;
+    animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+    
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    .modal-content {
+        border-radius: 0 0 12px 12px !important;
+        min-height: 60vh;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .modal-custom {
+            max-width: 90vw;
+            min-width: unset;
+        }
+    }
+    
+.modal-content {
+    border-radius:0.75rem!important;
+    box-shadow:0 12px 40px rgba(26,187,156,0.2);
+}
+.bg-gradient-primary{
+    background:linear-gradient(135deg,rgba(26,187,156,0.9),rgba(42,63,84,0.9))!important;
+}
+.text-gradient-primary{
+    background:linear-gradient(45deg,#1ABB9C,#2A3F54);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.form-control-sm,.form-select-sm{
+    font-size:0.875rem!important;
+    height:calc(2rem + 2px);
+    padding:0.375rem 0.75rem!important;
+}
+.form-floating>label{
+    padding:0.375rem 0.75rem!important;
+    font-size:0.8rem!important;
+    transform:scale(0.85) translateY(-0.9rem) translateX(0.15rem);
+}
+.card{
+    border-radius:0.5rem!important;
+}
+.card-title{
+    font-size:0.9rem!important;
+    letter-spacing:0.5px;
+}
+.btn-gradient-primary{
+    background:linear-gradient(135deg,#1ABB9C 0%,#2A3F54 100%);
+    border:none;
+    color:white!important;
+    transition:all 0.2s ease;
+}
+.btn-gradient-primary:hover{
+    opacity:0.92;
+    transform:translateY(-1px);
+}
+.small{
+    font-size:0.8rem!important;
+}
+.fas{
+    min-width:18px;
+    font-size:0.9em;
+}
+#total-cost,#review_number{
+    font-size:1.1rem;
+}
+@media (max-width:992px){
+    .modal-dialog{
+        margin:0.5rem!important;
+    }
+    .col-lg-6{
+        margin-bottom:1rem;
+    }
+}
+
+/* Custom Gradient & Animation */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+}
+
+.text-gradient-primary {
+    background: linear-gradient(45deg, #2A3F54, #1ABB9C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(45deg, #2A3F54, #1ABB9C);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(42,63,84,0.2);
+}
+
+/* Form Styling */
+.form-control {
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-bottom-color: #1ABB9C;
+}
+
+.form-floating label {
+    padding-left: 35px;
+    color: #6c757d;
+}
+
+.form-floating>.form-control:focus~label {
+    color: #1ABB9C;
+}
+
+/* Icon Positioning */
+.form-floating i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #6c757d;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Animation Delays */
+.animate__fadeInLeft { animation-delay: 0.2s; }
+.animate__fadeInRight { animation-delay: 0.4s; }
+.animate__fadeInUp { animation-delay: 0.6s; }
+
+#signupModal .form-control {
+    font-size: 12px !important;
+    padding: 4px !important;
+    border-radius: 0 !important;
+    border: 1px solid var(--primary);
+}
+
+#signupModal .input-group label {
+    font-size: 14px;
+    color: var(--dark);
+}
+
+#signupModal .modal-content {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+#signupModal .btn-primary {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+    border: none;
+}
+
+
+/* MENU CONTAINER */
+.menu-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+}
+
+/* MENU LINKS */
+.menu-links {
+    display: none;
+    width: calc(15% + 1cm);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 50px;
+    right: 0;
+}
+
+/* MENU HEADING */
+.menu-heading {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.menu-heading a {
+    text-decoration: none;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-heading a:hover {
+    color: #0056b3;
+    transform: translateX(5px);
+}
+
+/* CONTACT DETAILS */
+.contact-details {
+    display: none;
+    margin-left: 15px;
+    border-left: 3px solid #007bff;
+    padding-left: 12px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.contact-details p {
+    margin: 6px 0;
+}
+
+.contact-details a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+.contact-details a:hover {
+    color: #007bff;
+    transform: scale(1.05);
+}
+
+/* ICONS */
+.fas, .fab {
+    font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.fas.fa-envelope {
+    color: #007bff;
+}
+
+.fab.fa-whatsapp {
+    color: #25D366;
+}
+
+.contact-details a:hover .fas, 
+.contact-details a:hover .fab {
+    transform: rotate(-10deg) scale(1.1);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+        :root {
+            --primary: #2A3F54;
+            --secondary: #1ABB9C;
+            --white: #ffffff;
+            --shadow: rgba(0,0,0,0.2);
+            --transition: 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container { max-width: 1200px;
+            width: 150%; }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            padding: 4rem 2rem 3rem;
+            position: relative;
+            margin-top: -1.2cm;
+            
+        }
+
+        .header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 0 1.5rem;
+            position: relative;
+            letter-spacing: -0.02em;
+            width: 100%;
+        }
+
+        .logo-emblem {
+            position: absolute;
+            margin-top: -5px;
+            margin-left: -7px;
+            left: 10px;
+            width: 140px;
+            height: 69px;
+            background: url('/static/admin/img/pmh_3.png') center/cover no-repeat;
+            border-radius: 0px;
+            border: 2px solid var(--white);
+            box-shadow: 0 4px 10px var(--shadow);
+            z-index: 1;
+        }
+
+        /* Performance Statement */
+        .performance-statement {
+            font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+            line-height: 1.6;
+            color: var(--primary);
+            max-width: 85ch;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: justify;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,249,250,0.9));
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--shadow);
+            transition: transform var(--transition);
+        }
+
+        .statement-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .platform-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--secondary);
+            position: relative;
+            padding: 0 0.3em;
+            transition: color var(--transition);
+        }
+
+        .platform-name::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition);
+        }
+
+        .highlight-word {
+            font-weight: 650;
+            color: var(--primary);
+            position: relative;
+            transition: color var(--transition);
+        }
+
+        .decorative-underline {
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .decorative-underline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent 0 2px, var(--secondary) 2px 4px);
+        }
+
+        .animated-words {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 0 0.3em;
+            transition: transform var(--transition), text-shadow var(--transition);
+        }
+
+        /* Interactive States */
+        .performance-statement:hover { transform: translateY(-5px); }
+        .platform-name:hover { color: var(--primary); }
+        .platform-name:hover::after { transform: scaleX(1); }
+        .highlight-word:hover { color: var(--secondary); }
+        .animated-words:hover {
+            transform: translateY(-3px);
+            text-shadow: 0 6px 12px rgba(26,187,156,0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section { animation: fadeIn 0.8s ease-out; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-section { padding: 3rem 1.5rem; }
+            .header-title { font-size: clamp(2rem, 4vw, 3rem); }
+            .performance-statement { padding: 1.5rem; font-size: clamp(0.8rem, 1.6vw, 1rem); }
+            .logo-emblem { width: 45px; height: 38px; top: 3px; left: 5px; }
+        }
+
+.tile-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 75%);
+    transform: rotate(30deg);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.icon-container {
+    position: relative;
+    margin: 0 auto 1.0rem;
+    width: 60px;
+    height: 60px;
+}
+
+.fa-sign-in-alt:hover::after {
+    content: 'Click to access full functionality';
+    position: absolute;
+    top: 80%;
+    left: 20%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.fa-sign-in-alt {
+    font-size: 2.5rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.icon-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 187, 156, 0.2);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    top: 0;
+    left: 0;
+}
+
+.text-group {
+    position: relative;
+    z-index: 2;
+}
+
+.prompt-text {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 200;
+}
+
+.action-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.login-tile:hover .tile-shine {
+    opacity: 0.3;
+}
+
+.login-tile:hover .fa-sign-in-alt {
+    transform: translateY(-3px) scale(1.1);
+    color: white;
+}
+
+/* Animations */
+@keyframes glow-pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.9; transform: scale(1.1); }
+    100% { opacity: 0.6; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 0.4; }
+    100% { transform: scale(0.8); opacity: 0.8; }
+}
+
+.modal-content {
+    border-radius:0.75rem!important;
+    box-shadow:0 8px 30px rgba(26,187,156,0.15);
+}
+.bg-gradient-primary {
+    background:linear-gradient(135deg,rgba(42,63,84,0.95),rgba(26,187,156,0.9))!important;
+}
+.text-gradient-primary {
+    background:linear-gradient(45deg,#2A3F54,#1ABB9C);
+    -webkit-background-clip:text;
+    background-clip:text;
+}
+.form-control-sm {
+    font-size:0.875rem!important;
+    height:calc(2rem + 2px);
+    padding:0.375rem 0.75rem!important;
+}
+.form-floating>label {
+    padding:0.375rem 0.75rem!important;
+    font-size:0.8rem!important;
+    transform:scale(0.85) translateY(-0.9rem) translateX(0.15rem);
+}
+.card {
+    border-radius:0.5rem!important;
+    transition:transform 0.2s ease;
+}
+.card:hover {
+    transform:translateY(-3px);
+}
+.btn-gradient-primary {
+    background:linear-gradient(135deg,#1ABB9C,#2A3F54);
+    border:none;
+    color:white!important;
+    transition:all 0.2s ease;
+}
+.btn-gradient-primary:hover {
+    opacity:0.92;
+    transform:translateY(-1px);
+}
+.small {
+    font-size:0.8rem!important;
+}
+.fas {
+    min-width:18px;
+    font-size:0.9em;
+}
+@media (max-width:992px) {
+    .modal-dialog {
+        margin:0.5rem!important;
+    }
+    .col-lg-6 {
+        margin-bottom:1rem;
+    }
+    #image-preview {
+        width:100px!important;
+        height:100px!important;
+    }
+}
+
+/* Add hover effect for the tile */
+.glassmorphism:hover {
+    transform: translateY(-3px);
+    transition: transform 0.3s ease;
+}
+
+/* Improve modal styling */
+.modal-content {
+    border-radius: 8px;
+    border: none;
+}
+
+.readonly-group input {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+#image-preview:hover {
+    border-color: #0056b3;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-left: 4px solid #457b9d;
+}
+
+.tier-card {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(69,123,157,0.1);
+}
+
+.tier-icon {
+    font-size: 2rem;
+    color: #1d3557;
+    margin-bottom: 1rem;
+}
+
+.plan-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+}
+
+.discount-badge {
+    background: #2a9d8f;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.currency-box {
+    background: rgba(231,111,81,0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 3px solid #e76f51;
+}
+
+.performance-statement {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.16rem;
+    line-height: 1.8;
+    color: #2d3748;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+    margin-top: -10px;
+}
+
+
+
+
+
+
+.profile-frame {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    position: relative;
+    background: var(--glass-bg);
+    border: 2px dashed #4e73df;
+    transition: all 0.3s ease;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: var(--primary-gradient);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.profile-overlay:hover {
+    transform: scale(1.1);
+}
+
+.hover-effect:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary {
+    background: var(--primary-gradient);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+}
+
+.pmh-tile {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 2/1, 0.5;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 150px; /* adjust height as needed */
+    width: 300px; /* adjust width as needed */
+    border-radius: 10px;
+}
+
+.pmh-tile .tile-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pmh-tile:hover .tile-content {
+    opacity: 1;
+}
+
+.pmh-tile .tile-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 1px 5px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.pmh-tile .tile-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.pmh-tile .tile-description {
+    font-size: 12px;
+    color: #ccc;
+}
+/* Tile Images */
+#pmh-tile-1 {
+    background-image: url("{% static 'admin/img/Perfoma360_SelfAppraisal.JPG' %}");
+}
+
+#pmh-tile-2 {
+    background-image: url("{% static 'admin/img/Perfoma360_Skills_Goals.JPG' %}");
+}
+
+#pmh-tile-3 {
+    background-image: url("{% static 'admin/img/Perfoma360_KPICascadeMap.JPG' %}");
+}
+
+#pmh-tile-4 {
+    background-image: url("{% static 'admin/img/Perfoma360_Leadership.JPG' %}");
+}
+
+#pmh-tile-5 {
+    background-image: url("{% static 'admin/img/Perfoma360_ExperiencePulse.JPG' %}");
+}
+
+#pmh-tile-6 {
+    background-image: url("{% static 'admin/img/Perfoma360_AssessorAppraisal.JPG' %}");
+}
+
+#pmh-tile-7 {
+    background-image: url("{% static 'admin/img/Perfoma360_Configuration.JPG' %}");
+}
+
+#pmh-tile-8 {
+    background-image: url("{% static 'admin/img/Perfoma360_Dashboards.JPG' %}");
+}
+
+
+.pmh-tile-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px 0; /* Vertical gap doubled from 3px to 6px, horizontal gap remains 0px */
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-top: -30px;
+}
+
+/* Content Overlay */
+.tile-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%);
+    color: white;
+}
+
+/* Tile Title */
+.tile-title {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    transform: translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tile Description */
+.tile-description {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.70rem;
+    line-height: 1.5;
+    max-width: 80%;
+}
+
+/* Tile Hover Effects */
+.pmh-tile:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.pmh-tile:hover::before {
+    transform: scale(1.05);
+}
+
+.pmh-tile:hover .tile-title {
+    transform: translateY(0);
+}
+
+.pmh-tile:hover .tile-description {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.1s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pmh-tile-container {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+        padding: 1rem;
+    }
+
+    .tile-content {
+        padding: 1.1rem;
+    }
+
+    .tile-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Add 3px space between tiles */
+.pmh-tile:not(:last-child) {
+    margin-right: 3px;
+}
+
+/* Animation for Tile Entrance */
+@keyframes tileEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pmh-tile {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    height: 75px;
+    width: 170px;
+    border-radius: 10px;
+    background-color: #f8f9fa; /* Fallback background color */
+    justify-content: center;
+    margin-left: 60px;
+}
+
+
+/* Animation delays */
+.pmh-tile:nth-child(1) { animation-delay: 0.1s; }
+.pmh-tile:nth-child(2) { animation-delay: 0.2s; }
+.pmh-tile:nth-child(3) { animation-delay: 0.3s; }
+.pmh-tile:nth-child(4) { animation-delay: 0.4s; }
+.pmh-tile:nth-child(5) { animation-delay: 0.5s; }
+.pmh-tile:nth-child(6) { animation-delay: 0.6s; }
+.pmh-tile:nth-child(7) { animation-delay: 0.7s; }
+.pmh-tile:nth-child(8) { animation-delay: 0.8s; }
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .pmh-tile {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+.video-cta-container {
+    position: relative;
+    max-width: 600px;
+    margin: 1.5rem auto;
+    
+}
+
+.video-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.0rem;
+    padding: 1.0rem 1.2rem;
+    background: rgba(255,255,255,0.95);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,123,255,0.15);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,123,255,0.2);
+    margin-top: -140px;
+}
+
+.video-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,123,255,0.25);
+    background: rgba(255,255,255,0.98);
+}
+
+.play-pulse {
+    width: 48px;
+    height: 48px;
+    color: #007bff;
+    animation: pulseScale 2s ease-in-out infinite;
+}
+
+.cta-gradient {
+    background: linear-gradient(135deg, #007bff 0%, #00c3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cta-sub {
+    display: block;
+    font-size: 0.9rem;
+    color: #4a5568;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+@keyframes pulseScale {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.video-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0,123,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-cta:hover::before {
+    opacity: 1;
+}
+
+.video-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    animation: borderFlow 4s linear infinite;
+    mask: linear-gradient(90deg, transparent, white 50%, transparent);
+}
+
+@keyframes borderFlow {
+    0% { border-color: rgba(0,123,255,0); }
+    50% { border-color: rgba(0,123,255,0.3); }
+    100% { border-color: rgba(0,123,255,0); }
+}
+
+.video-cta-container {
+    position: relative;
+    max-width: 600px;
+    margin: 1rem auto;  /* Reduced from 1.5rem */
+}
+
+.video-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;  /* Reduced from 1.0rem */
+    padding: 0.6rem 1.2rem;  /* Vertical padding reduced by 40% */
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;  /* Slightly smaller radius */
+    box-shadow: 0 6px 24px rgba(0,123,255,0.15);  /* Softer shadow */
+    /* Other properties remain unchanged */
+}
+
+.play-pulse {
+    width: 40px;  /* Reduced from 48px */
+    height: 40px;  /* Reduced from 48px */
+}
+
+.cta-gradient {
+    font-size: 1.2rem;  /* Reduced from 1.4rem */
+    letter-spacing: -0.3px;
+}
+
+.cta-sub {
+    font-size: 0.85rem;  /* Reduced from 0.9rem */
+    margin-top: 0.3rem;  /* Reduced from 0.5rem */
+}
+
+
+.contact-menu-container {
+    position: fixed;
+    top: 70px; /* Adjust as needed */
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 140px;  /* Adjust padding to ensure space for links */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    display: none; /* Initially hidden */
+    border-color: #00c3ff;
+    border: 2px solid;
+}
+
+
+.contact-details a {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.contact-details a:hover {
+    color: #00c3ff;
+}
+
+.contact-details i {
+    margin-right: 8px;
+}
+
+/* Custom Styles */
+.text-primary-gradient { background: linear-gradient(45deg, #6A82FB, #FC5C7D); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.text-white-90 { color: rgba(0,0,0,0.9) !important; }
+.text-white-80 { color: rgba(0,0,0,0.7) !important; }
+
+.hover-bg-glass { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.hover-bg-glass:hover { 
+    background: rgba(255,255,255,0.05) !important;
+    transform: translateX(8px);
+    backdrop-filter: blur(4px);
+}
+
+.hover-underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    transition: width 0.3s ease;
+}
+
+.menu-item:hover .hover-underline {
+    width: 100%;
+}
+
+.transition-all { transition: all 0.3s ease; }
+
+@keyframes menuEntrance {
+    0% { opacity: 0; transform: translateX(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+#sideMenu {
+    animation: menuEntrance 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.menu-header {
+    border-left: 3px solid;
+    border-image: linear-gradient(180deg, #6A82FB 0%, #FC5C7D 100%);
+    border-image-slice: 1;
+}
+
+.pitch-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.pitch-modal-content {
+    background: linear-gradient(145deg, #2A3F54 0%, #1ABB9C 100%);
+    color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.pitch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.pitch-header h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.close-button, .close-pitch {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.close-button:hover, .close-pitch:hover {
+    transform: rotate(90deg);
+}
+
+.feature-highlight, .performance-benefits, .value-proposition {
+    margin-bottom: 25px;
+}
+
+.feature-highlight {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.icon-box {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.icon-box i {
+    font-size: 36px;
+    color: white;
+}
+
+.performance-benefits ul {
+    list-style: none;
+    padding: 0;
+}
+
+.performance-benefits li {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    border-radius: 6px;
+    position: relative;
+    padding-left: 40px;
+}
+
+.performance-benefits li:before {
+    content: '✓';
+    position: absolute;
+    left: 15px;
+    color: #1ABB9C;
+}
+
+.value-proposition {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.prop-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    width: 48%;
+}
+
+.prop-card h5 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    background: #16a085;
+}
+
+.pitch-cta {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .prop-card {
+        width: 100%;
+    }
+}
+
+
+
+.icon-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(26, 187, 156, 0.3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.pulse-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(26, 187, 156, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: text-fade 2s infinite;
+}
+
+@keyframes text-fade {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.2; }
+    100% { opacity: 0.4; }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(2);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+    .login-tile {
+        position: absolute;
+        top: 10px;
+        right: 30px;
+        z-index: 1000;
+        cursor: pointer;
+        margin-right: 50px;
+    }
+
+    .modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 1050; /* Ensures it stays on top */
+    background: linear-gradient(90deg, #007bff, #0056b3); /* Keep the gradient */
+}
+
+    /* Additional Styles for Separation */
+    .company-login-group {
+        border: 2px solid rgba(42, 63, 84, 0.1);
+        position: relative;
+        margin-bottom: 1.5rem !important;
+        color: red;
+    }
+    
+    .company-login-group::before {
+        content: "Company Login";
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background: white;
+        padding: 0 8px;
+        color: #2A3F54;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .employee-login-group {
+        border: 2px solid rgba(26, 187, 156, 0.1);
+        position: relative;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .employee-login-group::before {
+        content: "Employee Login";
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background: white;
+        padding: 0 8px;
+        color: #1ABB9C;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .icon-badge {
+        border-radius: 8px 0 0 8px !important;
+        width: 40px;
+        justify-content: center;
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-1px);
+        transition: transform 0.2s ease;
+    }
+
+    .disabled-field {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .header-title {
+                position: fixed;
+                top: -18px;
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                z-index: 1000;
+                padding: 10px 20px;
+                text-align: center;
+            }
+
+            /* Modal Overlay */
+            .modal-overlay {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+            
+            /* Modal Content Centered */
+            .modal-content {
+                position: relative;
+                margin: 5% auto;
+                width: fit-content;
+                background-color: transparent;
+                text-align: center;
+            }
+            
+            /* Close Button */
+            .close-btn {
+                position: absolute;
+                top: -25px;
+                right: -25px;
+                color: white;
+                font-size: 30px;
+                font-weight: bold;
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.6);
+                border-radius: 50%;
+                padding: 5px 10px;
+            }
+
+:root {
+    --primary-color: #3498db;
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --neumorphic-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-theme {
+    --primary-color: #2ecc71;
+    --background-color: #2c3e50;
+    --text-color: #f9f9f9;
+    --neumorphic-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-section {
+    background-color: var(--background-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--neumorphic-shadow);
+    transition: background-color 0.3s;
+}
+
+.header-title {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    padding: 10px;
+    border-radius: 10px;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.btn-neumorphic {
+    background-color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: var(--neumorphic-shadow);
+}
+
+.btn-neumorphic:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .btn-neumorphic:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+
+.modal-content {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.modal-header {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.dark-theme .modal-header {
+    background-color: var(--primary-color);
+}
+
+.glass-tile {
+    background-color: var(--background-color);
+    box-shadow: var(--neumorphic-shadow);
+}
+
+.input-group-text.icon-badge {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.form-control.modern-input {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+}
+
+.form-control.modern-input:focus {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .form-control.modern-input:focus {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.btn-gradient-primary {
+    background-image: linear-gradient(to bottom, var(--primary-color), #2ecc71);
+    color: #fff;
+}
+
+.dark-theme .btn-gradient-primary {
+    background-image: linear-gradient(to bottom, var(--primary-color), #1a1d23);
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.statement-section {
+    height: 50vh; /* adjust height to half of the viewport height */
+    width: 99vw; /* adjust width to 99% of the viewport width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: -40px;
+    padding: -450px;
+}
+.modal-body {
+    max-height: 70vh; /* or adjust to your preference */
+    overflow-y: auto;
+}
+
+    /* Chat Toggle Button */
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #1ABB9C;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(26, 187, 156, 0.3);
+      background-color: #14967d;
+    }
+
+    /* Chat Window */
+    .chatbot-window {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      max-height: 450px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 999;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid rgba(26, 187, 156, 0.15);
+    }
+
+    /* Header */
+    .chatbot-header {
+      background: rgba(26, 187, 156, 0.1);
+      color: #1a1a1a;
+      padding: 16px;
+      font-weight: 600;
+      text-align: center;
+      border-bottom: 2px solid #1ABB9C;
+    }
+
+    /* Chat Body */
+    .chatbot-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    /* Input Area */
+    .chatbot-input {
+      display: flex;
+      border-top: 1px solid rgba(26, 187, 156, 0.15);
+      background: #ffffff;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      font-size: 14px;
+      outline: none;
+      background: transparent;
+      color: #1a1a1a;
+    }
+
+    .chatbot-input button {
+      background: #1ABB9C;
+      color: #fff;
+      border: none;
+      padding: 0 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .chatbot-input button:hover {
+      background: #14967d;
+    }
+
+    /* Messages */
+    .chat-message {
+      margin: 8px 0;
+      line-height: 1.4;
+      padding: 12px 16px;
+      border-radius: 8px;
+      max-width: 85%;
+      font-size: 14px;
+      clear: both;
+    }
+
+    .bot-message {
+      background: rgba(26, 187, 156, 0.1);
+      color: #1a1a1a;
+      border: 1px solid rgba(26, 187, 156, 0.1);
+      float: left;
+    }
+
+    .user-message {
+      background: #1ABB9C;
+      color: #ffffff;
+      float: right;
+      border: 1px solid #14967d;
+    }
+
+    /* Dark Theme */
+    body.dark-theme .chatbot-window {
+      background: #2d2d2d;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-theme .chatbot-header {
+      background: rgba(26, 187, 156, 0.15);
+      color: #1ABB9C;
+      border-bottom-color: rgba(26, 187, 156, 0.3);
+    }
+
+    body.dark-theme .chatbot-body {
+      background: #2d2d2d;
+    }
+
+    body.dark-theme .chatbot-input {
+      border-top-color: rgba(255, 255, 255, 0.1);
+      background: #2d2d2d;
+    }
+
+    body.dark-theme .chatbot-input input {
+      color: #e6e6e6;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark-theme .bot-message {
+      background: rgba(26, 187, 156, 0.15);
+      color: #e6e6e6;
+    }
+
+    body.dark-theme .user-message {
+      background: #1ABB9C;
+      color: #ffffff;
+      border-color: #14967d;
+    }
+</style>
+
+<!-- Chat Icon -->
+<button class="chatbot-toggle" onclick="toggleChatbot()">💬</button>
+
+<!-- Chat Window -->
+<div class="chatbot-window" id="chatbot" style="display: none;">
+  <div class="chatbot-header">Performa360 Chat</div>
+  <div class="chatbot-body" id="chatBody">
+    <div class="chat-message bot-message">Hi! I’m here to help. Ask me anything.</div>
+  </div>
+  <div class="chatbot-input">
+    <input type="text" id="userInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const tile = document.getElementById("pmh-tile-7");
+        if (tile) {
+            tile.addEventListener("click", function () {
+                // Redirects to /settings/application/
+                window.location.href = "{% url 'settings' %}";
+            });
+        }
+    });
+
+
+
+
+  let sessionId = localStorage.getItem("chat_session_id") || null;
+
+  function toggleChatbot() {
+    const chatbot = document.getElementById('chatbot');
+    chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function appendMessage(message, sender) {
+    const chatBody = document.getElementById("chatBody");
+    const div = document.createElement("div");
+    div.className = `chat-message ${sender}-message`;
+    div.innerText = message;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage(message, "user");
+    input.value = "";
+
+    fetch("/chat/message/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken()
+      },
+      body: JSON.stringify({
+        session_id: sessionId,
+        sender: "user",
+        message: message
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.session_id) {
+        sessionId = data.session_id;
+        localStorage.setItem("chat_session_id", sessionId);
+      }
+
+      const reply = data.reply || "I'm not sure how to help with that yet, but I’m learning!";
+      appendMessage(reply, "bot");
+
+      // Optionally log bot reply to backend
+      return fetch("/chat/message/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken()
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          sender: "bot",
+          message: reply
+        })
+      });
+    });
+  }
+
+  function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookie = document.cookie.split(';').find(c => c.trim().startsWith(name + '='));
+    return cookie ? decodeURIComponent(cookie.split('=')[1]) : '';
+  }
+</script>
+
+
+
+<!-- Add this HTML before closing body tag -->
+<div class="theme-container" style="margin-left: 180px;margin-bottom: -10px;">
+    <button id="theme-toggle" class="btn"></button>
+</div>
+<body 
+class="position-relative">
+    <!-- Navigation -->
+<!-- Enhanced Side Menu -->
+<div class="glassmorphism position-fixed top-0 end-0 m-4 p-3" id="sideMenu" 
+     style="display: none; width: 280px; z-index: 1020; border-radius: 12px; backdrop-filter: blur(12px) saturate(180%); background: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.15) 100%); box-shadow: 0 8px 32px rgba(0,0,0,0.18);border: 1px solid rgba(255,255,255,0.12);">
+    <ul class="list-unstyled mb-0">
+        <!-- Section Header -->
+        <li class="menu-header mb-3 px-2 py-1">
+            <i class="fas fa-cogs fa-sm me-2 text-primary-gradient"></i>
+            <span class="h6 mb-0 text-white-80">Product Support</span>
+        </li>
+
+        <li class="mb-2">
+            <a href="mailto:solutions@iTBS.co.za" 
+               class="menu-item d-flex align-items-center text-decoration-none text-white-90 p-2 rounded-3
+                      transition-all hover-bg-glass">
+                <i class="fas fa-envelope fa-fw fa-sm me-3 text-gradient-primary"></i>
+                <span class="position-relative">
+                    solutions@pmh.com
+                    <span class="hover-underline" 
+                          style="background: linear-gradient(90deg, #6A82FB 0%, #FC5C7D 100%)"></span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item d-flex align-items-center text-decoration-none text-dark p-2 rounded-3" 
+               data-bs-toggle="modal" 
+               data-bs-target="#pricingModal">
+                <i class="fas fa-wallet fa-sm me-3"></i>Subscription Plans & Pricing
+            </a>
+        </li>
+    </ul>
+</div>
+
+<body>
+    <main class="container py-5" style="margin-top: -70px; width: 95vw; max-width: 95vw; margin-left: auto; margin-right: auto;">
+        <!-- Header Section -->
+        <section class="header-section">
+            <style>
+                .header-title {
+                    border-radius: 0px !important;
+                    color: rgba(0, 255, 150, 0.5);
+                    transition: color 0.3s ease;
+                }
+            
+                body.dark-theme .header-title {
+                    color: rgba(0, 255, 150, 0.15) !important;
+                }
+            </style>
+            
+            <h1 class="header-title">
+                Performa360 Platform
+                <nav class="position-fixed top-0 end-0 p-3 z-index-1030" style="margin-top: -25px;color:rgba(0, 255, 150, 0.15);">
+                    <div class="hamburger-menu" id="hamburgerMenu">
+                        <button class="btn btn-lg btn-neumorphic">
+                            <i class="fas fa-bars text-primary"></i>
+                        </button>
+                    </div>
+                </nav>
+            </h1>
+        </section>
+        <!-- Performance Statement Section -->
+<section class="statement-section" style="margin-top: 40.5px;">
+    <p class="performance-statement" style="width: 200%; font-size: 12px;height: 10px;margin-top: -90px;background-color: transparent !important;">
+       Performa360 Platform — a dynamic platform and ecosystem built around a suite of Performa360 applications  
+        <span class="platform-name" onclick="openPerformaExperiencePulse360()">(Performa360 Setting</span>,  
+        <span class="platform-name" onclick="showPitchModal()">Performa360 Goals Cascading</span>,  
+        <span class="platform-name" onclick="openPerformaExperiencePulse360()">Performa360 Experience Pulse</span>,  
+        <span class="platform-name" onclick="openPerformaSelfAppraisal360()">Performa360 Self Appraisal</span>,  
+        <span class="platform-name" onclick="openPerformaAssessorAppraisal360()">Performa360 Assessor Appraisal</span>,  
+        <span class="platform-name" onclick="openPerformaSkillsGoals360()">Performa360 SkillsForge Pro</span>,  
+        <span class="platform-name" onclick="openPerformaLeadership360()">Performa360 Leadership Matrix</span>,  
+        <span class="platform-name" onclick="openPerformaDashboards360()">Performa360 Dashboards)</span>.  
+        Together, these tools integrate seamlessly to empower businesses to  
+        <span class="highlight-word">align</span> strategy with execution,  
+        <span class="highlight-word">foster</span> a culture of continuous growth, and  
+        <span class="highlight-word">make</span> data-driven decisions. By streamlining  
+        <span class="decorative-underline">goal setting</span>,  
+        <span class="decorative-underline">employee evaluations</span>, and  
+        <span class="decorative-underline">talent development</span>,  
+        Performa360 tools empower your organization/company/institution to  
+        <span class="animated-words">optimize performance</span>,  
+        <span class="animated-words">cultivate excellence</span>, and  
+        <span class="animated-words">achieve your vision through strategic goals cascading, execution, tracking, and reporting</span>.  
+    </p>  
+</section>
+    </main>
+<!-- Video CTA Section -->
+<section style="margin-top: -77.8px; display: flex; justify-content: center;">
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; color: #007bff;">
+      <path d="M8 5v14l11-7z" fill="currentColor"/>
+      <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8z" fill="currentColor"/>
+    </svg>
+    <p id="go-app-link" style="cursor: pointer; color: #007bff; text-decoration: underline; margin: 0;">
+      explore the performa360 ecosystem!
+    </p>
+  </div>
+</section>
+
+<script>
+  document.getElementById('go-app-link').addEventListener('click', function () {
+    window.location.href = "/main/application/";
+  });
+</script>
+
+
+<br>
+<div class="login-tile" 
+     style="position: fixed; top: -5px; right: 30px; z-index: 1050; display: flex; align-items: center; justify-content: center; height: 100px; width: 100px;" 
+     data-bs-toggle="modal" 
+     data-bs-target="#loginModal" 
+     role="button">
+    <!-- Animated Icon with Login Text -->
+    <div class="icon-container" 
+         style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+        <i class="fas fa-sign-in-alt" 
+           style="color: #1ABB9C; font-size: 32px;"></i>
+
+        <div class="icon-pulse">
+            <span class="pulse-text" 
+                  style="font-size: 14px; font-weight: bold; color: #FF0055; animation: pulseOpacity 1.4s infinite;">
+                login
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" style="top: calc(50% - 30px); transform: translateY(-50%) !important;">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0" style="max-height:95vh;overflow-y: hidden;">
+                        <!-- Gradient Header -->
+                        <div class="modal-header bg-gradient-primary text-white py-3">
+                            <div class="w-100 text-center position-relative">
+                                <h2 class="modal-title fs-5 fw-bold mb-0 animated-words" style="overflow: hidden; color:#007bff;">
+                                    <i class="fas fa-unlock-alt me-2"></i>Navigate to Performa360 Portal
+                                </h2>                                              
+                                <p class="mb-0 opacity-75 small">User Login</p>
+                                <button type="button" 
+                                        class="btn-close btn-close-white position-absolute top-0 end-0 m-2" 
+                                        data-bs-dismiss="modal"></button>
+                            </div>
+                        </div>
+                        <!-- Stylish Body -->
+                        <div class="modal-body p-3" >
+                            <form id="login-form" class="needs-validation" novalidate>
+                                {% csrf_token %} <!-- Include CSRF token -->
+                                <div class="row g-3">
+                                    <!-- Left Column -->
+                                    <div class="col-lg-6">
+                                        <!-- Company Login Section -->
+                                        <div class="glass-tile mb-3 p-3 company-login-group">
+                                            <div class="row g-2">
+                                                <!-- Company Name -->
+                                                <div class="col-12">
+                                                    <label class="small mb-1 text-primary">Company name</label>
+                                                    <div class="input-group hover-effect">
+                                                        <span class="input-group-text icon-badge">
+                                                            <i class="fas fa-building text-white"></i>
+                                                        </span>
+                                                        <input type="text" 
+                                                            class="form-control modern-input" 
+                                                            id="company-name" 
+                                                            required
+                                                            style="border-radius: 0 8px 8px 0">
+                                                    </div>
+                                                </div>
+                            
+                                                <!-- Company Code -->
+                                                <div class="col-12">
+                                                    <label class="small mb-1 text-primary">Company code</label>
+                                                    <div class="input-group hover-effect">
+                                                        <span class="input-group-text icon-badge">
+                                                            <i class="fas fa-fingerprint text-white"></i>
+                                                        </span>
+                                                        <input type="password" 
+                                                            class="form-control modern-input" 
+                                                            id="company-code" 
+                                                            required
+                                                            style="border-radius: 0 8px 8px 0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            
+                                        <!-- Employee Login Section -->
+                                        <div class="glass-tile mb-3 p-3 employee-login-group">
+                                            <div class="row g-2">
+                                                <!-- Employee Name -->
+                                                <div class="col-12">
+                                                    <label class="small mb-1 text-primary" >Employee Name</label>
+                                                    <div class="input-group hover-effect">
+                                                        <span class="input-group-text icon-badge">
+                                                            <i class="fas fa-user-tag text-white"></i>
+                                                        </span>
+                                                        <input type="text" 
+                                                            class="form-control modern-input" 
+                                                            id="username" 
+                                                            required
+                                                            style="border-radius: 0 8px 8px 0">
+                                                    </div>
+                                                </div>
+                            
+                                                <!-- Password -->
+                                                <div class="col-12">
+                                                    <label class="small mb-1 text-primary">Password</label>
+                                                    <div class="input-group hover-effect">
+                                                        <span class="input-group-text icon-badge">
+                                                            <i class="fas fa-lock text-white"></i>
+                                                        </span>
+                                                        <input type="password" 
+                                                            class="form-control modern-input" 
+                                                            id="employee-password" 
+                                                            required
+                                                            style="border-radius: 0 8px 8px 0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                            <!-- Location Tile -->
+                            <div class="glass-tile mt-2 p-3" style="border-radius: 12px;">
+                                <div class="row g-2">
+                                    <!-- Region -->
+                                    <div class="col-6" style="width: 1px; height: 1px; overflow: hidden; visibility: hidden; position: absolute;">
+                                        <label class="small mb-1 text-primary">
+                                            Region
+                                        </label>
+                                        <div class="input-group hover-effect">
+                                            <span class="input-group-text icon-badge">
+                                                <i class="fas fa-map-marker-alt text-white"></i>
+                                            </span>
+                                            <input type="text" 
+                                                class="form-control modern-input" 
+                                                id="region-branch" 
+                                                readonly>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <!-- Country -->
+                                    <div class="col-6" style="visibility: hidden;">
+                                        <label class="small mb-1 text-primary" style="visibility: hidden;">
+                                            Country
+                                        </label>
+                                        <div class="input-group hover-effect">
+                                            <span class="input-group-text icon-badge">
+                                                <i class="fas fa-globe text-white"></i>
+                                            </span>
+                                            <input type="text" 
+                                            class="form-control modern-input" 
+                                            id="country" 
+                                            readonly 
+                                            style="width: 200px; margin-right: -145px;border-radius: 5px;">
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-lg-6">
+                            <!-- Profile Tile -->
+                            <div class="glass-tile h-100 p-3 d-flex flex-column" style="border-radius: 12px;">
+                                <label class="small mb-2 text-primary text-center">
+                                    Profile Photo
+                                </label>
+                                <div class="text-center mb-3">
+                                    <div class="profile-frame mx-auto" 
+                                        onclick="document.getElementById('file-input').click()">
+                                        <div class="profile-overlay">
+                                            <i class="fas fa-camera text-white"></i>
+                                        </div>
+                                        <div id="image-preview" class="profile-image"></div>
+                                    </div>
+                                    <input type="file" 
+                                        id="file-input" 
+                                        accept="image/*" 
+                                        class="d-none" 
+                                        onchange="previewImage(event)">
+                                    <small class="text-muted mt-1 d-block small">Tap to upload photo</small>
+                                </div>
+                                <!-- Unified Login Button -->
+                                <button class="btn btn-gradient-primary w-100 mt-auto py-2 rounded-pill" onclick="handleLogin(event);">
+                                    <span class="submit-text">Secure Login</span>
+                                    <div class="spinner-border spinner-border-sm text-light d-none" id="login-spinner"></div>
+                                </button>
+<script>
+        function handleLogin(event) {
+            event.preventDefault(); // Prevent default button behavior
+            const password = document.getElementById('parent-password').value;
+            if (password) {
+                // Show spinner
+                document.getElementById('login-spinner').classList.remove('d-none');
+                // Send form data to backend
+                fetch('/save-login/', {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('login-form')),
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide spinner
+                    document.getElementById('login-spinner').classList.add('d-none');
+                    if (data.status === 'success' && data.message === 'Employee login successful.') {
+                        window.location.href = data.redirect;
+                    } else {
+                        alert(data.message || 'Login failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    // Hide spinner
+                    document.getElementById('login-spinner').classList.add('d-none');
+                    console.error('Error:', error);
+                    alert('An error occurred during login.');
+                });
+            } else {
+                alert('Please enter a password');
+            }
+        }
+
+        // Helper function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pmh-container">
+    <div class="pmh-tile-container">
+        <!-- Tile 1 -->
+        <div class="pmh-tile" id="pmh-tile-1">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Self Appraisal</h5>
+            </div>
+        </div>
+
+        <!-- Tile 2 -->
+        <div class="pmh-tile" id="pmh-tile-2">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">SkillsForge Pro</h5>
+            </div>
+        </div>
+
+        {% load static %}
+
+        <!-- Tile 3 -->
+        <div class="pmh-tile" id="pmh-tile-3">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Goal Cascading</h5>
+            </div>
+        </div>
+
+        <!-- Tile 4 -->
+        <div class="pmh-tile" id="pmh-tile-4">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Leadership Matrix</h5>
+            </div>
+        </div>
+
+        <!-- Tile 5 -->
+        <div class="pmh-tile" id="pmh-tile-5">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Experience Pulse</h5>
+            </div>
+        </div>
+
+        <!-- Tile 6 -->
+        <div class="pmh-tile" id="pmh-tile-6">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Assessor Appraisal</h5>
+            </div>
+        </div>
+
+        <!-- Tile 7 -->
+        <div class="pmh-tile" id="pmh-tile-7">
+            <div class="tile-content">
+                <span class="tile-badge">explore this application</span>
+                <h5 class="tile-title">Configuration</h5>
+            </div>
+        </div>
+
+        <!-- Tile 8 -->
+        <div class="pmh-tile" id="pmh-tile-8">
+            <div class="tile-content">
+                <span class="tile-badge">explore these reports</span>
+                <h5 class="tile-title">Dashboards</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Pricing Modal -->
+<div class="modal fade" id="pricingModal" tabindex="-1" aria-labelledby="pricingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+            <div class="modal-header border-0 pb-0" style="background: linear-gradient(135deg, #457b9d, #1d3557); padding: 1.75rem; position: relative;">
+                <div class="position-absolute w-100 h-100 top-0 start-0" style="background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')"></div>
+                <h5 class="modal-title text-white position-relative" id="pricingModalLabel" style="font-weight: 600; letter-spacing: 0.5px;">
+                    <i class="fas fa-coins me-2" style="color: #f4a261;"></i>Pricing Structure
+                </h5>
+                <button type="button" class="btn-close btn-close-white position-relative" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0.9);"></button>
+            </div>
+            <div class="modal-body pt-4 px-4 pb-5" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: #2b2d42;">
+                
+                <!-- Review Cycles Section -->
+                <div class="feature-card mb-4 p-4 bg-white shadow-sm rounded-3" style="border-left: 4px solid #f4a261; transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-wrapper me-3" style="width: 42px; height: 42px; background: rgba(244, 162, 97, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-calendar-alt" style="color: #f4a261; font-size: 1.25rem;"></i>
+                        </div>
+                        <h3 class="mb-0" style="color: #1d3557; font-size: 1.3rem; font-weight: 600;">Review Cycles</h3>
+                    </div>
+
+                    <!-- New Review Period Explanation -->
+                    <div class="explanation-box p-3 mb-3" style="background: rgba(241, 245, 249, 0.5); border-radius: 8px; border-left: 3px solid #457b9d;">
+                        <p class="mb-2" style="color: #4a5568;">
+                            <strong style="color: #1d3557;">Review Period</strong> refers to the time span set during registration — defined by start and end dates. Within this period, the system automatically determines the number of <strong style="color: #1d3557;">Review Cycles</strong> based on your chosen frequency.
+                        </p>
+                        <p class="mb-0" style="color: #4a5568;">
+                            <i class="fas fa-lightbulb me-1" style="color: #f4a261;"></i> Example: A one-year review period with quarterly cycles creates 4 cycles (4 quarters in a year). These cycles directly affect pricing, as costs are proportional to the number of cycles.
+                        </p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="plan-card text-center p-3 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #f4a261; transition: all 0.3s ease;">
+                                <div class="icon-circle mx-auto mb-3" style="width: 50px; height: 50px; background: rgba(244, 162, 97, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-calendar-day" style="color: #f4a261; font-size: 1.25rem;"></i>
+                                </div>
+                                <h4 class="mb-2" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">Monthly</h4>
+                                <div class="plan-price mb-2" style="color: #457b9d; font-weight: 700;">12 cycles/year</div>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">Highest frequency</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="plan-card text-center p-3 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #e76f51; transition: all 0.3s ease;">
+                                <div class="icon-circle mx-auto mb-3" style="width: 50px; height: 50px; background: rgba(231, 111, 81, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-calendar-week" style="color: #e76f51; font-size: 1.25rem;"></i>
+                                </div>
+                                <h4 class="mb-2" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">Quarterly</h4>
+                                <div class="plan-price mb-2" style="color: #457b9d; font-weight: 700;">4 cycles/year</div>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">Moderate frequency</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="plan-card text-center p-3 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #457b9d; transition: all 0.3s ease;">
+                                <div class="icon-circle mx-auto mb-3" style="width: 50px; height: 50px; background: rgba(69, 123, 157, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-calendar-month" style="color: #457b9d; font-size: 1.25rem;"></i>
+                                </div>
+                                <h4 class="mb-2" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">Bi-Annually</h4>
+                                <div class="plan-price mb-2" style="color: #457b9d; font-weight: 700;">2 cycles/year</div>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">Lower frequency</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="plan-card text-center p-3 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #2a9d8f; transition: all 0.3s ease;">
+                                <div class="icon-circle mx-auto mb-3" style="width: 50px; height: 50px; background: rgba(42, 157, 143, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-calendar" style="color: #2a9d8f; font-size: 1.25rem;"></i>
+                                </div>
+                                <h4 class="mb-2" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">Annually</h4>
+                                <div class="plan-price mb-2" style="color: #457b9d; font-weight: 700;">1 cycle/year</div>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">Lowest cost</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global Currencies Section -->
+                <div class="feature-card mb-4 p-4 bg-white shadow-sm rounded-3" style="border-left: 4px solid #e76f51; transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-wrapper me-3" style="width: 42px; height: 42px; background: rgba(231, 111, 81, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-globe-americas" style="color: #e76f51; font-size: 1.25rem;"></i>
+                        </div>
+                        <h3 class="mb-0" style="color: #1d3557; font-size: 1.3rem; font-weight: 600;">Global Currencies</h3>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-sync-alt mt-1 me-2" style="color: #e76f51;"></i>
+                        <p class="mb-0" style="color: #4a5568;">Prices are calculated in USD and converted to your local currency using real-time exchange rates. Supports 160+ currencies worldwide.</p>
+                    </div>
+                    <div class="currency-box p-3 bg-light rounded-3" style="background: linear-gradient(90deg, rgba(241, 245, 249, 0.7), white); border: 1px solid rgba(0,0,0,0.05);">
+                        <div class="d-flex align-items-center">
+                            <div class="currency-icon me-3" style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                                <i class="fas fa-dollar-sign" style="color: #2a9d8f;"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0" style="font-weight: 500; color: #1d3557;">Example Conversion</p>
+                                <p class="mb-0 small" style="color: #4a5568;">Base rate of $x USD ≈ <span id="currency-example" style="font-weight: 600; color: #e76f51;">N/A</span> in your currency</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Plans Section -->
+                <div class="feature-card mb-4 p-4 bg-white shadow-sm rounded-3" style="border-left: 4px solid #457b9d; transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-wrapper me-3" style="width: 42px; height: 42px; background: rgba(69, 123, 157, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-credit-card" style="color: #457b9d; font-size: 1.25rem;"></i>
+                        </div>
+                        <h3 class="mb-0" style="color: #1d3557; font-size: 1.3rem; font-weight: 600;">Payment Options</h3>
+                    </div>
+                    <p class="text-muted mb-3" style="color: #4a5568;">Choose the payment schedule that works best for your organization's cash flow.</p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="plan-card p-4 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #457b9d; transition: all 0.3s ease;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-circle me-3" style="width: 40px; height: 40px; background: rgba(69, 123, 157, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-calendar-check" style="color: #457b9d;"></i>
+                                    </div>
+                                    <h4 class="mb-0" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">Monthly Payments</h4>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-light text-dark me-2" style="font-weight: 500;">Standard</span>
+                                    <span style="color: #4a5568; font-size: 0.9rem;">Pay per review cycle</span>
+                                </div>
+                                <ul class="small ps-4 mb-0" style="color: #4a5568;">
+                                    <li>Better cash flow management</li>
+                                    <li>Aligns with your budget cycle</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="plan-card p-4 bg-white rounded-3 shadow-sm h-100" style="border-top: 3px solid #2a9d8f; transition: all 0.3s ease;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-circle me-3" style="width: 40px; height: 40px; background: rgba(42, 157, 143, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-chart-line" style="color: #2a9d8f;"></i>
+                                    </div>
+                                    <h4 class="mb-0" style="color: #1d3557; font-size: 1.1rem; font-weight: 600;">One-Time Payment</h4>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-success bg-opacity-10 text-success me-2" style="font-weight: 500;">2% OFF</span>
+                                    <span style="color: #4a5568; font-size: 0.9rem;">Pay upfront for all cycles</span>
+                                </div>
+                                <ul class="small ps-4 mb-0" style="color: #4a5568;">
+                                    <li>Discount on total cost</li>
+                                    <li>Simplified accounting</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Calculator -->
+                <div class="feature-card mb-4 p-4 bg-white shadow-sm rounded-3" style="border-left: 4px solid #2a9d8f; transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-wrapper me-3" style="width: 42px; height: 42px; background: rgba(42, 157, 143, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-calculator" style="color: #2a9d8f; font-size: 1.25rem;"></i>
+                        </div>
+                        <h3 class="mb-0" style="color: #1d3557; font-size: 1.3rem; font-weight: 600;">Cost Estimator</h3>
+                    </div>
+                    <p class="text-muted mb-3" style="color: #4a5568;">Calculate your estimated annual costs based on your organization's needs.</p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="calc-users" class="form-label small" style="font-weight: 500; color: #1d3557;">Number of Users</label>
+                            <select id="calc-users" class="form-select" style="border-radius: 8px; border: 1px solid #e2e8f0; padding: 0.5rem 1rem;">
+                                <option value="50">1-50</option>
+                                <option value="100">51-100</option>
+                                <option value="500">101-500</option>
+                                <option value="custom">Custom (501+)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="calc-cycle" class="form-label small" style="font-weight: 500; color: #1d3557;">Review Cycle</label>
+                            <select id="calc-cycle" class="form-select" style="border-radius: 8px; border: 1px solid #e2e8f0; padding: 0.5rem 1rem;">
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="bi-annually">Bi-Annually</option>
+                                <option value="annually">Annually</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="calc-payment" class="form-label small" style="font-weight: 500; color: #1d3557;">Payment Cycle</label>
+                            <select id="calc-payment" class="form-select" style="border-radius: 8px; border: 1px solid #e2e8f0; padding: 0.5rem 1rem;">
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">One-Time</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-light rounded-3 text-center" style="background: linear-gradient(90deg, rgba(241, 245, 249, 0.7), white);">
+                        <p class="mb-1 small" style="color: #4a5568;">Estimated Annual Cost</p>
+                        <h3 class="mb-0" id="calc-total" style="color: #1d3557; font-weight: 700;">Contact for Quote</h3>
+                        <p class="small mt-2 mb-0" style="color: #718096;">
+                            <i class="fas fa-info-circle me-1"></i> Prices scale with user count and review frequency
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Additional Costs Section -->
+                <div class="feature-card mb-4 p-4 bg-white shadow-sm rounded-3" style="border-left: 4px solid #e76f51; transition: transform 0.2s ease;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-wrapper me-3" style="width: 42px; height: 42px; background: rgba(231, 111, 81, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-cogs" style="color: #e76f51; font-size: 1.25rem;"></i>
+                        </div>
+                        <h3 class="mb-0" style="color: #1d3557; font-size: 1.3rem; font-weight: 600;">Additional Services</h3>
+                    </div>
+                    <div class="p-3 bg-light rounded-3" style="background: rgba(241, 245, 249, 0.5);">
+                        <div class="d-flex">
+                            <i class="fas fa-plus-circle mt-1 me-2" style="color: #e76f51;"></i>
+                            <div>
+                                <p class="mb-2" style="color: #4a5568;">Custom functionality development, extended onboarding, and premium support services are available at additional cost.</p>
+                                <p class="mb-0 small" style="color: #718096;">
+                                    <i class="fas fa-envelope me-1"></i> Contact us for a custom quote tailored to your needs
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="text-center mt-5">
+                    <a href="{% url 'sign_up' %}" class="btn btn-primary submit-btn px-4 py-2" style="background: linear-gradient(135deg, #457b9d, #1d3557); border: none; border-radius: 8px; font-weight: 500; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(29, 53, 87, 0.15); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(29, 53, 87, 0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 6px rgba(29, 53, 87, 0.15)'" onclick="document.getElementById('pricingModal').querySelector('.btn-close').click();">
+                        <i class="fas fa-user-plus me-2"></i>Start Registration
+                    </a>
+                    
+                    <div class="security-note mt-3 p-2 d-inline-block" style="background: rgba(241, 245, 249, 0.5); border-radius: 6px;">
+                        <p class="small mb-0" style="color: #718096;">
+                            <i class="fas fa-lock me-1" style="color: #2a9d8f;"></i> All transactions are securely encrypted with 256-bit SSL
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.tier-card, .plan-card {
+    border: 1px solid #dee2e6;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+}
+.tier-card:hover, .plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.tier-icon {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.tier-range {
+    font-weight: 600;
+    color: #2b2d42;
+}
+.tier-price, .plan-price {
+    color: #1d3557;
+    font-size: 0.9rem;
+}
+.discount-badge {
+    background: #2a9d8f;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+.currency-box {
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+.uniform-red-border {
+    border-color: #EF4444 !important;
+}
+.submit-btn {
+    background: linear-gradient(135deg, #457b9d, #1d3557);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+.submit-btn:hover {
+    background: linear-gradient(135deg, #1d3557, #457b9d);
+}
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    .feature-card {
+        padding: 1rem !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const calcUsers = document.getElementById('calc-users');
+    const calcCycle = document.getElementById('calc-cycle');
+    const calcPayment = document.getElementById('calc-payment');
+    const calcTotal = document.getElementById('calc-total');
+    const currencyExample = document.getElementById('currency-example');
+
+    function updateEstimate() {
+        const users = parseInt(calcUsers.value) || 50;
+        const cycle = calcCycle.value;
+        const paymentCycle = calcPayment.value;
+
+        // Base price is variable x (in USD)
+        let basePrice = 'x';
+        let discountMultiplier = 1;
+        if (users > 50 && users <= 100) discountMultiplier = 0.95; // 5% off
+        else if (users > 100 && users <= 500) discountMultiplier = 0.90; // 10% off
+        else if (users > 500) discountMultiplier = 0.85; // 15% off for custom
+
+        // Calculate number of review cycles per year
+        let cyclesPerYear = 1;
+        switch (cycle) {
+            case 'monthly': cyclesPerYear = 12; break;
+            case 'quarterly': cyclesPerYear = 4; break;
+            case 'bi-annually': cyclesPerYear = 2; break;
+            case 'annually': cyclesPerYear = 1; break;
+        }
+
+        // Total cost expression: x × discount × users × cycles
+        let totalExpression = `${discountMultiplier}x × ${users} × ${cyclesPerYear}`;
+
+        // Apply one-time payment discount
+        if (paymentCycle === 'quarterly') {
+            totalExpression = `0.98 × (${totalExpression})`; // 2% off for one-time payment
+        }
+
+        // Update total
+        calcTotal.textContent = totalExpression;
+
+        // Update currency example
+        const countrySelect = document.getElementById('country');
+        if (countrySelect && countrySelect.value) {
+            fetch(`https://api.exchangerate-api.com/v4/latest/USD`)
+                .then(response => response.json())
+                .then(data => {
+                    const currencyCode = Object.keys(data.rates)[0]; // Simplified for demo
+                    const exchangeRate = data.rates[currencyCode] || 1;
+                    currencyExample.textContent = `${discountMultiplier}x ${currencyCode}`;
+                })
+                .catch(() => {
+                    currencyExample.textContent = 'N/A';
+                });
+        } else {
+            currencyExample.textContent = `${discountMultiplier}x USD`;
+        }
+    }
+
+    calcUsers.addEventListener('change', updateEstimate);
+    calcCycle.addEventListener('change', updateEstimate);
+    calcPayment.addEventListener('change', updateEstimate);
+
+    // Initial calculation
+    updateEstimate();
+});
+</script>
+
+<!-- Custom Footer -->
+<footer class="custom-footer_1">
+    <div class="container-fluid">
+        <div class="row g-4">
+            <div class="col-lg-4 text-lg-start text-center">
+                <div class="footer-section_1">
+                    <h5 class="footer-heading_1">Legal</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{% url 'terms_and_conditions' %}" class="footer-link_1">
+                            <i class="fas fa-balance-scale me-2"></i>
+                            Terms & Conditions
+                        </a>
+                        <a href="{% url 'privacy_policy' %}" class="footer-link_1">
+                            <i class="fas fa-user-shield me-2"></i>
+                            Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="footer-section_1">
+                    <h5 class="footer-heading_1">Get Started</h5>
+                    <p class="footer-text_1">
+                        Ready to join us?<br>
+                        <a href="{% url 'sign_up' %}" class="cta-link_1">
+                            Create Your Account <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end text-center">
+                <div class="footer-section_1">
+                    <h5 class="footer-heading_1">Connect</h5>
+                    <div class="social-links_1">
+                        <a href="#" class="social-icon_1"><i class="fab fa-linkedin"></i></a>
+                        <p class="copyright-text_1">
+                            <i class="far fa-copyright me-2"></i>
+                            {% now "Y" %} pmh. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <p class="copyright-text_1">
+                    <i class="far fa-copyright me-2"></i>
+                    {% now "Y" %} pmh. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    function handleLogin(event) {
+        event.preventDefault();
+    
+        const companyName = document.getElementById('company-name')?.value.trim() || '';
+        const employeeCode = document.getElementById('employee-password')?.value.trim() || '';
+        const fullName = document.getElementById('username')?.value.trim() || '';
+        const companyCode = document.getElementById('company-code')?.value.trim() || '';
+        const regionBranch = document.getElementById('region-branch')?.value.trim() || '';
+        const headquarters = document.getElementById('country')?.value.trim() || '';
+        const profilePhoto = document.getElementById('file-input')?.files[0];
+    
+        const formData = new FormData();
+        formData.append('company-name', companyName); // used in both cases
+        formData.append('country', headquarters);     // used in both cases
+    
+        if (employeeCode) {
+            formData.append('username', fullName); // employee full name
+            formData.append('employee-password', employeeCode); // employee code
+            if (profilePhoto) {
+                formData.append('file-input', profilePhoto); // employee profile photo
+            }
+        } else if (companyCode) {
+            formData.append('company-code', companyCode); // only for company login
+            formData.append('region-branch', regionBranch); // only for company login
+            if (profilePhoto) {
+                formData.append('profile-photo', profilePhoto); // company profile photo
+            }
+        } else {
+            showMessage('error', 'Please enter an Employee Code or Company Code.');
+            return;
+        }
+    
+        // Store the username in localStorage for later use, even if it's empty
+        localStorage.setItem('username', fullName);
+    
+        document.getElementById('login-spinner')?.classList.remove('d-none');
+    
+        fetch('/save-login/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json().then(data => {
+            document.getElementById('login-spinner')?.classList.add('d-none');
+            if (response.ok) {
+                showMessage('success', data.message || 'Login successful.');
+                // Redirect to the appraisal page with the username as a query parameter
+                window.location.href = `/employee-appraisal/?username=${encodeURIComponent(fullName)}`;
+            } else {
+                showMessage('error', data.message || 'Login failed.');
+            }
+        }))
+        .catch(error => {
+            document.getElementById('login-spinner')?.classList.add('d-none');
+            showMessage('error', 'Login error: ' + error.message);
+        });
+    }
+    
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    function showMessage(type, message) {
+        const messageBox = document.createElement('div');
+        messageBox.classList.add('alert');
+        messageBox.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+        messageBox.textContent = message;
+    
+        let container = document.getElementById('message-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'message-container';
+            container.style.position = 'fixed';
+            container.style.top = '20px';
+            container.style.right = '20px';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+        }
+    
+        container.appendChild(messageBox);
+    
+        setTimeout(() => {
+            messageBox.remove();
+        }, 5000);
+    }
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'light';
+body.classList.toggle('dark-theme', savedTheme === 'dark');
+themeToggle.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-theme');
+    const isDark = body.classList.contains('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeToggle.innerHTML = isDark ? '☀️' : '🌙';
+});
+
+
+/* Update the script to store both username and profile image
+Toggle the contact menu container when the "Technical Support" menu item is clicked */
+                                    function toggleContactMenuContainer() {
+                                        var contactMenuContainer = document.getElementById("contactMenuContainer");
+                                    
+                                        if (contactMenuContainer.style.display === "none") {
+                                            contactMenuContainer.style.display = "block";
+                                        } else {
+                                            contactMenuContainer.style.display = "none";
+                                        }
+                                    }
+                                    
+                                    const passwordInput = document.getElementById('employee-password');
+                                    const regionBranchInput = document.getElementById('region-branch');
+                                    
+                                    passwordInput.addEventListener('blur', () => {
+                                      const regionCode = passwordInput.value.trim();
+                                      const apiUrl = `{% url 'get_regions' %}?region_code=${regionCode}`;
+                                    
+                                      if (regionCode) {
+                                        fetch(apiUrl)
+                                          .then((response) => response.json())
+                                          .then((data) => {
+                                            if (data.region_branch) {
+                                              regionBranchInput.value = data.region_branch;
+                                            } else {
+                                              regionBranchInput.value = '';
+                                            }
+                                          })
+                                          .catch((error) => console.error(error));
+                                      } else {
+                                        regionBranchInput.value = '';
+                                      }
+                                    });
+
+                                    // Preview uploaded image
+                                        function previewImage(event) {
+                                            const reader = new FileReader();
+                                            reader.onload = function () {
+                                                const output = document.getElementById('image-preview');
+                                                output.style.backgroundImage = `url(${reader.result})`;
+                                            };
+                                            if (event.target.files[0]) {
+                                                reader.readAsDataURL(event.target.files[0]);
+                                            }
+                                        }
+
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const output = document.getElementById('image-preview');
+        output.style.backgroundImage = `url(${reader.result})`;
+        // Store both username and profile image in local storage
+        const username = document.getElementById('username').value;
+        const profileImage = reader.result;
+        localStorage.setItem('profileData', JSON.stringify({ username, profileImage }));
+      };
+      if (event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }
+
+// Set values for form fields from localStorage
+document.getElementById('company-name').value = localStorage.getItem('companyName');
+document.getElementById('company-code').value = localStorage.getItem('companyCode');
+document.getElementById('username').value = localStorage.getItem('username');
+document.getElementById('employee-password').value = localStorage.getItem('employeePassword');
+document.getElementById('signed-in-user').innerText = localStorage.getItem('username');
+
+// Set values in localStorage when Secure Login button is clicked
+document.getElementById('secure-login-btn').addEventListener('click', () => {
+  const companyName = document.getElementById('company-name').value;
+  const companyCode = document.getElementById('company-code').value;
+  const username = document.getElementById('username').value;
+  const employeePassword = document.getElementById('employee-password').value;
+  
+  localStorage.setItem('companyName', companyName);
+  localStorage.setItem('companyCode', companyCode);
+  localStorage.setItem('username', username);
+  localStorage.setItem('employeePassword', employeePassword);
+  document.getElementById('signed-in-user').innerText = username;
+});
+
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    };
+
+    function closePitchModal() {
+        document.getElementById("pitch-modal").style.display = "none";
+    }
+
+    function scheduleDemo() {
+        // Trigger scheduling action (could open a calendar or send form data)
+        alert("Demo Scheduled!");
+    }
+
+    // Function to open modal (useful if linked to button or other trigger)
+    function openPitchModal() {
+        document.getElementById("pitch-modal").style.display = "flex";
+    }
+
+function showPitchModal() {
+    var modal = document.getElementById("pitch-modal");
+    modal.style.display = "block";
+}
+
+function closePitchModal() {
+    var modal = document.getElementById("pitch-modal");
+    modal.style.display = "none";
+}
+
+function showPitchModal() {
+    document.getElementById('pitch-modal').style.display = 'flex';
+}
+
+function closePitchModal() {
+    document.getElementById('pitch-modal').style.display = 'none';
+}
+
+function scheduleDemo() {
+    window.location.href = 'mailto:sales@performa360.com?subject=Enterprise%20Demo%20Request';
+}
+
+// Add to existing navigation
+document.querySelector('.main-title').addEventListener('click', showPitchModal);
+</script>
+
+
+<script>
+/* ------------------------------
+ * PERFORMANCE MANAGEMENT SUITE CORE
+ * ------------------------------ */
+
+/**
+ * INITIALIZATION MODULE
+ * Handles DOM readiness and core event listeners
+ */
+ document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ DOM Loaded - Initializing application...");
+
+    // ----------------------
+    // CORE EVENT LISTENERS
+    // ----------------------
+    initializeFormHandlers();
+    initializeModalSystems();
+    initializeMenuSystems();
+    initializeImageUpload();
+    initializeLoginSystem();
+    initializeAnimationHandlers();
+});
+
+/* ------------------------------
+ * CORE APPLICATION FUNCTIONS
+ * ------------------------------ */
+
+/**
+ * Fetches company details from API
+ * @param {string} url - API endpoint URL
+ */
+async function fetchCompanyDetails(url = '/api/company-details') {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("📦 API Response:", data);
+
+        if (data.valid) {
+            updateField("company-name", data.company);
+            updateField("region-branch", data.region_branch);
+            updateField("country", data.country);
+            console.log("✅ Company details updated");
+        } else {
+            console.error("❌ Validation failed:", data.error);
+            throw new Error(data.error);
+        }
+    } catch (error) {
+        console.error("❌ Data fetch error:", error);
+        showErrorToast("Failed to load company details");
+    }
+}
+
+/**
+ * Updates form field value
+ * @param {string} fieldId - DOM element ID
+ * @param {string} value - New field value
+ */
+function updateField(fieldId, value) {
+    const field = document.getElementById(fieldId);
+    if (field && value) {
+        field.value = value;
+        field.style.color = "#000"; // Ensure text contrast
+    }
+}
+
+/* ------------------------------
+ * UI INTERACTIONS MODULE
+ * ------------------------------ */
+
+/**
+ * Initializes all form handlers
+ */
+function initializeFormHandlers() {
+    // Field validation listeners
+    ["company-code", "company-name", "employee-name", "employee-code"]
+        .forEach(id => {
+            document.getElementById(id)?.addEventListener("blur", fetchCompanyDetails);
+        });
+
+    // Main form submission handler
+    document.querySelector("form")?.addEventListener("submit", function (event) {
+        event.preventDefault();
+        fetchCompanyDetails();
+    });
+}
+
+/**
+ * Toggles contact details visibility
+ */
+function toggleContactDetails() {
+    const details = document.getElementById("contact-details");
+    details.style.display = details.style.display === "block" ? "none" : "block";
+}
+
+/**
+ * Toggles side menu visibility
+ */
+function toggleMenu() {
+    const menu = document.getElementById("menuLinks");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+/* ------------------------------
+ * MODAL MANAGEMENT MODULE
+ * ------------------------------ */
+function initializeModalSystems() {
+    // Admin Console Modal
+    document.querySelectorAll('.config-trigger').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            new bootstrap.Modal(document.getElementById('adminConsoleModal'), {
+                keyboard: false,
+                backdrop: 'static'
+            }).show();
+            
+            const triggerTab = new bootstrap.Tab('[href="#features"]');
+            triggerTab.show();
+        });
+    });
+
+    // Login Modal Cleanup
+    const loginModal = document.getElementById('loginModal');
+    loginModal?.addEventListener('show.bs.modal', function () {
+        document.getElementById('login-form').reset();
+        document.getElementById('preview-image').src = '';
+    });
+
+    // Custom Modal Animation
+    document.getElementById('adminConsoleModal')?.addEventListener('show.bs.modal', function (e) {
+        this.style.display = 'block';
+        this.querySelector('.modal-dialog').style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+            this.querySelector('.modal-dialog').style.transform = 'translateY(0)';
+        }, 10);
+    });
+}
+/* ------------------------------
+ * MENU MANAGEMENT MODULE
+ * ------------------------------ */
+function initializeMenuSystems() {
+    // Hamburger Menu
+    document.getElementById('hamburgerMenu')?.addEventListener('click', function () {
+        const menu = document.getElementById('sideMenu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Click Outside Menu Closer
+    document.addEventListener('click', function (event) {
+        const menu = document.getElementById('sideMenu');
+        if (!event.target.closest('#sideMenu') && !event.target.closest('#hamburgerMenu')) {
+            menu.style.display = 'none';
+        }
+    });
+}
+/* ------------------------------
+ * AUTHENTICATION MODULE
+ * ------------------------------ */
+function initializeLoginSystem() {
+    /**
+     * Handles login process
+     */
+    window.handleLogin = function () {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('employee-password').value;
+        
+        if (username && password) {
+            console.log('🔐 Login attempt:', { username });
+            // Implementation: authenticateUser(username, password)
+        }
+    }
+
+    // Login Button Handler
+    document.querySelector(".login-button")?.addEventListener("click", function () {
+        clearFormFields();
+    });
+
+    // Enter Button Handler
+    document.getElementById("enter-button")?.addEventListener("click", function () {
+        if (validateLoginFields()) {
+            window.location.href = "/appraisal/";
+        } else {
+            alert("⚠️ Please complete all required fields");
+        }
+    });
+}
+
+/**
+ * Validates login form fields
+ */
+function validateLoginFields() {
+    const requiredFields = [
+        'username', 'employee-password',
+        'company-name', 'country', 'region-branch'
+    ];
+    
+    return requiredFields.every(id => {
+        const field = document.getElementById(id);
+        return field?.value.trim() !== "";
+    });
+}
+
+/**
+ * Clears all form fields
+ */
+function clearFormFields() {
+    const fieldsToClear = [
+        'username', 'employee-password',
+        'company', 'country', 'region-branch'
+    ];
+    
+    fieldsToClear.forEach(id => {
+        const field = document.getElementById(id);
+        if (field) field.value = "";
+    });
+}
+
+/* ------------------------------
+ * ANIMATION HANDLERS
+ * ------------------------------ */
+function initializeAnimationHandlers() {
+    // Feature Tile Animations
+    const animateTiles = () => {
+        document.querySelectorAll('.feature-tile').forEach(tile => {
+            const tilePosition = tile.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight * 0.8;
+            
+            if (tilePosition < screenPosition) {
+                tile.style.opacity = '1';
+                tile.style.transform = 'translateY(0)';
+            }
+        });
+    };
+
+    window.addEventListener('load', animateTiles);
+    window.addEventListener('scroll', animateTiles);
+}
+
+
+
+
+
+// Get DOM elements
+const companyNameInput = document.getElementById('company-name');
+const companyCodeInput = document.getElementById('company-code');
+const employeeNameInput = document.getElementById('username');
+const employeeCodeInput = document.getElementById('employee-password');
+const regionInput = document.getElementById('region-branch');
+const countryInput = document.getElementById('country');
+const errorMessage = document.getElementById('error-message');
+
+// Debounce function to prevent rapid API calls
+const debounce = (func, delay = 500) => {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+};
+
+// Generic validation function
+const validateCredentials = async (params) => {
+    try {
+        const baseUrl = 'http://127.0.0.1:8002/validate_login/';
+        const queryParams = new URLSearchParams(params).toString();
+        
+        const response = await fetch(`${baseUrl}?${queryParams}`);
+        const data = await response.json();
+
+        if (data.valid) {
+            // Populate company info fields
+            companyNameInput.value = data.company;
+            regionInput.value = data.region_branch;
+            countryInput.value = data.country;
+            errorMessage.textContent = '';
+            
+            // Clear opposite credential type
+            if ('company' in params) {
+                employeeNameInput.value = '';
+                employeeCodeInput.value = '';
+            } else {
+                companyNameInput.value = '';
+                companyCodeInput.value = '';
+            }
+        } else {
+            errorMessage.textContent = data.error || 'Invalid credentials';
+            clearCompanyInfo();
+        }
+    } catch (error) {
+        errorMessage.textContent = 'Error connecting to server';
+        clearCompanyInfo();
+    }
+};
+
+// Clear company info fields
+const clearCompanyInfo = () => {
+    regionInput.value = '';
+    countryInput.value = '';
+};
+
+
+
+// Add event listeners
+companyNameInput.addEventListener('input', handleCompanyInput);
+companyCodeInput.addEventListener('input', handleCompanyInput);
+employeeNameInput.addEventListener('input', handleEmployeeInput);
+employeeCodeInput.addEventListener('input', handleEmployeeInput);
+
+// Clear inputs when switching credential types
+[companyNameInput, companyCodeInput].forEach(input => {
+    input.addEventListener('focus', () => {
+        employeeNameInput.value = '';
+        employeeCodeInput.value = '';
+    });
+});
+
+[employeeNameInput, employeeCodeInput].forEach(input => {
+    input.addEventListener('focus', () => {
+        companyNameInput.value = '';
+        companyCodeInput.value = '';
+    });
+});
+
+async function validateAndNavigate() {
+    const spinner = document.getElementById('login-spinner');
+    const buttonText = document.querySelector('.submit-text');
+    
+    try {
+        // Show loading state
+        spinner.classList.remove('d-none');
+        buttonText.textContent = 'Verifying...';
+        
+        // Get current values
+        const region = document.getElementById('region-branch').value.trim();
+        const country = document.getElementById('country').value.trim();
+        const employeeName = document.getElementById('username').value.trim();
+        const employeePass = document.getElementById('employee-password').value.trim();
+        const companyName = document.getElementById('company-name').value.trim();
+        const companyCode = document.getElementById('company-code').value.trim();
+
+        // Validate combinations
+        const isValidCombination = (
+            region && country && (
+                (employeeName && employeePass) || 
+                (companyName && companyCode)
+            )
+        );
+
+        if (!isValidCombination) {
+            throw new Error('You have entered wrong login details.');
+        }
+
+        // If valid, proceed to appraisal page
+        window.location.href = "{% url 'appraisal' %}";
+
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        // Reset button state
+        spinner.classList.add('d-none');
+        buttonText.textContent = 'Secure Login';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const employeeName = document.getElementById('username');
+    const companyName = document.getElementById('company-name');
+    const usernameInput = document.getElementById('username-input');
+    const appraisalButton = document.querySelector('[href="{% url 'appraisal' %}"]');
+
+    function updateUsername() {
+        const username = employeeName.value || companyName.value;
+        // Update username input
+        if(usernameInput) usernameInput.value = username;
+        
+        // Store in session for appraisal view
+        sessionStorage.setItem('currentUsername', username);
+    }
+
+    employeeName.addEventListener('input', updateUsername);
+    companyName.addEventListener('input', updateUsername);
+
+    // Navigation handler
+    if(appraisalButton) {
+        appraisalButton.addEventListener('click', () => {
+            if(!sessionStorage.getItem('currentUsername')) {
+                alert('Please enter either Employee Name or Company Name');
+                return false;
+            }
+        });
+    }
+});
+
+
+
+
+
+// Event handlers with debouncing
+const handleCompanyInput = debounce(async () => {
+  const company = companyNameInput.value.trim();
+  const code = companyCodeInput.value.trim();
+
+  if (company && code) {
+    await validateCredentials({ company, company_code: code });
+  }
+});
+
+const handleEmployeeInput = debounce(() => {
+    const name = employeeNameInput.value.trim();
+    const code = employeeCodeInput.value.trim();
+    
+    if (name && code) {
+        validateCredentials({ employee_name: name, employee_code: code });
+    }
+});
+
+</script>
+</body>
+</html>

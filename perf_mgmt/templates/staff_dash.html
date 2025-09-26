@@ -1,0 +1,971 @@
+{% load static %}
+{% verbatim %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.18.9/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.0.0/dist/chartjs-chart-matrix.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1E3C72;
+            --secondary: #2A5298;
+            --accent: #1ABB9C;
+            --text: #F1F5F9;
+            --bg: #0F172A;
+            --card: #1E293B;
+            --border: #4B5563;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+            --header-height: 5rem;
+        }
+        
+        [data-theme="light"] {
+            --primary: #E3F2FD;
+            --secondary: #BBDEFB;
+            --accent: #1ABB9C;
+            --text: #1E293B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --border: #E2E8F0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin: 0;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: var(--gradient);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .theme-toggle i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+        
+        /* Select2 Customization */
+        .select2-container .select2-selection--single {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 0.5rem;
+            height: 42px;
+        }
+        
+        .select2-dropdown {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .select2-results__option {
+            color: var(--text);
+        }
+        
+        .select2-results__option--highlighted {
+            background: var(--accent) !important;
+            color: var(--bg);
+        }
+        
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1rem;
+        }
+        
+        .chart-container canvas {
+            max-height: 100%;
+            width: 100%;
+        }
+        
+        .tile-label {
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: var(--card);
+            padding: 0 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        /* Info Cards */
+        .info-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            animation: fadeInCard 0.8s ease-out forwards;
+            animation-delay: calc(0.2s * var(--order));
+            flex: 0 0 180px;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-card:nth-child(1) { --order: 1; }
+        .info-card:nth-child(2) { --order: 2; }
+        .info-card:nth-child(3) { --order: 3; }
+        .info-card:nth-child(4) { --order: 4; }
+        .info-card:nth-child(5) { --order: 5; }
+        .info-card:nth-child(6) { --order: 6; }
+        .info-card:nth-child(7) { --order: 7; }
+        .info-card:nth-child(8) { --order: 8; }
+        .info-card:nth-child(9) { --order: 9; }
+        .info-card:nth-child(10) { --order: 10; }
+        
+        .icon-container {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover .icon-container {
+            transform: scale(1.1);
+        }
+        
+        .icon-container i {
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+        
+        /* Narrative Section */
+        .narrative-section {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+        
+        .narrative-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .narrative-section p {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInCard {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            padding-top: calc(var(--header-height) + 1rem);
+            padding-left: 1rem;
+            padding-right: 1rem;
+            width: 100%;
+        }
+
+/* Add this to your :root styles */
+:root {
+    /* ... your existing variables ... */
+    --company-opacity: 0.03;
+}
+
+[data-theme="light"] {
+    /* ... your existing light theme variables ... */
+    --company-opacity: 0.05;
+}
+
+/* Add this to your body styles */
+body {
+    position: relative;
+    /* ... your existing body styles ... */
+}
+
+body::after {
+    content: attr(data-company);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 20vw;
+    font-weight: 900;
+    color: var(--text);
+    opacity: var(--company-opacity);
+    z-index: -1;
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+}
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Mock Data
+        const mockUserData = {
+            employee_code: "EMP1A7M2CPY",
+            company: "Acme Corp",
+            employee_name: "Thomas Ndlovu",
+            region_branch: "Administration",
+            review_cycle: "Cycle 4 of 6"
+        };
+        
+        const mockAssignments = {
+            strategic_goals: [
+                {
+                    id: "sg1",
+                    description: "Increase Revenue",
+                    weight: 30,
+                    due_date: "2025-12-31",
+                    progress: 85,
+                    kpis: [
+                        {
+                            id: "kpi1",
+                            description: "Sales Growth",
+                            weight: 15,
+                            target: 5,
+                            uom: "%",
+                            due_date: "2025-06-30",
+                            progress: 80,
+                            deliverables: [
+                                {
+                                    id: "del1",
+                                    description: "New Clients",
+                                    weight: 10,
+                                    target: 20,
+                                    uom: "clients",
+                                    due_date: "2025-03-31",
+                                    progress: 90,
+                                    evidence: [
+                                        { id: "ev1", description: "Signed Contracts", due_date: "2025-03-31" }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        const mockPerformanceData = {
+            kpi_achievement: 85,
+            self_score: 8.5,
+            assessor_score: 7.8,
+            peer_metrics: { collaboration: 8, technical: 7, leadership: 6 },
+            peer_avg: { collaboration: 7.5, technical: 7.8, leadership: 6.5 },
+            skills_progress: [
+                { month: "Jan", proficiency: 50 },
+                { month: "Jun", proficiency: 80 }
+            ],
+            goal_timeline: [
+                { goal: "Sales Growth", start: "2025-01-01", end: "2025-06-30", progress: 80 }
+            ],
+            target_vs_actual: { target: 90, actual: 85 },
+            engagement_scores: [
+                { cycle: "Q1", score: 7.5 },
+                { cycle: "Q2", score: 7.8 }
+            ],
+            feedback_scores: { manager: 8.2, peer: 7.9 },
+            course_deadlines: [
+                { course: "Excel", start: "2025-01-01", end: "2025-03-31", progress: 75 }
+            ],
+            skills_heatmap: [
+                { skill: "Excel", month: "Jan", proficiency: 50 },
+                { skill: "Excel", month: "Jun", proficiency: 80 },
+                { skill: "Leadership", month: "Jan", proficiency: 60 },
+                { skill: "Leadership", month: "Jun", proficiency: 70 }
+            ]
+        };
+        
+        const performanceData = [
+            {
+                id: 238,
+                employee_code: "EMP1A7M2CPY",
+                assessor_employee_code: "EMP65867",
+                date_self_appraisal_completed: "2025-06-05",
+                date_assessor_appraisal_completed: "2025-06-05",
+                strategic_goal: "% implementation of MPAT recommendations",
+                kpi: "Number of MPAT implementation progress reports published",
+                deliverable: "Publish quarterly MPAT progress reports",
+                deliverable_self_score: 4,
+                deliverable_assessor_score: 4,
+                doc_evidence: "Quarterly progress reports",
+                deliverable_number: "3.2.2",
+                deliverable_weight: 0.40,
+                doc_evidence_number: "3.2.2.1",
+                doc_evidence_weight: 1.00,
+                kpi_number: "3.2",
+                kpi_weight: 0.30,
+                strategic_goal_number: "3",
+                strategic_goal_weight: 0.26,
+                short_term_actual: 85,
+                short_term_target: 92,
+                intermediate_term_actual: 75,
+                intermediate_term_target: 90,
+                long_term_actual: 80,
+                long_term_target: 95,
+                uom: "%",
+                doc_evidence_self_confirmation: true,
+                doc_evidence_assessor_confirmation: true
+            }
+        ];
+
+        // Theme Context
+        const ThemeContext = React.createContext();
+
+        // Header Component
+        const Header = ({ userData }) => {
+            const { isDarkMode } = React.useContext(ThemeContext);
+            return (
+                <header className="header">
+                    <div className="flex justify-between items-center w-full">
+                        <div>
+                            <h1>{userData.company}</h1>
+                            <p className="text-sm">{userData.employee_name} | {userData.region_branch} | {userData.review_cycle}</p>
+                        </div>
+                        <ThemeToggle />
+                    </div>
+                </header>
+            );
+        };
+
+        // Theme Toggle Component
+        const ThemeToggle = () => {
+            const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
+            return (
+                <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme" aria-label="Toggle between light and dark mode">
+                    <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+                </button>
+            );
+        };
+
+        // Trending Filters Component
+        const TrendingFilters = ({ onFilterChange }) => {
+            React.useEffect(() => {
+                $('#cycleFilter, #periodFilter').select2({
+                    placeholder: "Select option",
+                    allowClear: true,
+                    width: '100%'
+                }).on('change', (e) => {
+                    const filter = e.target.id.replace('Filter', '');
+                    onFilterChange(filter, e.target.value);
+                });
+                return () => {
+                    $('#cycleFilter, #periodFilter').select2('destroy');
+                };
+            }, []);
+
+            return (
+                <div className="flex flex-wrap gap-4 mb-6">
+                    <div className="w-48">
+                        <label className="block text-sm font-semibold mb-1">Review Cycle</label>
+                        <select id="cycleFilter" className="p-2 rounded w-full">
+                            <option value="">All Cycles</option>
+                            <option value="4">Cycle 4</option>
+                            <option value="6">Cycle 6</option>
+                        </select>
+                    </div>
+                    <div className="w-48">
+                        <label className="block text-sm font-semibold mb-1">Period</label>
+                        <select id="periodFilter" className="p-2 rounded w-full">
+                            <option value="">All Periods</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+            );
+        };
+
+// Narrative Insights Component
+const NarrativeInsights = ({ performanceData, mockPerformanceData }) => {
+    const strengths = [];
+    const upskilling = [];
+    
+    if (performanceData[0].deliverable_assessor_score >= 4) {
+        strengths.push({
+            text: `You excel in delivering "${performanceData[0].deliverable}" for the strategic goal "${performanceData[0].strategic_goal}" with a strong assessor score of ${performanceData[0].deliverable_assessor_score}/5.`,
+            icon: "fa-trophy",
+            color: "text-green-500"
+        });
+    }
+    if (performanceData[0].short_term_actual < performanceData[0].short_term_target) {
+        upskilling.push({
+            text: `Your short-term performance on "${performanceData[0].deliverable}" (${performanceData[0].short_term_actual}% vs. ${performanceData[0].short_term_target}% target) suggests an opportunity for upskilling in time management or resource allocation. Consider enrolling in a project management course.`,
+            icon: "fa-clock",
+            color: "text-yellow-500"
+        });
+    }
+    if (mockPerformanceData.peer_metrics.leadership < mockPerformanceData.peer_avg.leadership) {
+        upskilling.push({
+            text: `Your leadership score (${mockPerformanceData.peer_metrics.leadership}/10) is below the peer average (${mockPerformanceData.peer_avg.leadership}/10). A leadership development workshop could help enhance your skills.`,
+            icon: "fa-users",
+            color: "text-blue-500"
+        });
+    }
+    if (mockPerformanceData.skills_heatmap.find(s => s.skill === "Excel" && s.proficiency >= 80)) {
+        strengths.push({
+            text: `Your proficiency in Excel has improved significantly, reaching ${mockPerformanceData.skills_heatmap.find(s => s.skill === "Excel" && s.month === "Jun").proficiency}% in June 2025.`,
+            icon: "fa-chart-line",
+            color: "text-purple-500"
+        });
+    }
+
+    return (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+            <div className="flex items-center mb-6">
+                <i className="fas fa-lightbulb text-2xl text-indigo-500 mr-3"></i>
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">Performance Insights for Thomas Ndlovu</h2>
+            </div>
+            
+            <div className="mb-6">
+                <div className="flex items-center mb-3">
+                    <i className="fas fa-star text-lg text-green-500 mr-2"></i>
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Strengths</h3>
+                </div>
+                {strengths.length ? (
+                    <div className="space-y-3">
+                        {strengths.map((item, idx) => (
+                            <div key={idx} className="flex items-start bg-green-50 dark:bg-green-900/30 rounded-lg p-3">
+                                <i className={`fas ${item.icon} ${item.color} mt-1 mr-3 text-lg`}></i>
+                                <p className="text-gray-700 dark:text-gray-200">{item.text}</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
+                        <i className="fas fa-check-circle text-gray-400 mr-3"></i>
+                        <p className="text-gray-600 dark:text-gray-300">No specific strengths identified yet. Keep up the good work!</p>
+                    </div>
+                )}
+            </div>
+            
+            <div>
+                <div className="flex items-center mb-3">
+                    <i className="fas fa-book text-lg text-blue-500 mr-2"></i>
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">Areas for Upskilling</h3>
+                </div>
+                {upskilling.length ? (
+                    <div className="space-y-3">
+                        {upskilling.map((item, idx) => (
+                            <div key={idx} className="flex items-start bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
+                                <i className={`fas ${item.icon} ${item.color} mt-1 mr-3 text-lg`}></i>
+                                <p className="text-gray-700 dark:text-gray-200">{item.text}</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
+                        <i className="fas fa-check-circle text-gray-400 mr-3"></i>
+                        <p className="text-gray-600 dark:text-gray-300">No upskilling recommendations at this time. You're performing well!</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+// Information Cards Component
+const InfoCards = ({ performanceData, filteredData }) => {
+    const { isDarkMode } = React.useContext(ThemeContext);
+    const avgSelfScore = filteredData.length ? (filteredData.reduce((sum, d) => sum + d.deliverable_self_score, 0) / filteredData.length).toFixed(1) : 'N/A';
+    const avgAssessorScore = filteredData.length ? (filteredData.reduce((sum, d) => sum + d.deliverable_assessor_score, 0) / filteredData.length).toFixed(1) : 'N/A';
+    const evidenceCompletion = filteredData.length ? ((filteredData.filter(d => d.doc_evidence_self_confirmation && d.doc_evidence_assessor_confirmation).length / filteredData.length) * 100).toFixed(1) : '0';
+
+    const cardColors = [
+        'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100',
+        'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100',
+        'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100',
+        'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100',
+        'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100',
+        'bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100',
+        'bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100',
+        'bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100',
+        'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-100'
+    ];
+
+    const cards = [
+        { title: "Performance", value: `${performanceData.self_score}/10`, subtitle: "Dept Avg: 7.8", icon: "fa-star" },
+        { title: "Peer Rank", value: "#3 of 20", subtitle: "Sales Dept", icon: "fa-trophy" },
+        { title: "Engagement", value: `${performanceData.engagement_scores[1].score}/10`, subtitle: "Dept Avg: 7.2", icon: "fa-heart" },
+        { title: "Skills", value: "75%", subtitle: "3/4 Courses", icon: "fa-graduation-cap" },
+        { title: "Goals", value: "80%", subtitle: "4/5 Goals", icon: "fa-check-circle" },
+        { title: "Feedback", value: `${performanceData.feedback_scores.manager}/10`, subtitle: "Latest", icon: "fa-comment" },
+        { title: "Self Score", value: `${avgSelfScore}/5`, subtitle: "Deliverable", icon: "fa-user-check" },
+        { title: "Assessor", value: `${avgAssessorScore}/5`, subtitle: "Deliverable", icon: "fa-user-tie" },
+        { title: "Evidence", value: `${evidenceCompletion}%`, subtitle: "Confirmed", icon: "fa-file-alt" }
+    ];
+
+    return (
+        <div className="w-[99.9%] mx-auto flex nowrap overflow-x-auto gap-2 py-2 scrollbar-hide">
+            {cards.map((card, idx) => (
+                <div 
+                    key={idx} 
+                    className={`flex-shrink-0 flex-1 min-w-[11%] p-3 rounded-lg shadow-sm ${cardColors[idx]} transition-all hover:shadow-md hover:scale-[1.02]`}
+                    onClick={() => alert(`View details for ${card.title}`)}
+                >
+                    <div className="flex flex-col items-center text-center h-full justify-between">
+                        <i className={`fas ${card.icon} text-xl mb-2`}></i>
+                        <h3 className="font-semibold text-sm">{card.title}</h3>
+                        <p className="font-bold text-base my-1">{card.value}</p>
+                        <p className="text-xs opacity-80">{card.subtitle}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+        // Standard Charts Component
+        const StandardCharts = ({ assignments, performanceData }) => {
+            React.useEffect(() => {
+                const charts = {};
+                const createChart = (id, config) => {
+                    const ctx = document.getElementById(id)?.getContext('2d');
+                    if (ctx) charts[id] = new Chart(ctx, config);
+                };
+
+                createChart('progressBarChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['KPI Achievement'],
+                        datasets: [{ label: 'Achievement Rate (%)', data: [performanceData.kpi_achievement], backgroundColor: '#2ECC71' }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { datalabels: { anchor: 'end', align: 'top' } } }
+                });
+
+                createChart('divergingBarChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['Deliverable Score'],
+                        datasets: [
+                            { label: 'Self Score', data: [performanceData.self_score], backgroundColor: '#3498DB' },
+                            { label: 'Assessor Score', data: [-performanceData.assessor_score], backgroundColor: '#E74C3C' }
+                        ]
+                    },
+                    options: { indexAxis: 'y', scales: { x: { stacked: true, ticks: { callback: value => Math.abs(value) } } }, plugins: { datalabels: { anchor: 'end', align: 'end' } } }
+                });
+
+                createChart('radarChart', {
+                    type: 'radar',
+                    data: {
+                        labels: ['Collaboration', 'Technical', 'Leadership'],
+                        datasets: [
+                            { label: 'You', data: [8, 7, 6], backgroundColor: 'rgba(46, 204, 113, 0.2)', borderColor: '#2ECC71' },
+                            { label: 'Peer Avg', data: [7.5, 7.8, 6.5], backgroundColor: 'rgba(52, 152, 219, 0.2)', borderColor: '#3498DB' }
+                        ]
+                    },
+                    options: { plugins: { datalabels: { display: false } } }
+                });
+
+                createChart('lineChart', {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Jun'],
+                        datasets: [{ label: 'Proficiency (%)', data: [50, 80], borderColor: '#9B59B6', fill: false }]
+                    },
+                    options: { plugins: { datalabels: { anchor: 'end', align: 'top' } } }
+                });
+
+                createChart('ganttChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['Sales Growth'],
+                        datasets: [{ label: 'Progress', data: [80], backgroundColor: '#F1C40F', barThickness: 20 }]
+                    },
+                    options: { indexAxis: 'y', scales: { x: { beginAtZero: true, max: 100 } }, plugins: { datalabels: { anchor: 'end', align: 'right' } } }
+                });
+
+                createChart('treeChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['Increase Revenue', '  Sales Growth', '    New Clients', '      Signed Contracts'],
+                        datasets: [{ label: 'Progress (%)', data: [85, 80, 90, 100], backgroundColor: ['#2ECC71', '#E67E22', '#E67E22', '#E67E22'] }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        scales: { x: { beginAtZero: true, max: 100 } },
+                        plugins: {
+                            datalabels: { anchor: 'end', align: 'right' },
+                            tooltip: { callbacks: { label: (tooltipItem) => ['Goal: 30%, Due: 12/31/2025', 'KPI: 15%, 5%, Due: 06/30/2025', 'Deliverable: 10%, 20 clients, Due: 03/31/2025', 'Evidence: Due: 03/31/2025'][tooltipItem.dataIndex] } }
+                        },
+                        onClick: (e, elements) => { if (elements.length) alert('View goal details or upload evidence'); }
+                    }
+                });
+
+                return () => {
+                    Object.values(charts).forEach(chart => chart?.destroy());
+                };
+            }, [performanceData]);
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <div className="chart-container relative">
+                        <span className="tile-label">Goal Achievement Rate</span>
+                        <canvas id="progressBarChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Self vs. Assessor Scores</span>
+                        <canvas id="divergingBarChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Peer Comparison</span>
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Skills Development Progress</span>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Goal and Milestone Timelines</span>
+                        <canvas id="ganttChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Assigned Goals, KPIs, Deliverables</span>
+                        <canvas id="treeChart"></canvas>
+                    </div>
+                </div>
+            );
+        };
+
+        // Real-Time Charts Component
+        const RealTimeCharts = ({ performanceData }) => {
+            React.useEffect(() => {
+                const charts = {};
+                const createChart = (id, config) => {
+                    const ctx = document.getElementById(id)?.getContext('2d');
+                    if (ctx) charts[id] = new Chart(ctx, config);
+                };
+
+                createChart('rtProgressBarChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['Performance'],
+                        datasets: [
+                            { label: 'Target', data: [performanceData.target_vs_actual.target], backgroundColor: '#3498DB' },
+                            { label: 'Actual', data: [performanceData.target_vs_actual.actual], backgroundColor: '#2ECC71' }
+                        ]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { datalabels: { anchor: 'end', align: 'top' } } }
+                });
+
+                createChart('rtLineChart', {
+                    type: 'line',
+                    data: {
+                        labels: ['Q1', 'Q2'],
+                        datasets: [{ label: 'Engagement Score', data: [7.5, 7.8], borderColor: '#E74C3C', fill: false }]
+                    },
+                    options: { plugins: { datalabels: { anchor: 'end', align: 'top' } } }
+                });
+
+                createChart('rtRadarChart', {
+                    type: 'radar',
+                    data: {
+                        labels: ['Manager', 'Peer'],
+                        datasets: [{ label: 'Feedback Score', data: [8.2, 7.9], backgroundColor: 'rgba(241, 196, 15, 0.2)', borderColor: '#F1C40F' }]
+                    },
+                    options: { plugins: { datalabels: { display: false } } }
+                });
+
+                createChart('rtGanttChart', {
+                    type: 'bar',
+                    data: {
+                        labels: ['Excel Course'],
+                        datasets: [{ label: 'Progress', data: [75], backgroundColor: '#9B59B6', barThickness: 20 }]
+                    },
+                    options: { indexAxis: 'y', scales: { x: { beginAtZero: true, max: 100 } }, plugins: { datalabels: { anchor: 'end', align: 'right' } } }
+                });
+
+                createChart('heatmapChart', {
+                    type: 'matrix',
+                    data: {
+                        datasets: [{
+                            label: 'Skill Proficiency',
+                            data: [
+                                { x: 0, y: 0, v: 50 }, { x: 1, y: 0, v: 80 },
+                                { x: 0, y: 1, v: 60 }, { x: 1, y: 1, v: 70 }
+                            ],
+                            backgroundColor: (ctx) => ctx.dataset.data[ctx.dataIndex].v > 75 ? '#2ECC71' : ctx.dataset.data[ctx.dataIndex].v > 50 ? '#F1C40F' : '#E74C3C',
+                            width: 50, height: 50
+                        }]
+                    },
+                    options: {
+                        scales: { x: { type: 'category', labels: ['Jan', 'Jun'] }, y: { type: 'category', labels: ['Excel', 'Leadership'] } },
+                        plugins: { datalabels: { color: 'white', formatter: value => value.v } }
+                    }
+                });
+
+                return () => {
+                    Object.values(charts).forEach(chart => chart?.destroy());
+                };
+            }, [performanceData]);
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <div className="chart-container relative">
+                        <span className="tile-label">Target vs. Actual Performance</span>
+                        <canvas id="rtProgressBarChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Engagement Trend</span>
+                        <canvas id="rtLineChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Feedback Insights</span>
+                        <canvas id="rtRadarChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Course and Goal Deadlines</span>
+                        <canvas id="rtGanttChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Skill Proficiency Over Time</span>
+                        <canvas id="heatmapChart"></canvas>
+                    </div>
+                </div>
+            );
+        };
+
+        // Detailed Performance Charts Component
+        const DetailedPerformanceCharts = ({ filteredData }) => {
+            React.useEffect(() => {
+                const charts = {};
+                const createChart = (id, config) => {
+                    const ctx = document.getElementById(id)?.getContext('2d');
+                    if (ctx) charts[id] = new Chart(ctx, config);
+                };
+
+                createChart('strategicGoalChart', {
+                    type: 'bar',
+                    data: {
+                        labels: [...new Set(filteredData.map(d => d.strategic_goal))],
+                        datasets: [{
+                            label: 'Weighted Assessor Score',
+                            data: [...new Set(filteredData.map(d => d.strategic_goal))].map(goal => {
+                                const goalData = filteredData.filter(d => d.strategic_goal === goal);
+                                return goalData.length ? goalData.reduce((sum, d) => sum + (d.deliverable_assessor_score * d.strategic_goal_weight), 0) / goalData.length : 0;
+                            }),
+                            backgroundColor: '#2ECC71'
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 5 } }, plugins: { datalabels: { anchor: 'end', align: 'top', formatter: value => value.toFixed(1) } } }
+                });
+
+                createChart('kpiChart', {
+                    type: 'bar',
+                    data: {
+                        labels: [...new Set(filteredData.map(d => d.kpi))],
+                        datasets: [{
+                            label: 'Weighted KPI Score',
+                            data: [...new Set(filteredData.map(d => d.kpi))].map(kpi => {
+                                const kpiData = filteredData.filter(d => d.kpi === kpi);
+                                return kpiData.length ? kpiData.reduce((sum, d) => sum + (d.deliverable_assessor_score * d.kpi_weight), 0) / kpiData.length : 0;
+                            }),
+                            backgroundColor: '#3498DB'
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 5 } }, plugins: { datalabels: { anchor: 'end', align: 'top', formatter: value => value.toFixed(1) } } }
+                });
+
+                createChart('deliverableChart', {
+                    type: 'bar',
+                    data: {
+                        labels: filteredData.map(d => d.deliverable.slice(0, 20) + '...'),
+                        datasets: [
+                            { label: 'Self Score', data: filteredData.map(d => d.deliverable_self_score), backgroundColor: '#F1C40F' },
+                            { label: 'Assessor Score', data: filteredData.map(d => d.deliverable_assessor_score), backgroundColor: '#E74C3C' }
+                        ]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 5 } }, plugins: { datalabels: { anchor: 'end', align: 'top', formatter: value => value } } }
+                });
+
+                createChart('evidenceChart', {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Self Confirmed', 'Assessor Confirmed', 'Pending'],
+                        datasets: [{
+                            data: [
+                                filteredData.filter(d => d.doc_evidence_self_confirmation).length,
+                                filteredData.filter(d => d.doc_evidence_assessor_confirmation).length,
+                                filteredData.filter(d => !d.doc_evidence_self_confirmation || !d.doc_evidence_assessor_confirmation).length
+                            ],
+                            backgroundColor: ['#2ECC71', '#3498DB', '#E74C3C']
+                        }]
+                    },
+                    options: { plugins: { datalabels: { color: 'white', formatter: value => value } } }
+                });
+
+                createChart('targetVsActualChart', {
+                    type: 'bar',
+                    data: {
+                        labels: filteredData.map(d => d.deliverable.slice(0, 20) + '...'),
+                        datasets: [
+                            { label: 'Short-Term Actual', data: filteredData.map(d => d.short_term_actual || 0), backgroundColor: '#2ECC71' },
+                            { label: 'Short-Term Target', data: filteredData.map(d => d.short_term_target || 0), backgroundColor: '#3498DB' }
+                        ]
+                    },
+                    options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { datalabels: { anchor: 'end', align: 'top', formatter: value => value } } }
+                });
+
+                return () => {
+                    Object.values(charts).forEach(chart => chart?.destroy());
+                };
+            }, [filteredData]);
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <div className="chart-container relative">
+                        <span className="tile-label">Strategic Goal Performance</span>
+                        <canvas id="strategicGoalChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">KPI Performance</span>
+                        <canvas id="kpiChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Deliverable Scores</span>
+                        <canvas id="deliverableChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Evidence Submission Status</span>
+                        <canvas id="evidenceChart"></canvas>
+                    </div>
+                    <div className="chart-container relative">
+                        <span className="tile-label">Target vs. Actual</span>
+                        <canvas id="targetVsActualChart"></canvas>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [isDarkMode, setIsDarkMode] = React.useState(true);
+            const [filters, setFilters] = React.useState({ cycle: '', period: '' });
+
+            const toggleTheme = () => {
+                setIsDarkMode(!isDarkMode);
+                document.documentElement.setAttribute('data-theme', isDarkMode ? 'light' : 'dark');
+            };
+
+            const handleFilterChange = (filter, value) => {
+                setFilters(prev => ({ ...prev, [filter]: value }));
+            };
+
+            const filteredData = performanceData.filter(d => 
+                (!filters.cycle || d.review_cycle_number === filters.cycle) &&
+                (!filters.period || d.date_self_appraisal_completed.startsWith(filters.period))
+            );
+
+            return (
+                <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+                    <div className="main-content">
+                        <Header userData={mockUserData} />
+                        <TrendingFilters onFilterChange={handleFilterChange} />
+                        <NarrativeInsights performanceData={filteredData} mockPerformanceData={mockPerformanceData} />
+                        <InfoCards performanceData={mockPerformanceData} filteredData={filteredData} />
+                        <h2 className="text-2xl font-bold mb-4"></h2>
+                        <StandardCharts assignments={mockAssignments} performanceData={mockPerformanceData} />
+                        <h2 className="text-2xl font-bold mb-4"></h2>
+                        <RealTimeCharts performanceData={mockPerformanceData} />
+                        <h2 className="text-2xl font-bold mb-4"></h2>
+                        <DetailedPerformanceCharts filteredData={filteredData} />
+                    </div>
+                </ThemeContext.Provider>
+            );
+        };
+
+        // Render App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+{% endverbatim %}

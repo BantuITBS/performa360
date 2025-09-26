@@ -1,0 +1,356 @@
+// Display Deliverables in Modal with Chat-like Comment Functionality
+function displayDeliverables(deliverables) {
+    const modalContent = document.getElementById('modal-body-content');
+    modalContent.innerHTML = '';
+
+    // Define header columns
+    const headerRow = document.createElement('div');
+    headerRow.className = 'modal-header-row';
+    [
+        'Del #',
+        'Weight',
+        'Deliverable',
+        'Self Appraisal Score',
+        'Due Date',
+        'Short Term Target',
+        'Short Term Actual',
+        "Inter' Term Target",
+        "Inter' Term Actual",
+        'Long Term Target',
+        'Long Term Actual',
+        'UoM'
+    ].forEach(text => {
+        const headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = text;
+        headerRow.appendChild(headerCell);
+    });
+    modalContent.appendChild(headerRow);
+
+    if (deliverables.length === 0) {
+        const emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="12">No deliverables available.</div>';
+        modalContent.appendChild(emptyRow);
+    } else {
+        // Sort deliverables based on deliverable_number
+        deliverables.sort((a, b) => a.deliverable_number - b.deliverable_number);
+
+        deliverables.forEach((deliverable, index) => {
+            // Create deliverable row
+            const deliverableRow = document.createElement('div');
+            deliverableRow.className = 'modal-deliverable-row';
+
+            // Deliverable Number
+            const deliverableNumberCell = document.createElement('div');
+            deliverableNumberCell.className = 'modal-deliverable-cell';
+            deliverableNumberCell.textContent = deliverable.deliverable_number || '-';
+            deliverableRow.appendChild(deliverableNumberCell);
+
+            // Weight
+            const weightCell = document.createElement('div');
+            weightCell.className = 'modal-deliverable-cell';
+            weightCell.textContent = deliverable.deliverable_weight || 'N/A';
+            deliverableRow.appendChild(weightCell);
+
+            // Deliverable
+            const descCell = document.createElement('div');
+            descCell.className = 'modal-deliverable-cell';
+            descCell.textContent = deliverable.deliverable || 'No description';
+            deliverableRow.appendChild(descCell);
+
+            // Self Appraisal Score
+            const selfAppraisalCell = document.createElement('div');
+            selfAppraisalCell.className = 'modal-deliverable-cell';
+            const selfAppraisalScore = document.createElement('select');
+            selfAppraisalScore.className = 'modal-deliverable-select';
+            selfAppraisalScore.id = `self-appraisal-score-${index}`;
+            selfAppraisalScore.innerHTML = '<option value="">Score</option>';
+            for (let i = 1; i <= 10; i++) {
+                selfAppraisalScore.innerHTML += `<option value="${i}" ${deliverable.self_appraisal_score == i ? 'selected' : ''}>${i}</option>`;
+            }
+            selfAppraisalCell.appendChild(selfAppraisalScore);
+            deliverableRow.appendChild(selfAppraisalCell);
+
+            // Due Date
+            const dueDateCell = document.createElement('div');
+            dueDateCell.className = 'modal-deliverable-cell';
+            dueDateCell.textContent = deliverable.deliverable_due_date ? formatDate(deliverable.deliverable_due_date) : 'No due date';
+            deliverableRow.appendChild(dueDateCell);
+
+            // Short Term Target (Display Textbox)
+            const shortTermTargetCell = document.createElement('div');
+            shortTermTargetCell.className = 'modal-deliverable-cell';
+            shortTermTargetCell.style.display = 'flex';
+            shortTermTargetCell.style.alignItems = 'center';
+            shortTermTargetCell.style.justifyContent = 'center';
+            const shortTermTargetTextbox = document.createElement('input');
+            shortTermTargetTextbox.type = 'text';
+            shortTermTargetTextbox.id = `short-term-target-${index}`;
+            shortTermTargetTextbox.className = 'modal-deliverable-textbox';
+            shortTermTargetTextbox.readOnly = true;
+            shortTermTargetTextbox.value = deliverable.short_term_target || '';
+            shortTermTargetTextbox.style.width = '10px';
+            shortTermTargetTextbox.style.minWidth = '10px';
+            adjustTextboxWidth(shortTermTargetTextbox);
+            shortTermTargetCell.appendChild(shortTermTargetTextbox);
+            deliverableRow.appendChild(shortTermTargetCell);
+
+            // Short Term Actual (Float Input)
+            const shortTermActualCell = document.createElement('div');
+            shortTermActualCell.className = 'modal-deliverable-cell';
+            shortTermActualCell.style.display = 'flex';
+            shortTermActualCell.style.alignItems = 'center';
+            shortTermActualCell.style.justifyContent = 'center';
+            const shortTermActualInput = document.createElement('input');
+            shortTermActualInput.type = 'number';
+            shortTermActualInput.id = `short-term-actual-${index}`;
+            shortTermActualInput.step = '0.01';
+            shortTermActualInput.className = 'modal-deliverable-input';
+            shortTermActualInput.value = deliverable.short_term_actual || '';
+            shortTermActualInput.style.width = '50px';
+            shortTermActualInput.style.minWidth = '50px';
+            shortTermActualInput.addEventListener('input', () => {
+                adjustTextboxWidth(shortTermActualInput);
+            });
+            shortTermActualCell.appendChild(shortTermActualInput);
+            deliverableRow.appendChild(shortTermActualCell);
+
+            // Intermediate Target (Display Textbox)
+            const intermediateTargetCell = document.createElement('div');
+            intermediateTargetCell.className = 'modal-deliverable-cell';
+            intermediateTargetCell.style.display = 'flex';
+            intermediateTargetCell.style.alignItems = 'center';
+            intermediateTargetCell.style.justifyContent = 'center';
+            const intermediateTargetTextbox = document.createElement('input');
+            intermediateTargetTextbox.type = 'text';
+            intermediateTargetTextbox.id = `intermediate-target-${index}`;
+            intermediateTargetTextbox.className = 'modal-deliverable-textbox';
+            intermediateTargetTextbox.readOnly = true;
+            intermediateTargetTextbox.value = deliverable.intermediate_target || '';
+            intermediateTargetTextbox.style.width = '10px';
+            intermediateTargetTextbox.style.minWidth = '10px';
+            adjustTextboxWidth(intermediateTargetTextbox);
+            intermediateTargetCell.appendChild(intermediateTargetTextbox);
+            deliverableRow.appendChild(intermediateTargetCell);
+
+            // Intermediate Actual (Float Input)
+            const intermediateActualCell = document.createElement('div');
+            intermediateActualCell.className = 'modal-deliverable-cell';
+            intermediateActualCell.style.display = 'flex';
+            intermediateActualCell.style.alignItems = 'center';
+            intermediateActualCell.style.justifyContent = 'center';
+            const intermediateActualInput = document.createElement('input');
+            intermediateActualInput.type = 'number';
+            intermediateActualInput.id = `intermediate-actual-${index}`;
+            intermediateActualInput.step = '0.01';
+            intermediateActualInput.className = 'modal-deliverable-input';
+            intermediateActualInput.value = deliverable.intermediate_actual || '';
+            intermediateActualInput.style.width = '50px';
+            intermediateActualInput.style.minWidth = '50px';
+            intermediateActualInput.addEventListener('input', () => {
+                adjustTextboxWidth(intermediateActualInput);
+            });
+            intermediateActualCell.appendChild(intermediateActualInput);
+            deliverableRow.appendChild(intermediateActualCell);
+
+            // Long Term Target (Display Textbox)
+            const longTermTargetCell = document.createElement('div');
+            longTermTargetCell.className = 'modal-deliverable-cell';
+            longTermTargetCell.style.display = 'flex';
+            longTermTargetCell.style.alignItems = 'center';
+            longTermTargetCell.style.justifyContent = 'center';
+            const longTermTargetTextbox = document.createElement('input');
+            longTermTargetTextbox.type = 'text';
+            longTermTargetTextbox.id = `long-term-target-${index}`;
+            longTermTargetTextbox.className = 'modal-deliverable-textbox';
+            longTermTargetTextbox.readOnly = true;
+            longTermTargetTextbox.value = deliverable.long_term_target || '';
+            longTermTargetTextbox.style.width = '10px';
+            longTermTargetTextbox.style.minWidth = '10px';
+            adjustTextboxWidth(longTermTargetTextbox);
+            longTermTargetCell.appendChild(longTermTargetTextbox);
+            deliverableRow.appendChild(longTermTargetCell);
+
+            // Long Term Actual (Float Input)
+            const longTermActualCell = document.createElement('div');
+            longTermActualCell.className = 'modal-deliverable-cell';
+            longTermActualCell.style.display = 'flex';
+            longTermActualCell.style.alignItems = 'center';
+            longTermActualCell.style.justifyContent = 'center';
+            const longTermActualInput = document.createElement('input');
+            longTermActualInput.type = 'number';
+            longTermActualInput.id = `long-term-actual-${index}`;
+            longTermActualInput.step = '0.01';
+            longTermActualInput.className = 'modal-deliverable-input';
+            longTermActualInput.value = deliverable.long_term_actual || '';
+            longTermActualInput.style.width = '50px';
+            longTermActualInput.style.minWidth = '50px';
+            longTermActualInput.addEventListener('input', () => {
+                adjustTextboxWidth(longTermActualInput);
+            });
+            longTermActualCell.appendChild(longTermActualInput);
+            deliverableRow.appendChild(longTermActualCell);
+
+            // UoM (Unit of Measure Textbox)
+            const uomCell = document.createElement('div');
+            uomCell.className = 'modal-deliverable-cell';
+            uomCell.style.display = 'flex';
+            uomCell.style.alignItems = 'center';
+            uomCell.style.justifyContent = 'center';
+            const uomTextbox = document.createElement('input');
+            uomTextbox.type = 'text';
+            uomTextbox.id = `uom-display-${index}`;
+            uomTextbox.className = 'modal-deliverable-textbox';
+            uomTextbox.readOnly = true;
+            uomTextbox.value = deliverable.uom || '';
+            uomTextbox.style.width = '10px';
+            uomTextbox.style.minWidth = '10px';
+            adjustTextboxWidth(uomTextbox);
+            uomCell.appendChild(uomTextbox);
+            deliverableRow.appendChild(uomCell);
+
+            // Append deliverable row
+            modalContent.appendChild(deliverableRow);
+
+            // Chat Container
+const chatContainer = document.createElement('div');
+chatContainer.className = 'chat-container';
+chatContainer.style.marginTop = '10px';
+
+// Chat Messages
+const chatMessages = document.createElement('div');
+chatMessages.className = 'chat-messages';
+chatMessages.style.height = '200px';
+chatMessages.style.overflowY = 'auto';
+chatMessages.style.padding = '10px';
+chatMessages.style.backgroundColor = '#f0f0f0';
+
+// Chat Input Container
+const chatInputContainer = document.createElement('div');
+chatInputContainer.className = 'chat-input-container';
+chatInputContainer.style.display = 'flex';
+chatInputContainer.style.alignItems = 'center';
+chatInputContainer.style.padding = '10px';
+
+// Send button
+const sendButton = document.createElement('button');
+sendButton.className = 'send-comment-btn';
+sendButton.innerHTML = '<i class="fa fa-paper-plane"></i>';
+sendButton.style.padding = '8px 12px';
+sendButton.style.backgroundColor = '#1ABB9C';
+sendButton.style.color = 'white';
+sendButton.style.border = 'none';
+sendButton.style.borderRadius = '4px';
+sendButton.style.cursor = 'pointer';
+
+// Message input
+const messageInput = document.createElement('input');
+messageInput.type = 'text';
+messageInput.className = 'chat-input';
+messageInput.style.flex = '1';
+messageInput.style.padding = '8px';
+messageInput.style.color = 'white';
+messageInput.style.border = '1px solid #ddd';
+messageInput.style.borderRadius = '4px';
+messageInput.style.backgroundColor = '#000'; 
+messageInput.placeholder = 'Type your comment...';
+
+// Send comment function
+const sendComment = async () => {
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    // Get current user data
+    const currentUserCode = document.getElementById('employee-password').value.trim();
+    const currentUser = document.getElementById('signed-in-user').textContent.trim();
+    const currentChatPartnerCode = document.getElementById('subordinate_code').value.trim();
+    const currentChatPartner = document.getElementById('username-input-dropdown').value.trim();
+
+    if (!currentUserCode || !currentChatPartnerCode) {
+        alert('Please select a subordinate before commenting.');
+        return;
+    }
+
+    // Create payload similar to the chat example
+    const payload = {
+        message: message,
+        deliverable_id: deliverable.deliverable_id,
+        sender_code: currentUserCode,
+        recipient_code: currentChatPartnerCode,
+        sender_name: currentUser || 'Unknown Sender',
+        recipient_name: currentChatPartner || 'Unknown Recipient',
+        strategic_goal: deliverable.strategic_goal || 'N/A',
+        kpi: deliverable.kpi || 'N/A',
+        deliverable: deliverable.deliverable || 'N/A',
+        deliverable_number: deliverable.deliverable_number || 'N/A'
+    };
+
+    try {
+        const response = await fetch('/save-deliverable-comment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save comment');
+        }
+
+        const data = await response.json();
+        if (data.status === 'Comment saved') {
+            // Add the new message to the chat
+            const newMessage = {
+                id: data.message_id,
+                sender: currentUserCode,
+                sender_name: currentUser,
+                message: message,
+                timestamp: new Date().toISOString(),
+                strategic_goal: deliverable.strategic_goal || 'N/A',
+                kpi: deliverable.kpi || 'N/A',
+                deliverable: deliverable.deliverable || 'N/A'
+            };
+
+            const messageDiv = createMessageElement(newMessage);
+            chatMessages.appendChild(messageDiv);
+            messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // If this was the first message, clear the "no comments" message
+            if (chatMessages.querySelector('p')) {
+                chatMessages.innerHTML = '';
+                chatMessages.appendChild(messageDiv);
+            }
+        }
+    } catch (error) {
+        console.error('Error saving comment:', error);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#f44336';
+        errorDiv.style.fontSize = '10px';
+        errorDiv.textContent = `Error saving comment: ${error.message}`;
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+};
+
+// Event listeners
+sendButton.addEventListener('click', sendComment);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendComment();
+    }
+});
+
+// Append elements
+chatInputContainer.appendChild(messageInput);
+chatInputContainer.appendChild(sendButton);
+chatContainer.appendChild(chatMessages);
+chatContainer.appendChild(chatInputContainer);
+commentCell.appendChild(chatContainer);
+commentRow.appendChild(commentCell);
+modalContent.appendChild(commentRow);

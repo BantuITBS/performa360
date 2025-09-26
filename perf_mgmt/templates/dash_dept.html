@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Department Performance Dashboard</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+</head>
+    <body class="bg-gray-50">
+        <!-- Department Header -->
+        <nav class="bg-gradient-to-r from-blue-800 to-blue-600 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-white text-2xl font-bold">Marketing Team Dashboard</h1>
+                        <p class="text-blue-200">Q3 Performance Overview</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            Download Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    
+    <main class="max-w-7xl mx-auto px-4 py-6">
+            <!-- Enhanced Metrics Overview -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                <p class="text-sm text-gray-500">Leadership Score</p>
+                <p class="text-2xl font-bold">4.2/5</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                <p class="text-sm text-gray-500">KPI Completion</p>
+                <p class="text-2xl font-bold">78%</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
+                <p class="text-sm text-gray-500">Skill Gaps Closed</p>
+                <p class="text-2xl font-bold">63%</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
+                <p class="text-sm text-gray-500">Experience Score</p>
+                <p class="text-2xl font-bold">8.4/10</p>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Leadership 360 Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Leadership 360 Insights</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div id="leadershipRadar" class="h-64"></div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Feedback Analysis</h3>
+                        <div id="feedbackWordCloud" class="h-48"></div>
+                        <div class="mt-2 text-sm text-gray-600">
+                            Most frequent feedback terms
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-3 gap-2">
+                    <div class="text-center p-2 bg-blue-50 rounded">
+                        <p class="text-sm">Decision Making</p>
+                        <p class="font-bold">4.1/5</p>
+                    </div>
+                    <!-- Add other leadership metrics -->
+                </div>
+            </div>
+
+            <!-- KPI Cascade Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">KPI Cascade Progress</h2>
+                <div id="sankeyDiagram" class="h-64"></div>
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-semibold">Top Completed Objectives</h3>
+                        <ul class="mt-2 space-y-2">
+                            <li class="flex justify-between text-sm">
+                                <span>Campaign Launch</span>
+                                <span class="text-green-600">100%</span>
+                            </li>
+                            <!-- Add more objectives -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">At Risk KPIs</h3>
+                        <ul class="mt-2 space-y-2">
+                            <li class="flex justify-between text-sm">
+                                <span>Lead Conversion</span>
+                                <span class="text-red-600">45%</span>
+                            </li>
+                            <!-- Add more KPIs -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills & Goals Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Skills Development</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div id="skillGapRadar" class="h-64"></div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Top Skill Priorities</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div class="w-2/3 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 65%"></div>
+                                </div>
+                                <span class="ml-2 text-sm">Data Analysis</span>
+                            </div>
+                            <!-- Add more skills -->
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h3 class="font-semibold">Learning Progress</h3>
+                    <div id="learningTimeline" class="h-48 mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Appraisal Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Appraisal Overview</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-semibold">Self vs Assessor Scores</h3>
+                        <div id="appraisalComparison" class="h-48"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Recent Appraisals</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-2 bg-green-50 rounded">
+                                <span>John Doe</span>
+                                <span class="text-green-600">Completed</span>
+                            </div>
+                            <!-- Add more appraisals -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Pulse Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 lg:col-span-2">
+                <h2 class="text-xl font-bold mb-4">Employee Experience</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div id="sentimentChart" class="h-48"></div>
+                    <div id="engagementTrend" class="h-48"></div>
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <p class="text-2xl font-bold">8.2/10</p>
+                            <p class="text-sm text-purple-600">Avg Satisfaction</p>
+                        </div>
+                        <div class="bg-teal-50 p-4 rounded-lg">
+                            <p class="text-2xl font-bold">92%</p>
+                            <p class="text-sm text-teal-600">Retention Risk</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Skills Matrix Heatmap -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Skill Competency Matrix</h2>
+                <div id="competencyHeatmap" class="h-96"></div>
+                <div class="mt-4 flex items-center">
+                    <div class="flex items-center mr-4">
+                        <div class="w-4 h-4 bg-blue-200 mr-2"></div>
+                        <span class="text-sm">Basic</span>
+                    </div>
+                    <div class="flex items-center mr-4">
+                        <div class="w-4 h-4 bg-blue-400 mr-2"></div>
+                        <span class="text-sm">Proficient</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-600 mr-2"></div>
+                        <span class="text-sm">Expert</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Pulse Heatmap -->
+            <div class="bg-white rounded-xl shadow-lg p-6 lg:col-span-2">
+                <h2 class="text-xl font-bold mb-4">Sentiment Analysis Over Time</h2>
+                <div id="sentimentHeatmap" class="h-64"></div>
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold">84%</p>
+                        <p class="text-sm text-gray-600">Positive Sentiment</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold">12%</p>
+                        <p class="text-sm text-gray-600">Neutral</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold">4%</p>
+                        <p class="text-sm text-gray-600">Negative</p>
+                    </div>
+                </div>
+            </div>
+    </main>
+
+    <script>
+        // Leadership Radar Chart
+        const leadershipData = {
+            type: 'scatterpolar',
+            r: [4.2, 3.8, 4.5, 4.1],
+            theta: ['Decision Making', 'Communication', 'Team Motivation', 'Strategic Alignment'],
+            fill: 'toself',
+            name: 'Leadership Metrics'
+        };
+        Plotly.newPlot('leadershipRadar', [leadershipData], {
+            polar: {radialaxis: {visible: true, range: [0, 5]}},
+            margin: {t: 30}
+        });
+
+        // Skill Gap Radar
+        const skillData = {
+            type: 'scatterpolar',
+            r: [3.2, 4.1, 2.8, 3.5],
+            theta: ['Technical Skills', 'Leadership', 'Communication', 'Strategic Thinking'],
+            fill: 'toself'
+        };
+        Plotly.newPlot('skillGapRadar', [skillData]);
+
+        // Appraisal Comparison
+        const appraisalData = [{
+            x: ['Goal Achievement', 'Skills', 'Collaboration', 'Innovation'],
+            y: [3.8, 4.2, 4.0, 3.5],
+            name: 'Self',
+            type: 'bar'
+        }, {
+            x: ['Goal Achievement', 'Skills', 'Collaboration', 'Innovation'],
+            y: [3.5, 4.0, 4.1, 3.2],
+            name: 'Assessor',
+            type: 'bar'
+        }];
+        Plotly.newPlot('appraisalComparison', appraisalData);
+
+
+
+
+
+        // KPI Progress Heatmap
+        const kpiHeatmapData = {
+            z: [[80, 90, 75], [65, 85, 95], [70, 60, 88]],
+            x: ['Team A', 'Team B', 'Team C'],
+            y: ['Campaign Launch', 'Lead Generation', 'ROI Improvement'],
+            type: 'heatmap',
+            colorscale: 'Viridis',
+            hoverongaps: false
+        };
+        Plotly.newPlot('kpiHeatmap', [kpiHeatmapData], {
+            margin: {t: 40},
+            xaxis: {title: 'Teams'},
+            yaxis: {title: 'Objectives'}
+        });
+
+        // Competency Matrix Heatmap
+        const competencyData = {
+            z: [[3, 4, 2], [5, 3, 4], [2, 5, 3]],
+            x: ['Data Analysis', 'Communication', 'Leadership'],
+            y: ['John D.', 'Jane S.', 'Mike R.'],
+            type: 'heatmap',
+            colorscale: 'Blues',
+            showscale: false
+        };
+        Plotly.newPlot('competencyHeatmap', [competencyData], {
+            margin: {t: 40}
+        });
+
+        // Sentiment Heatmap
+        const sentimentData = {
+            z: [[5, 8, 7], [6, 7, 9], [8, 6, 7]],
+            x: ['Q1', 'Q2', 'Q3'],
+            y: ['Positive', 'Neutral', 'Negative'],
+            type: 'heatmap',
+            colorscale: 'RdBu',
+            reversescale: true
+        };
+        Plotly.newPlot('sentimentHeatmap', [sentimentData]);
+
+        // Feedback Frequency Heatmap
+        const feedbackData = {
+            z: [[12, 8, 15], [9, 5, 18], [7, 13, 10]],
+            x: ['Decision Making', 'Communication', 'Motivation'],
+            y: ['Manager A', 'Manager B', 'Manager C'],
+            type: 'heatmap',
+            colorscale: 'YlOrRd'
+        };
+        Plotly.newPlot('feedbackHeatmap', [feedbackData], {
+            margin: {t: 40}
+        });
+
+const kpiHeatmapData = {
+    z: {{ kpi_heatmap.z|safe }},
+    x: {{ kpi_heatmap.x|safe }},
+    y: {{ kpi_heatmap.y|safe }},
+    type: 'heatmap',
+    colorscale: 'Viridis'
+};
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Performance Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+    /* Base Styles */
+    body {
+        background: linear-gradient(120deg, #2A3F54 0%, #1ABB9C 50%, #2A3F54 100%);
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: black;
+    }
+
+    /* Unified Metric Styles */
+    .metric-container {
+        margin: 20px 0;
+        padding: 10px;
+        border-radius: var(--radius);
+    }
+
+    .metric-row {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        margin: 8px 0;
+        padding: 8px;
+        transition: var(--transition);
+    }
+
+    .metric-weight {
+        width: 30px;
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
+        border-right: 1px solid var(--secondary);
+    }
+
+    .metric-content {
+        flex-grow: 1;
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Strategic Goals Specific */
+    .strategic-goals {
+        background: #000;
+        color: white;
+    }
+
+    .strategic-goals .metric-row {
+        background: var(--dark);
+        color: aqua;
+    }
+
+    /* KPI Specific */
+    .kpi-container .metric-row {
+        background: white;
+        color: var(--dark);
+    }
+
+    /* Unified Modal Styles */
+    .modal-grid {
+        display: grid;
+        grid-template-columns: 80px 1fr 120px 120px;
+        gap: 15px;
+        padding: 12px;
+        align-items: center;
+    }
+
+    .modal-cell {
+        padding: 10px;
+        font-size: 0.8rem;
+        border: 1px solid var(--border);
+    }
+
+    /* Navigation & Header */
+    .performa-nav {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        height: 80px;
+        box-shadow: var(--shadow);
+    }
+
+    .nav-input {
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-bottom: 2px solid var(--secondary);
+        color: white;
+        transition: var(--transition);
+    }
+
+    /* Tiles & Quotes */
+    .tiles-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 70px 16px 24px;
+    }
+
+    .tile {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 20px;
+        border-radius: var(--radius);
+        transition: var(--transition);
+    }
+
+    .quote {
+        font-style: italic;
+        position: relative;
+        padding-left: 24px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .metric-container {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        
+        .nav-input {
+            width: 140px;
+            padding: 6px 10px;
+        }
+    }
+
+
+
+
+
+
+
+
+        /* General Styles */
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            font-family: 'Merriweather', serif;
+           
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            height: 100px;
+            background-color: whitesmoke;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .horizontal-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 120px;
+        }
+
+        .input-container{
+            position: absolute;
+            top: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            flex: 1;
+            background-color: teal;
+        }
+
+        .tile-header {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            font-weight: bold;
+            color: white;
+            font-size: 12px;
+        }
+
+        .tile-header span {
+            margin-right: 5px;
+        }
+
+        .icon-container i {
+            font-size: 60px;
+        }
+
+        /* Strategic Goals Container */
+        .strategic-goals-container {
+            margin-top: 90px;
+            padding: 10px;
+        }
+
+        .sg-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid lightgrey;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            background-color: black;
+            padding: 5px;
+            transition: background-color 0.3s;
+            color: aqua;
+        }
+
+        .sg-row:hover {
+            background-color: #e0f7fa;
+        }
+
+        .sg-icon {
+            margin-right: 5px;
+            color: teal;
+            font-size: 14px;
+        }
+
+        .sg-weight-tile {
+            background-color: black;
+            padding: 5px;
+            width: 30px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            border-right: 1px solid teal;
+        }
+
+        .sg-goal-tile {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            padding: 5px;
+            border-left: 1px solid lightgrey;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        /* KPI Container */
+        #kpi-container {
+            margin-top: 10px;
+            padding: 0 5px;
+        }
+
+        .kpi-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid lightgrey;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            background-color: black;
+            padding: 5px;
+            transition: background-color 0.3s;
+            color: aqua;
+            cursor: pointer;
+        }
+
+        .kpi-row:hover {
+            background-color: #e0f7fa;
+        }
+
+        .kpi-icon {
+            margin-right: 5px;
+            color: teal;
+            font-size: 14px;
+        }
+
+        .kpi-weight-tile {
+            background-color: white;
+            padding: 5px;
+            width: 30px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            border-right: 1px solid teal;
+            color: black;
+        }
+
+        .kpi-goal-tile {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            padding: 5px;
+            border-left: 1px solid lightgrey;
+            font-size: 12px;
+            text-align: left;
+            background-color: white;
+        }
+
+        .kpi-desc-tile {
+            flex-grow: 1;
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            max-width: 280px;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 100px;
+        }
+
+        .tile-header {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tile-header:hover .tooltip {
+            display: block;
+        }
+
+        .horizontal-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: aqua;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-width: 100%; /* Prevent modal from extending outside the page */
+    width: 800px; /* Fixed width for symmetry */
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.modal-header {
+    background-color: teal; /* Different color for header */
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: -20px -20px 20px -20px; /* Align header with modal edges */
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white; /* White close button */
+}
+
+.modal-body {
+    font-size: 12px;
+    line-height: 1.6;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white; /* White background for rows */
+    border-radius: 8px;
+    overflow: hidden; /* Prevent content from overflowing */
+    
+}
+
+.modal-header-row,
+.modal-deliverable-row {
+    display: table-row;
+}
+
+.modal-header-cell,
+.modal-deliverable-cell {
+    display: table-cell;
+    border: 1px solid #ddd; /* Horizontal and vertical dividing lines */
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.modal-header-cell {
+    font-weight: bold;
+    background-color: #f0f0f0; /* Light gray for header cells */
+}
+
+.modal-deliverable-cell {
+    background-color: white; /* White for row cells */
+}
+
+.modal-deliverable-select {
+    width: 80%;
+    padding: 2px;
+    font-size: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+.modal-footer {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.modal-footer .save-btn {
+    padding: 5px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: goldenrod;
+    color: blacks;
+    transition: background-color 0.3s ease;
+}
+
+.modal-footer .save-btn:hover {
+    background-color: white;
+}
+
+    .custom-modal {
+      display: block;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 110%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      font-size: 12px;
+    }
+  
+    .custom-modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 100%;
+      border-radius: 8px;
+    }
+  
+    .custom-close-btn {
+      color: #aaa;
+      float: right;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  
+    .custom-close-btn:hover,
+    .custom-close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  
+    table {
+      width: 95%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+  
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+  
+    th {
+      background-color: #f2f2f2;
+    }
+
+
+.tiles-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows tiles to wrap to the next line if necessary */
+    gap: 2px; /* Adjusts the space between tiles */
+    margin-top: 90px;
+}
+
+.tile {
+    flex: 1 1 200px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 10px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 5px !important;
+    text-align: center !important;
+    background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%) !important;
+    color: black !important;
+}
+.quote {
+    margin-bottom: 10px;
+    font-style: italic;
+    text-align: center;
+    font-size: 12px;
+}
+
+.author-container {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid teal;
+    border-radius: 3px;
+}
+
+.author {
+    font-weight: bold;
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Navbar Styling */
+.performa-nav {
+    background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+    height: 80px;
+    padding: 0 2rem;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styling */
+.performa-logo {
+    font-size: 1.8rem;
+    color: #1ABB9C !important;
+    transition: transform 0.3s ease;
+    margin-left: 20px;
+}
+
+.performa-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Title Styling */
+.main-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #1ABB9C 30%, #FFFFFF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Right-Aligned Input & Profile */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Input Styling */
+.nav-input {
+    padding: 8px 12px;
+    border: none;
+    border-bottom: 2px solid #1ABB9C;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 160px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.username-input {
+    width: 100%;
+    padding: 6px;
+    font-size: 12px;
+    text-align: center;
+    border: none;
+    background-color: black;
+    color: white;
+}
+
+/* Placeholder styling */
+.username-input,
+.input-container_3,
+.nav-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Focus styling */
+.username-input,
+.input-container_3,
+.nav-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-bottom-color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(26, 187, 156, 0.2);
+}
+
+
+/* Profile Avatar Styling */
+.profile-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #1ABB9C;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(26, 187, 156, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .main-title {
+        font-size: 1.2rem;
+    }
+    
+    .username-input,.nav-input {
+        width: 140px;
+        padding: 6px 10px;
+    }
+}
+
+
+    
+    .sgs::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(145deg, #2A3F54 0%, #1ABB9C 100%);
+        z-index: -1;
+        border-radius: 0px;
+        animation: gradientShift 4s ease infinite;
+    }
+    
+    .sgs i {
+        font-size: 1.6rem;
+        color: #1ABB9C;
+        animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translate(-50%, -45%); }
+        to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    
+    
+    .sgs:hover {
+        transform: translate(-50%, -50%) scale(1.02);
+        box-shadow: 0 8px 25px rgba(42,63,84,0.2);
+    }
+
+.sgs i {
+    font-size: 1.6rem;
+    color: #1ABB9C;
+    transform: rotate(45deg) scaleY(-1);
+    animation: pointBounce 1.5s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+@keyframes pointBounce {
+    0%, 100% {
+        transform: rotate(45deg) scaleY(-1) translate(0, 0);
+    }
+    50% {
+        transform: rotate(45deg) scaleY(-1) translate(-5px, 5px);
+    }
+}
+
+#username-input-dropdown {
+  width: 125%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #1ABB9C;
+  color: white;
+}
+
+#username-input-dropdown option {
+  background-color: white;
+  color: #333;
+}
+
+.custom-image {
+    position: absolute;
+    top: -50px;
+    left: 5px;
+    width: 55px;
+    height: 46px;
+    background-image: url('/static/admin/img/pmh_3.png');
+    margin-top: 55px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border: 2px solid #ffffff;
+}
+
+.performa-nav {
+    height: 67px;
+    background: #2c3e50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.main-title {
+    font-size: 1.7rem;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    margin-left: 20px;
+}
+
+.gradient-text {   
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    background-color: transparent;
+}
+
+.user-selection {
+    display: flex;
+    gap: 1rem;
+    position: relative;
+    background-color: transparent;
+}
+
+.dropdown-wrapper {
+    position: relative;   
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.nav-dropdown {
+    padding: 0.6rem 1.0rem;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    appearance: none;
+    min-width: 180px;   
+}
+
+.user-input-wrapper {
+    position: relative;
+}
+
+.nav-input {
+    padding: 0.6rem 1rem; 
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    min-width: 200px;
+    margin-right: 70px;
+    background-color: transparent;
+
+}
+
+.nav-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26,188,156,0.1);
+}
+
+.manager-input {
+    position: relative;
+}
+
+.home-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.home-link:hover {
+    color: #1abc9c;
+    transform: translateY(-2px);
+}
+
+.home-link i {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+}
+
+.home-link span {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+}
+
+/* Dropdown arrow styling */
+.nav-dropdown::-ms-expand { display: none; }
+.nav-dropdown {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1em;
+}
+
+.strategic-goals-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 24px;
+    background: #ffffff;
+}
+
+.sg-tile {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.2s ease;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 200px;
+}
+
+.sg-tile:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sg-icon {
+    font-size: 1.2rem;
+    color: #4a5568;
+}
+
+.sg-weight {
+    font-size: 14px;
+    color: #718096;
+    font-weight: 500;
+}
+
+.sg-content {
+    margin: 16px 0;
+    line-height: 1.5;
+    color: #2d3748;
+    font-size: 15px;
+}
+
+.sg-due-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4a5568;
+    padding-top: 16px;
+    border-top: 1px solid #edf2f7;
+}
+
+/* Status Indicators */
+.due-date-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.due-date-urgent { background: #e53e3e; }
+.due-date-warning { background: #dd6b20; }
+.due-date-normal { background: #38a169; }
+
+/* Selected State */
+.sg-tile.selected {
+    border-color: #4299e1;
+    background-color: #f8fafc;
+}
+
+@media (max-width: 640px) {
+    .strategic-goals-container {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+    
+    .sg-tile {
+        min-height: auto;
+    }
+}
+
+.alert-box {
+  background-color: #ffe6e6;
+  color: #ff4c4c;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ff4c4c;
+  width: fit-content;
+}
+
+.form-row {
+  font-size: 10px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  font-size: 10px;
+  margin-bottom: 2px;
+  color: #fff;
+}
+
+.input-small {
+  width: 100px;
+  padding: 3px;
+  font-size: 10px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.checkbox-label {
+  font-size: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.checkbox-label input {
+  margin-right: 3px;
+}
+body{
+  background-color: black;
+}
+</style>
+</head>
+<body>
+
+<nav class="performa-nav">
+    <div class="custom-image"></div>
+    <div class="nav-container">
+        <!-- Main Title -->
+        <h1 class="main-title">
+            <span class="gradient-text">Performa360 AssessorAppraisal</span>
+        </h1>
+        <!-- Navigation Controls -->
+        <br class="nav-controls">
+            <!-- User Selection -->
+            <div class="user-selection">
+                <div class="dropdown-wrapper">
+                    <select id="username-input-dropdown" class="nav-dropdown" style="background-color: transparent; border: none;">
+                        <option value="" disabled selected>Select Subordinate</option>
+                    </select>
+                </div>
+            </div>
+            <br></br>
+            <!-- Manager Input -->
+            <div class="manager-input">
+                <input type="text" id="new-textbox" class="nav-input" style="text-align: center;color:transparent;" value="{{ username }}" placeholder="Manager's Name" readonly>
+            </div>
+
+            <li class="dropdown-header menu-header" style="font-size: 12px;margin-right: 70px;margin-top: -25px;">
+                <div class="user-status small text-gradient">Welcome</div>
+                <strong id="signed-in-user" class="username-display">{{ username }}</strong>
+            </li>
+
+        </div>
+        <div class="user-input-wrapper" style="visibility: hidden;">
+            <input type="text" id="username-input" class="nav-input" placeholder="Username">
+        </div>
+
+
+
+        <!-- Home Link -->
+        <a href="http://127.0.0.1:8002/" class="home-link">
+            <i class="fa fa-home"></i>
+            <span>Home</span>
+        </a>
+    </div>
+</nav>
+      
+
+
+<form id="my-form">
+    <div class="form-row">
+      <div class="field-container">
+        <label class="field-label" for="username">Employee Name:</label>
+        <input class="input-small" type="text" id="username" name="username" placeholder="Name">
+      </div>
+  
+      <div class="field-container">
+        <label class="field-label" for="employee-password">Password:</label>
+        <input class="input-small" type="password" id="employee-password" name="employee_password" placeholder="Password">
+        <label class="checkbox-label">
+          <input type="checkbox" id="show-password"> Show
+        </label>
+      </div>   
+  
+      <div class="field-container">
+        <label class="field-label" for="company_code">Company Code:</label>
+        <input class="input-small" type="text" id="company_code" name="company_code" placeholder="Company Code">
+      </div>
+  
+      <div class="field-container">
+        <label class="field-label" for="branch_code">Branch Code:</label>
+        <input class="input-small" type="text" id="branch_code" name="branch_code" placeholder="Branch Code">
+      </div>
+  
+      <!-- ✅ New Region Branch Field -->
+      <div class="field-container">
+        <label class="field-label" for="region_branch">Region Branch:</label>
+        <input class="input-small" type="text" id="region_branch" name="region_branch" placeholder="Region Branch">
+      </div>
+  
+    </div>
+  </form>
+  <script>
+  // Fetch company code from employee password input
+  function fetchCompanyCode() {
+    const employeeCode = document.getElementById('employee-password').value.trim();
+    console.log("Fetching company code for:", employeeCode);
+  
+    if (!employeeCode) {
+        document.getElementById('company_code').value = '';
+        return;
+    }
+  
+    fetch(`/get_company_code/?employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            if (data.company_code) {
+                document.getElementById('company_code').value = data.company_code;
+                fetchRegionBranch(data.company_code, employeeCode); // Fetch branch_code right after company_code
+            } else {
+                console.error('Company code not found:', data);
+                document.getElementById('company_code').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            document.getElementById('company_code').value = '';
+        });
+  }
+  
+  // Fetch region branch using company_code and employee_code
+  function fetchRegionBranch(companyCode, employeeCode) {
+    if (!companyCode || !employeeCode) {
+        document.getElementById('branch_code').value = '';
+        document.getElementById('region_branch').value = '';
+        return;
+    }
+  
+    fetch(`/get-region-branch/?company_code=${encodeURIComponent(companyCode)}&employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.region_code) {
+                document.getElementById('branch_code').value = data.region_code;  // ✅ Set region_code to branch_code field
+            } else {
+                console.warn(data.message || "No region code found.");
+                document.getElementById('branch_code').value = '';
+            }
+  
+            if (data.region_branch) {
+                document.getElementById('region_branch').value = data.region_branch;  // ✅ Set region_branch to new input
+            } else {
+                document.getElementById('region_branch').value = '';
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching region data:", error);
+            document.getElementById('branch_code').value = '';
+            document.getElementById('region_branch').value = '';
+        });
+  }
+  // Handle password visibility toggle
+  function handleShowPasswordToggle(e) {
+    const passwordInput = document.getElementById('employee-password');
+    passwordInput.type = e.target.checked ? 'text' : 'password';
+  }
+  // Attach all listeners once DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    // Trigger company code fetch when employee-password changes
+    document.getElementById('employee-password').addEventListener('input', fetchCompanyCode);
+    // Toggle password visibility
+    const toggle = document.getElementById('show-password');
+    if (toggle) toggle.addEventListener('change', handleShowPasswordToggle);
+  
+    // Trigger once on page load for autofill compatibility
+    setTimeout(fetchCompanyCode, 200);
+  });
+  
+    document.getElementById("username-input-dropdown").addEventListener("change", function() {
+        document.getElementById("username-input").value = this.value;
+    });
+</script>
+
+    <div class="tiles-container" style="margin-top: 15px;">
+        <div class="tile">
+            <p class="quote">"Fairness in performance appraisals is not just a legal obligation; it's a moral commitment to recognizing and rewarding employees based on their true contributions."</p>
+            <p class="author">Jennifer Herrity</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"Dispirited, unmotivated, unappreciated workers cannot compete in a highly competitive world."</p>
+            <p class="author">Francis Hesselbein</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"You got to be rigorous in your appraisal system. The biggest cowards are managers who don't let people know where they stand."</p>
+            <p class="author">Jack Welch</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"The way your employees feel is the way your customers will feel. And if your employees don't feel valued, neither will your customers."</p>
+            <p class="author">Sybil F. Stershic</p>
+        </div>
+    </div>    
+
+<!-- Header -->
+
+<!-- Modal Structure -->
+<div id="deliverable-modal" class="modal-overlay">
+    <div class="modal-content" style="top:5.7cm;">
+        <div class="modal-header">
+            <span class="modal-title">Deliverables</span>
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+            <!-- Deliverables will be dynamically injected here -->
+        </div>
+    </div>
+</div>
+
+<!-- Document Evidence Modal Structure -->
+<div id="document-evidence-modal" class="modal-overlay">
+    <div class="modal-content" style="top: calc(45% + 4.2cm); left: calc(77% - 3cm);">
+      <div class="modal-header">
+        <span class="modal-title">Document Evidence</span>
+        <button class="modal-close-btn" onclick="closeDocumentEvidenceModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="document-evidence-content">
+        <!-- Document Evidence will be dynamically injected here -->
+      </div>
+<!-- Trigger Button -->
+    <div class="modal-footer">
+      <button class="save-btn" onclick="showCustomModal()">Save</button>
+        </div>
+    </div>
+  </div>
+  
+<!-- Custom Modal Structure -->
+<div id="customModal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content"style="top: calc(45% + 10.2cm);">
+      <span class="custom-close-btn" onclick="closeCustomModal()">&times;</span>
+      <h4>Self Appraisal</h4>
+      
+      <table id="assessmentTable">
+        <thead>
+          <tr>
+            <th>Review Cycle Number</th>
+            <th>Employee Username</th>
+            <th>Employee Name</th>
+            <th>Manager Name</th>
+            <th>Manager Username</th>
+            <th>Date Created</th>
+            <th>Date Modified</th>
+            <th>Strategic Goal</th>
+            <th>KPI</th>
+            <th>Deliverable</th>
+            <th>Self Score</th>
+            <th>Assessor Score</th>
+            <th>Document Evidence</th>
+            <th>Self Confirmation</th>
+            <th>Assessor Confirmation</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+
+  <!-- Custom Modal JavaScript -->
+
+<!-- Strategic Goals Container -->
+<div class="strategic-goals-container" id="strategic-goals-list">
+    <!-- Dynamic content will be added here -->
+</div>
+
+<!-- KPI Container -->
+<div id="kpi-container">
+    <!-- KPIs will be displayed here -->
+</div>
+<div style="position: absolute; top: -10px; right: 10px;color: #1ABB9C;">
+    <ul class="navbar-nav ms-auto">
+        <li>
+            <a class="dropdown-item menu-item hover-glow" href="#" onclick="handleLogout()">
+                <div class="icon-wrapper me-3" style="color: #1ABB9C;">
+                    <i class="fas fa-sign-out-alt text-gradient-icon" style="color: #1ABB9C;"></i>
+                </div>
+                <span class="menu-label" style="color: #1ABB9C;">Log Out</span>
+                <i class="fas fa-chevron-right ms-auto menu-arrow" style="color: #1ABB9C;"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function handleLogout() {
+        if (confirm('Are you sure you want to log out?')) {
+            fetch('/logout/', {  // ✅ Updated logout URL
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "{% url 'main' %}";  // ✅ Ensure 'main' exists in urls.py
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+            });
+        }
+    }
+
+const textbox = document.getElementById('new-textbox');
+const dropdown = document.getElementById('username-input-dropdown');
+
+textbox.addEventListener('input', () => {
+  const enteredValue = textbox.value.trim();
+  if (enteredValue !== '') {
+    fetch('/get_subordinates/?reports_to=' + enteredValue)
+      .then(response => response.json())
+      .then(data => {
+        dropdown.innerHTML = '<option value="" disabled selected>select subordinate</option>';
+        data.forEach(subordinate => {
+          const option = document.createElement('option');
+          option.value = subordinate;
+          option.text = subordinate;
+          dropdown.add(option);
+        });
+      })
+      .catch(error => console.error('Error:', error));
+  } else {
+    dropdown.innerHTML = '<option value="" disabled selected>select subordinate</option>';
+  }
+});
+
+
+// Function to display the custom modal by setting its display style to 'block'
+function showCustomModal() {
+    document.getElementById("customModal").style.display = "block";
+}
+
+// Function to hide the custom modal by setting its display style to 'none'
+function closeCustomModal() {
+    document.getElementById("customModal").style.display = "none";
+}
+
+// Array of tooltip messages to be displayed for each tile header
+const tooltips = [
+    'Click on any strategic goal to view the related KPI(s).',
+    'Click on any KPI to view the related Deliverable(s).',
+    'Click on any Deliverable to view required Document Evidence that proves task completion.',
+    'Click on any Document Evidence to appraise yourself on it. If the due date has lapsed, offer an explanation.'
+];
+
+// Loop through all elements with the class 'tile-header' and attach tooltips
+document.querySelectorAll('.tile-header').forEach((header, index) => {
+    // Create a new div element for the tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip'; // Assign the class 'tooltip' to the div
+    tooltip.textContent = tooltips[index]; // Set the tooltip text from the array
+    header.appendChild(tooltip); // Append the tooltip to the header
+
+    // Add a mouseover event listener to show the tooltip
+    header.addEventListener('mouseover', function() {
+        tooltip.style.display = 'block'; // Make the tooltip visible
+        tooltip.style.top = '50%'; // Position the tooltip vertically at 50%
+        tooltip.style.left = '50%'; // Position the tooltip horizontally at 50%
+        tooltip.style.transform = 'translate(-50%, -50%)'; // Center the tooltip
+    });
+
+    // Add a mouseout event listener to hide the tooltip
+    header.addEventListener('mouseout', function() {
+        tooltip.style.display = 'none'; // Hide the tooltip
+    });
+});
+
+// Add a change event listener to the username dropdown field
+document.getElementById('username-input-dropdown').addEventListener('change', function() {
+    // Get the selected username value from the dropdown
+    var username = this.value;
+
+    // Set the value of the text input field to match the selected username
+    document.getElementById('username-input').value = username;
+
+// Fetch strategic goals data from the server based on the username
+
+    fetch('/get_strategic_goals/?username=' + encodeURIComponent(username))
+        .then(response => response.json()) // Parse the response as JSON
+        .then(data => {
+            // Get the container for strategic goals
+            var listContainer = document.getElementById('strategic-goals-list');
+            listContainer.innerHTML = ''; // Clear the container
+
+            // Variable to track the previously selected goal
+            let previousSelectedGoal = null;
+
+            // Loop through each strategic goal in the data
+            data.strategic_goals.forEach(function(item) {
+                // Create a new row for the strategic goal
+                var row = document.createElement('div');
+                row.className = 'sg-row';
+
+                // Create an icon for the goal
+                var icon = document.createElement('i');
+                icon.className = 'fas fa-check-circle sg-icon';
+                icon.style.color = 'teal'; // Set the default icon color
+
+                // Create a tile for the goal weight
+                var weightTile = document.createElement('div');
+                weightTile.className = 'sg-weight-tile';
+                weightTile.textContent = item.strategic_goal_weight ? item.strategic_goal_weight : '-'; // Display weight or '-' if not available
+
+                // Create a tile for the due date with color coding
+                var dueDateTile = document.createElement('div');
+                dueDateTile.className = 'sg-due-date-tile';
+                dueDateTile.style.fontSize = '10px';
+
+                // Check if the due date is available
+                if (item.strategic_goal_due_date) {
+                    var dueDate = new Date(item.strategic_goal_due_date); // Convert the due date string to a Date object
+                    var workDaysLeft = calculateWorkingDays(new Date(), dueDate); // Calculate working days left
+                    var color = getColorForDueDate(workDaysLeft); // Get the color based on the due date
+
+                    dueDateTile.style.backgroundColor = color; // Set the background color
+                    dueDateTile.textContent = `${workDaysLeft} work days left - ${item.strategic_goal_due_date}`; // Display work days left and due date
+
+                    // If the due date has passed, display 'OVERDUE'
+                    if (workDaysLeft < 0) {
+                        dueDateTile.textContent = `OVERDUE - ${item.strategic_goal_due_date}`;
+                    }
+                } else {
+                    dueDateTile.textContent = 'No Due Date'; // Display if no due date is available
+                }
+
+                // Create a tile for the goal description
+                var goalTile = document.createElement('div');
+                goalTile.className = 'sg-goal-tile';
+                goalTile.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`; // Display goal number and description
+
+                // Append all elements to the row
+                row.appendChild(icon);
+                row.appendChild(weightTile);
+                row.appendChild(goalTile);
+                row.appendChild(dueDateTile);
+
+                // Add a click event listener to the row to select the goal
+                row.addEventListener('click', function() {
+                    // Reset the color of the previously selected goal's icon
+                    if (previousSelectedGoal) {
+                        previousSelectedGoal.querySelector('.sg-icon').style.color = 'teal';
+                    }
+                    icon.style.color = 'red'; // Highlight the selected goal's icon
+                    previousSelectedGoal = row; // Update the previously selected goal
+
+                    // Display the KPIs associated with the selected goal
+                    displayKPIs(item.kpis);
+                });
+
+                // Append the row to the strategic goals container
+                listContainer.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching strategic goals:', error)); // Log any errors
+});
+
+
+
+// Updated JavaScript implementation
+data.strategic_goals.forEach(function(item) {
+    const tile = document.createElement('div');
+    tile.className = 'sg-tile';
+
+    // Header Section
+    const header = document.createElement('div');
+    header.className = 'sg-header';
+
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-bullseye sg-icon';
+
+    const weight = document.createElement('div');
+    weight.className = 'sg-weight';
+    weight.textContent = `Weight: ${item.strategic_goal_weight || 'N/A'}`;
+
+    // Content Section
+    const content = document.createElement('div');
+    content.className = 'sg-content';
+    content.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`;
+
+    // Due Date Section
+    const dueDate = document.createElement('div');
+    dueDate.className = 'sg-due-date';
+
+    const statusIndicator = document.createElement('div');
+    statusIndicator.className = 'due-date-indicator';
+
+    const dateText = document.createElement('span');
+
+    if (item.strategic_goal_due_date) {
+        const dueDateObj = new Date(item.strategic_goal_due_date);
+        const workDaysLeft = calculateWorkingDays(new Date(), dueDateObj);
+        
+        if (workDaysLeft < 0) {
+            statusIndicator.classList.add('due-date-urgent');
+            dateText.textContent = `Overdue: ${dueDateObj.toLocaleDateString()}`;
+        } else if (workDaysLeft <= 7) {
+            statusIndicator.classList.add('due-date-warning');
+            dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString()}`;
+        } else {
+            statusIndicator.classList.add('due-date-normal');
+            dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString()}`;
+        }
+    } else {
+        statusIndicator.style.display = 'none';
+        dateText.textContent = 'No due date';
+    }
+
+    // Assembly
+    header.appendChild(icon);
+    header.appendChild(weight);
+    
+    dueDate.appendChild(statusIndicator);
+    dueDate.appendChild(dateText);
+
+    tile.appendChild(header);
+    tile.appendChild(content);
+    tile.appendChild(dueDate);
+
+    // Interaction
+    tile.addEventListener('click', function() {
+        document.querySelectorAll('.sg-tile').forEach(t => t.classList.remove('selected'));
+        tile.classList.add('selected');
+        displayKPIs(item.kpis);
+    });
+
+    listContainer.appendChild(tile);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// Function to display KPIs in the kpi-container
+function displayKPIs(kpis) {
+    var kpiContainer = document.getElementById('kpi-container');
+    kpiContainer.innerHTML = ''; // Clear the container
+
+    // Add KPI header
+    const kpiHeader = document.createElement('div');
+    kpiHeader.innerHTML = `
+        <h2 style="color: black; background: white; padding: 8px;
+                  margin: -10px -10px 10px -10px; font-size: 18px;text-align:center">
+            Click on Key Performance Indicator to navigate to Deliverables
+        </h2>`;
+    kpiContainer.appendChild(kpiHeader);
+
+    let previousSelectedKPI = null;
+
+    // Check if there are no KPIs
+    if (kpis.length === 0) {
+        kpiContainer.innerHTML += '<p>No KPIs available.</p>';
+        return;
+    }
+
+    // Loop through each KPI
+    kpis.forEach(function(kpi) {
+        // Create a new row for the KPI
+        var row = document.createElement('div');
+        row.className = 'kpi-row';
+
+        // Create a tile for the KPI weight
+        var weightTile = document.createElement('div');
+        weightTile.className = 'kpi-weight-tile';
+        weightTile.textContent = kpi.kpi_weight ? kpi.kpi_weight : '-';
+
+        // Create a tile for the KPI description
+        var descTile = document.createElement('div');
+        descTile.className = 'kpi-desc-tile';
+        descTile.textContent = kpi.kpi;
+
+        // Create a tile for the KPI due date with color coding
+        var dueDateTile = document.createElement('div');
+        dueDateTile.className = 'kpi-due-date-tile';
+        dueDateTile.style.fontSize = '10px';
+
+        // Date handling
+        if (kpi.kpi_due_date) {
+            var dueDate = new Date(kpi.kpi_due_date);
+            var workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+            var color = getColorForDueDate(workDaysLeft);
+
+            dueDateTile.style.backgroundColor = color;
+            dueDateTile.textContent = workDaysLeft < 0 
+                ? `OVERDUE - ${kpi.kpi_due_date}`
+                : `${workDaysLeft} work days left - ${kpi.kpi_due_date}`;
+        } else {
+            dueDateTile.textContent = 'No Due Date';
+        }
+
+        // Assemble row
+        row.appendChild(weightTile);
+        row.appendChild(descTile);
+        row.appendChild(dueDateTile);
+
+        // Row interaction
+        row.addEventListener('click', function() {
+            if (previousSelectedKPI) {
+                previousSelectedKPI.style.backgroundColor = '';
+            }
+            row.style.backgroundColor = '#f0f8ff';
+            previousSelectedKPI = row;
+            displayDeliverables(kpi.deliverables);
+        });
+
+        kpiContainer.appendChild(row);
+    });
+}
+
+// Function to display deliverables in a modal
+function displayDeliverables(deliverables) {
+    var modalContent = document.getElementById('modal-body-content');
+    modalContent.innerHTML = ''; // Clear the modal content
+
+    // Create a header row for the modal
+    var headerRow = document.createElement('div');
+    headerRow.className = 'modal-header-row';
+    // Add header cells for Weight, Deliverable, Self Appraisal Score, Assessor Score, and Due Date
+    ['Weight', 'Deliverable', 'Self Appraisal Score', 'Assessor Score', 'Due Date'].forEach(function(headerText) {
+        var headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+    });
+    modalContent.appendChild(headerRow); // Append the header row to the modal content
+
+    // Variable to track the previously clicked deliverable row
+    let previousClickedRow = null;
+
+    // Check if there are no deliverables
+    if (deliverables.length === 0) {
+        // Display a message if no deliverables are available
+        var emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="5">No deliverables available.</div>';
+        modalContent.appendChild(emptyRow);
+    } else {
+        // Loop through each deliverable
+        deliverables.forEach(function(deliverable) {
+            // Create a new row for the deliverable
+            var deliverableRow = document.createElement('div');
+            deliverableRow.className = 'modal-deliverable-row';
+
+            // Create a cell for the deliverable weight
+            var weightCell = document.createElement('div');
+            weightCell.className = 'modal-deliverable-cell';
+            weightCell.textContent = deliverable.deliverable_weight; // Display the weight
+            deliverableRow.appendChild(weightCell);
+
+            // Create a cell for the deliverable description
+            var descCell = document.createElement('div');
+            descCell.className = 'modal-deliverable-cell';
+            descCell.textContent = deliverable.deliverable; // Display the description
+            deliverableRow.appendChild(descCell);
+
+            // Create a dropdown for the self-appraisal score
+            var selfAppraisalCell = document.createElement('div');
+            selfAppraisalCell.className = 'modal-deliverable-cell';
+            var selfAppraisalScore = document.createElement('select');
+            selfAppraisalScore.className = 'modal-deliverable-select';
+            selfAppraisalScore.innerHTML = '<option value="">Score</option>';
+            // Add options for scores from 1 to 10
+            for (let i = 1; i <= 10; i++) {
+                selfAppraisalScore.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+            selfAppraisalCell.appendChild(selfAppraisalScore);
+            deliverableRow.appendChild(selfAppraisalCell);
+
+            // Create a dropdown for the assessor score
+            var assessorCell = document.createElement('div');
+            assessorCell.className = 'modal-deliverable-cell';
+            var assessorScore = document.createElement('select');
+            assessorScore.className = 'modal-deliverable-select';
+            assessorScore.innerHTML = '<option value="">Score</option>';
+            // Add options for scores from 1 to 10
+            for (let i = 1; i <= 10; i++) {
+                assessorScore.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+            assessorCell.appendChild(assessorScore);
+            deliverableRow.appendChild(assessorCell);
+
+            // Create a cell for the due date
+            var dueDateCell = document.createElement('div');
+            dueDateCell.className = 'modal-deliverable-cell';
+            dueDateCell.textContent = deliverable.deliverable_due_date ? formatDate(deliverable.deliverable_due_date) : 'No due date'; // Display the due date
+            deliverableRow.appendChild(dueDateCell);
+
+            // Add a click event listener to the deliverable row
+            deliverableRow.addEventListener('click', function(event) {
+                // Remove the 'clicked' class from the previously clicked row
+                if (previousClickedRow) {
+                    previousClickedRow.classList.remove('clicked');
+                }
+
+                // Add the 'clicked' class to the current row
+                deliverableRow.classList.add('clicked');
+                previousClickedRow = deliverableRow;
+
+                // Open the Document Evidence Modal
+                var rect = deliverableRow.getBoundingClientRect();
+                var modal = document.getElementById('document-evidence-modal');
+                modal.style.top = (rect.top + rect.height + window.scrollY) + 'px';
+                modal.style.left = (rect.left + window.scrollX - 300) + 'px'; // Shift 3cm to the left
+                displayDocumentEvidence(deliverable.doc_evidence); // Display document evidence
+            });
+
+            // Append the deliverable row to the modal content
+            modalContent.appendChild(deliverableRow);
+        });
+    }
+
+    // Open the modal
+    openModal();
+}
+
+// Function to display document evidence in a modal
+function displayDocumentEvidence(documentEvidence) {
+    var modalContent = document.getElementById('document-evidence-content');
+    modalContent.innerHTML = ''; // Clear the modal content
+
+    // Create a header row for the modal
+    var headerRow = document.createElement('div');
+    headerRow.className = 'modal-header-row';
+    // Add header cells for Weight, Document Evidence, Self Confirmation, Assessor Confirmation, and Due Date
+    ['Weight', 'Document Evidence', 'Self Confirmation', 'Assessor Confirmation', 'Due Date'].forEach(function(headerText) {
+        var headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+    });
+    modalContent.appendChild(headerRow); // Append the header row to the modal content
+
+    // Check if there is no document evidence
+    if (documentEvidence.length === 0) {
+        // Display a message if no document evidence is available
+        var emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="5">No document evidence available.</div>';
+        modalContent.appendChild(emptyRow);
+    } else {
+        // Loop through each document evidence
+        documentEvidence.forEach(function(doc) {
+            // Create a new row for the document evidence
+            var docRow = document.createElement('div');
+            docRow.className = 'modal-deliverable-row';
+
+            // Create a cell for the document evidence weight
+            var weightCell = document.createElement('div');
+            weightCell.className = 'modal-deliverable-cell';
+            weightCell.textContent = doc.doc_evidence_weight || 'N/A'; // Display the weight or 'N/A' if not available
+            docRow.appendChild(weightCell);
+
+            // Create a cell for the document evidence description
+            var descCell = document.createElement('div');
+            descCell.className = 'modal-deliverable-cell';
+            descCell.textContent = doc.doc_evidence || 'No description available'; // Display the description or a default message
+            docRow.appendChild(descCell);
+
+            // Create a dropdown for self-confirmation
+            var selfConfirmationCell = document.createElement('div');
+            selfConfirmationCell.className = 'modal-deliverable-cell';
+            var selfConfirmationSelect = document.createElement('select');
+            selfConfirmationSelect.className = 'modal-deliverable-select';
+            selfConfirmationSelect.innerHTML = `
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            `;
+            selfConfirmationCell.appendChild(selfConfirmationSelect);
+            docRow.appendChild(selfConfirmationCell);
+
+            // Create a dropdown for assessor confirmation
+            var assessorConfirmationCell = document.createElement('div');
+            assessorConfirmationCell.className = 'modal-deliverable-cell';
+            var assessorConfirmationSelect = document.createElement('select');
+            assessorConfirmationSelect.className = 'modal-deliverable-select';
+            assessorConfirmationSelect.innerHTML = `
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            `;
+            assessorConfirmationCell.appendChild(assessorConfirmationSelect);
+            docRow.appendChild(assessorConfirmationCell);
+
+            // Create a cell for the due date
+            var dueDateCell = document.createElement('div');
+            dueDateCell.className = 'modal-deliverable-cell';
+            dueDateCell.textContent = doc.doc_evidence_due_date ? formatDate(doc.doc_evidence_due_date) : 'No due date'; // Display the due date or a default message
+            docRow.appendChild(dueDateCell);
+
+            // Append the document evidence row to the modal content
+            modalContent.appendChild(docRow);
+        });
+    }
+
+    // Open the document evidence modal
+    openDocumentEvidenceModal();
+}
+
+// Function to open the deliverables modal
+function openModal() {
+    document.getElementById('deliverable-modal').style.display = 'block';
+}
+
+// Function to close the deliverables modal
+function closeModal() {
+    document.getElementById('deliverable-modal').style.display = 'none';
+}
+
+// Function to open the document evidence modal
+function openDocumentEvidenceModal() {
+    document.getElementById('document-evidence-modal').style.display = 'block';
+}
+
+// Function to close the document evidence modal
+function closeDocumentEvidenceModal() {
+    document.getElementById('document-evidence-modal').style.display = 'none';
+}
+
+// Function to format a date string into a readable format
+function formatDate(dateString) {
+    var options = { year: 'numeric', month: 'short', day: 'numeric' };
+    var date = new Date(dateString);
+    return date.toLocaleDateString(undefined, options);
+}
+
+// Function to calculate the number of working days between two dates
+function calculateWorkingDays(startDate, endDate) {
+    var count = 0;
+    var currentDate = new Date(startDate);
+
+    // Loop through each day between the start and end dates
+    while (currentDate <= endDate) {
+        var dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {  // Skip weekends (Sunday = 0, Saturday = 6)
+            count++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+    }
+
+    return count; // Return the total number of working days
+}
+
+// Function to determine the color for a due date based on the number of working days left
+function getColorForDueDate(workDaysLeft) {
+    if (workDaysLeft >= 20) {
+        return 'green'; // More than 20 working days left
+    } else if (workDaysLeft >= 10) {
+        return 'yellow'; // 10-19 working days left
+    } else if (workDaysLeft >= 1) {
+        return 'orange'; // 1-9 working days left
+    } else {
+        return 'red'; // Due date has passed
+    }
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        window.onload = function() {
+            // Get the username from the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+
+            if (username) {
+                // Perform all the redirects with delays
+
+                setTimeout(function() {
+                    window.location.href = "/self_appraisal.html?username=" + encodeURIComponent(username);
+                }, 100);
+
+                setTimeout(function() {
+                    window.location.href = "/kpi_tree.html?username=" + encodeURIComponent(username);
+                }, 200);
+
+
+
+                setTimeout(function() {
+                    window.location.href = "/eng_fedb.html?username=" + encodeURIComponent(username);
+                }, 400);
+
+                setTimeout(function() {
+                    window.location.href = "/manager_appraisal.html?username=" + encodeURIComponent(username);
+                }, 500);
+
+                setTimeout(function() {
+                    window.location.href = "/pdp.html?username=" + encodeURIComponent(username);
+                }, 600);
+
+                setTimeout(function() {
+                    window.location.href = "/employee-appraisal/?username=" + encodeURIComponent(username);
+                }, 700);
+
+                setTimeout(function() {
+                    window.location.href = "/create-user.html?username=" + encodeURIComponent(username);
+                }, 900);
+            } else {
+                console.error('No username found in URL');
+            }
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>

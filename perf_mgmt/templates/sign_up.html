@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+/* Dark mode variables */
+:root {
+    --primary: #93C5FD;
+    --secondary: #34D399;
+    --accent: #60A5FA;
+    --surface: #1F2937;
+    --border: #4B5563;
+    --background: #111827;
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --gradient-primary: linear-gradient(135deg, #1F2937 0%, #34D399 100%);
+    --shadow: rgba(0,0,0,0.2);
+    --input-bg: #374151;
+    --modal-bg: linear-gradient(135deg, rgba(26,40,53,0.95) 0%, rgba(16,30,43,0.98) 100%);
+    --card-bg: #2D3748;
+    --select-option-bg: #374151;
+    --select-option-color: #F9FAFB;
+    --dark: #F9FAFB;
+    --light: #1F2937;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+body {
+    background: var(--background);
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+/* Confetti Animation */
+@keyframes confettiFall {
+    0% { transform: translateY(-100vh) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--secondary);
+    animation: confettiFall 3s linear infinite;
+    z-index: 10000;
+}
+
+.form-container {
+    background: var(--surface);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-header {
+    padding: 1rem;
+    background: var(--gradient-primary);
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 0.25rem;
+}
+
+.form-subtitle {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+}
+
+.form-content {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-section {
+    background: var(--card-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    width: 100%;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.5rem;
+    min-height: 36px;
+}
+
+.section-icon {
+    background: var(--gradient-primary);
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.section-icon i {
+    color: white;
+    font-size: 0.875rem;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.flex-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-label {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.input-label i {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.3s ease;
+    min-height: 40px;
+}
+
+.input-field:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+    outline: none;
+}
+
+.input-field::placeholder {
+    color: var(--text-secondary);
+}
+
+.input-field.error {
+    border-color: #EF4444;
+}
+
+.features-section {
+    padding: 1rem;
+    background: var(--card-bg);
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.feature-card {
+    padding: 0.5rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-align: center;
+    width: 140px;
+    transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.icon-container {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.25rem;
+}
+
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, #4F46E5 0%, #C471ED 100%);
+}
+
+.bg-gradient-accent {
+    background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+}
+
+.icon-light {
+    color: white;
+    font-size: 0.75rem;
+}
+
+.card-title {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.125rem;
+}
+
+.card-text {
+    font-size: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
+}
+
+.metric-item {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: transform 0.2s ease;
+    text-align: center;
+    width: 120px;
+    height: 60px;
+}
+
+.metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow);
+}
+
+.metric-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.metric-label {
+    font-size: 0.625rem;
+    color: var(--text-secondary);
+}
+
+.metric-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    font-size: 0.875rem;
+    color: rgba(107, 114, 128, 0.2);
+}
+
+.submit-btn {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+    margin: 0.5rem auto;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.success-modal {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--modal-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid rgba(26, 187, 156, 0.3);
+    box-shadow: 0 8px 32px rgba(26, 187, 156, 0.1);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-scroll-container {
+    overflow-y: auto;
+    max-height: 60vh;
+    padding: 0 1.5rem;
+    margin: 0 -1.5rem;
+    flex-grow: 1;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--secondary) 0%, #169f84 100%);
+    padding: 2rem;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header::after {
+    content: '🎉';
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.1;
+    right: 1rem;
+    bottom: -0.5rem;
+    transform: rotate(20deg);
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow);
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 0.875rem;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.col-md-6 {
+    flex: 1;
+}
+
+.text-muted {
+    font-size: 0.625rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.cancel-btn {
+    background: #EF4444;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    width: 80px;
+}
+
+.cancel-btn:hover {
+    background: #DC2626;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+}
+
+.btn-register-regions {
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 0.625rem;
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    max-width: 280px;
+    margin: 0.25rem 0;
+    text-align: center;
+}
+
+.btn-register-regions:hover {
+    background: var(--secondary);
+    transform: scale(1.02);
+}
+
+.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single {
+    border: 2px solid var(--border) !important;
+    background: var(--input-bg);
+    padding: 0.375rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    min-height: 40px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 32px;
+}
+
+.select2-container--default .select2-results__option {
+    background: var(--select-option-bg);
+    color: var(--select-option-color);
+    font-size: 0.75rem;
+    padding: 0.375rem;
+}
+
+.select2-container--default .select2-results__option--highlighted {
+    background: var(--secondary) !important;
+    color: white;
+}
+
+.exchange-rate { border-left: 2px solid #34D399; }
+.total-reviews { border-left: 2px solid #60A5FA; }
+.total-amount { border-left: 2px solid #F59E0B; }
+.instalment-amount { border-left: 2px solid #8B5CF6; }
+
+input:invalid {
+    border-color: #EF4444;
+}
+
+input:valid {
+    border-color: #34D399;
+}
+
+.pay-btn {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    min-width: 80px;
+}
+
+.pay-btn:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px var(--shadow);
+}
+
+.pay-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+.pay-btn i {
+    font-size: 0.75rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.uniform-control,
+.uniform-red-border {
+    border: 2px solid #EF4444 !important;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    min-height: 40px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.uniform-red-border:focus {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    outline: none;
+}
+
+.select2-container--default .select2-selection--single.uniform-red-border,
+.select2-container--default .select2-selection--multiple.uniform-red-border {
+    border: 2px solid #EF4444 !important;
+    padding: 0.375rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    min-height: 40px;
+    background: var(--input-bg);
+}
+
+.select2-container--default .select2-selection--single.uniform-red-border .select2-selection__rendered {
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.select2-container--default .select2-selection--single.uniform-red-border .select2-selection__arrow {
+    height: 32px;
+}
+
+.uniform-red-border::placeholder {
+    color: var(--text-secondary);
+}
+
+.code-display {
+    background: linear-gradient(135deg, rgba(26, 187, 156, 0.15) 0%, rgba(16, 120, 100, 0.2) 100%);
+    border: 2px dashed var(--secondary);
+    color: var(--light);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.5em;
+    margin: 1rem 0;
+}
+
+.region-badge {
+    background: linear-gradient(135deg, rgba(26, 187, 156, 0.2) 0%, rgba(16, 120, 100, 0.25) 100%);
+    color: var(--light);
+    border: 1px solid rgba(26, 187, 156, 0.3);
+    padding: 0.8rem 1.5rem;
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 2px solid #EF4444 !important;
+    background: var(--input-bg);
+    border-radius: 6px;
+    min-height: 40px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 0.375rem 0.5rem;
+    color: var(--text-primary);
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin: 2px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white;
+    margin-right: 4px;
+}
+
+.select2-dropdown-custom {
+    background: var(--select-option-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.multi-select {
+    height: 120px;
+    padding: 0.5rem;
+}
+
+.error-message {
+    color: #EF4444;
+    font-size: 0.875rem;
+    display: none;
+    margin-top: 0.25rem;
+}
+
+.conditional-input {
+    margin-top: 0.5rem;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        padding: 0.5rem;
+        margin: 0.25rem;
+    }
+
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .flex-row {
+        flex-direction: column;
+    }
+
+    .features-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-title {
+        font-size: 1.25rem;
+    }
+
+    .success-modal {
+        width: 90%;
+    }
+
+    .metric-item {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-height: 600px) {
+    .success-modal {
+        max-height: 85vh;
+    }
+    .modal-scroll-container {
+        max-height: 50vh;
+    }
+    .modal-header {
+        padding: 1.5rem;
+    }
+    .modal-content {
+        padding: 1.5rem;
+    }
+}
+
+#region-input {
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+
+#region-list {
+  margin-top: 10px;
+}
+
+.region-item {
+  background-color: black;
+  padding: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-button {
+  cursor: pointer;
+  font-size: 12px;
+  color: #666;
+  margin-left: 10px;
+}
+
+.remove-button:hover {
+  color: #333;
+}
+</style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">Performance Management Hub Registration</h1>
+            <p class="form-subtitle">Sign up for the Performance Management Hub's comprehensive Performa 360 Suite to streamline your performance management processes.</p>
+        </div>
+
+        <form class="form-content">
+            <!-- Core Performance Features Section -->
+            <div class="features-section">
+                <div class="features-grid grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Card 1 -->
+                    <article class="feature-card p-8 rounded-2xl shadow-lg">
+                        <div class="icon-container bg-gradient-primary text-5xl p-6 mb-6 rounded-full">
+                            <i class="fas fa-brain icon-light"></i>
+                        </div>
+                        <h3 class="card-title text-3xl font-bold mb-4">Intelligent AI Integration</h3>
+                        <p class="card-text text-2xl">Predictive analytics and optimization.</p>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="feature-card p-8 rounded-2xl shadow-lg">
+                        <div class="icon-container bg-gradient-secondary text-5xl p-6 mb-6 rounded-full">
+                            <i class="fas fa-sync-alt icon-light"></i>
+                        </div>
+                        <h3 class="card-title text-3xl font-bold mb-4">Holistic 360° Evaluation</h3>
+                        <p class="card-text text-2xl">Multi-source assessment framework.</p>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="feature-card p-8 rounded-2xl shadow-lg">
+                        <div class="icon-container bg-gradient-accent text-5xl p-6 mb-6 rounded-full">
+                            <i class="fas fa-tachometer-alt icon-light"></i>
+                        </div>
+                        <h3 class="card-title text-3xl font-bold mb-4">Real-Time Analytics</h3>
+                        <p class="card-text text-2xl">Interactive KPI dashboards.</p>
+    </article>
+</div>
+
+            </div>
+
+            <!-- Organization Details -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h2 class="section-title">Organization Profile</h2>
+                </div>
+
+<div class="form-container">
+  <div class="grid-layout">
+    <!-- Left Column -->
+    <div class="form-column">
+      <div class="input-group">
+        <label class="input-label" for="areYouPartner">
+          <i class="fas fa-handshake icon"></i>Are you our partner?
+        </label>
+        <select id="areYouPartner" class="input-field" name="partner_status" required>
+          <option value="">Select an option</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="partnerCodeInput" style="display: none;">
+        <label class="input-label" for="partnerCode">
+          <i class="fas fa-handshake icon"></i>Partner Code
+        </label>
+        <input type="text" id="partnerCode" class="input-field" name="partner_code" placeholder="Enter partner code" required>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="company">
+          <i class="fas fa-landmark icon"></i>Company/Organisation
+        </label>
+        <input type="text" id="company" class="input-field" name="company_name" placeholder="Enter company name" required>
+      </div>
+
+<!-- Updated Country Select -->
+<div class="input-group">
+  <label class="input-label" for="country">
+    <i class="fas fa-globe icon"></i>Country
+  </label>
+  <select id="country" class="input-field uniform-control" name="country" required>
+    <option value="">Select Country</option>
+  </select>
+</div>
+
+      <div class="input-group">
+        <label class="input-label" for="region">
+          <i class="fas fa-map-marker-alt icon"></i>Main Region/Branch
+        </label>
+        <input type="text" id="region" class="input-field" name="region" required>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="form-column">
+    <div class="input-group">
+    <label class="input-label" for="region-input">
+        <i class="fas fa-map-marker-alt icon"></i>Regions/Branches/Projects
+    </label>
+    <div style="display: flex; align-items: center;">
+        <input id="region-input-display" class="input-field" type="text" placeholder="Enter region" style="flex: 1;">
+        <button id="add-region-button" style="margin-left: 10px; padding: 5px 10px;background-color: black;border-radius: 5px;">Enter</button>
+    </div>
+    <input id="region-input" type="hidden" name="region">
+    <div id="region-list"></div>
+    </div>
+
+      <div class="input-group">
+        <label class="input-label" for="street-address">
+          <i class="fas fa-map-marker-alt icon"></i>Street Address
+        </label>
+        <input type="text" id="street-address" class="input-field" name="street_address" required>
+        <div class="error-message" id="address-error">Please enter a valid address.</div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="city">
+          <i class="fas fa-city icon"></i>City
+        </label>
+        <input type="text" id="city" class="input-field" name="city" required>
+      </div>
+
+      <div class="input-group" style="border: red;">
+        <label class="input-label" style="border: red;" for="industry">
+          <i class="fas fa-industry icon" style="border: red;"></i>Industry
+        </label>
+        <select id="industry" class="input-field" style="border: red;" name="industry" required>
+          <option value="other">Other</option>
+        </select>
+        <input type="text" id="otherIndustry" class="input-field conditional-input" style="border: red;" placeholder="Specify industry">
+      </div>
+    </div>
+  </div>
+</div>
+
+            <!-- Metrics & Timeline -->
+            <div class="form-section">
+                <div class="flex-row">
+                    <div style="flex: 1;">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h2 class="section-title">Period and Cycles</h2>
+                        </div>
+                        <div class="flex-row">
+                            <div style="flex: 1;">
+                                <div class="input-group">
+                                    <label class="input-label">Review period start date</label>
+                                    <input type="date" id="start-date" class="input-field" name="cycle_start_date" required>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">Review period end date</label>
+                                    <input type="date" id="end-date" class="input-field" name="cycle_end_date" required>
+                                    <span id="date-error" style="color: #EF4444; font-size: 0.75rem;"></span>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div class="input-group">
+                                    <label class="input-label">Review cycles</label>
+                                    <select id="review-cycle" class="input-field" style="border-color: red;" name="review_frequency" required>
+                                        <option value="" selected disabled>Select review cycles</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="quarterly">Quarterly</option>
+                                        <option value="bi-annually">Bi-annually</option>
+                                        <option value="annually">Annually</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" >Set your Payment Cycle</label>
+                                    <select id="payment-cycle" class="input-field" style="border-color: red;" name="payment_cycle" required>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="quarterly">Once Off</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label" style="margin-left: -50px;">Maximum employees</label>
+                                    <select id="num-users" class="input-field" style="border-color: red; margin-left: -100px;" name="user_count" required>
+                                        <option value="" selected disabled>Select maximum number of users</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                    <input type="number" id="custom-num-users" class="input-field" name="custom_user_count" placeholder="Enter custom number of users" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h2 class="section-title">Cost Metrics</h2>
+                        </div>
+                        <div class="metrics-grid">
+                            <div class="metric-item exchange-rate">
+                                <div class="metric-content">
+                                    <div class="metric-value" id="current-exchange-rate">0.00 <i class="fas fa-dollar-sign"></i></div>
+                                    <i class="fas fa-dollar-sign metric-icon"></i>
+                                    <div class="metric-label">Current USD Exchange Rate</div>
+                                </div>
+                            </div>
+                            <div class="metric-item total-reviews">
+                                <div class="metric-content">
+                                    <div class="metric-value" id="total-reviews">0</div>
+                                    <i class="fas fa-clipboard-list metric-icon"></i>
+                                    <div class="metric-label">Total Review Cycles</div>
+                                </div>
+                            </div>
+                            <div class="metric-item total-amount">
+                                <div class="metric-content">
+                                    <div class="metric-value" id="total-payable-amount">$0.00</div>
+                                    <i class="fas fa-hand-holding-usd metric-icon"></i>
+                                    <div class="metric-label">Total Payable Amount</div>
+                                </div>
+                            </div>
+                            <div class="metric-item instalment-amount">
+                                <div class="metric-content">
+                                    <div class="metric-value" id="installment-amount">0.00</div>
+                                    <i class="fas fa-calendar-alt metric-icon"></i>
+                                    <div class="metric-label">Installment Amount</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="section-title">Security</h2>
+                </div>
+                <div class="flex-row">
+                    <div style="flex: 1;">
+                        <div class="input-group">
+                            <label class="input-label" for="email">Email</label>
+                            <input type="email" id="email" class="input-field" name="email" required autocomplete="email" placeholder="Enter email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="input-field" name="phone" required autocomplete="tel" placeholder="Enter phone number" pattern="^\+?[1-9]\d{1,14}$">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="input-group">
+                            <label class="input-label" for="password">Password</label>
+                            <input type="password" id="password" class="input-field" name="password" required autocomplete="new-password" placeholder="Enter password">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" class="input-field" name="confirm_password" required autocomplete="new-password" placeholder="Confirm password">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn" id="create-account-btn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+
+            </div>
+        </form>
+
+<!-- Payment Modal Overlay -->
+<div id="payment-overlay" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title"><i class="fas fa-credit-card"></i> Select Payment Method</h2>
+            <button type="button" class="btn-close" id="close-payment-modal" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="payment-method"><i class="fas fa-wallet"></i> Payment Method</label>
+                    <select id="payment-method" class="uniform-red-border" name="payment-method" required>
+                        <option value="" disabled selected>Select payment method</option>
+                        <option value="visa">Visa</option>
+                        <option value="mastercard">Mastercard</option>
+                        <option value="amex">American Express</option>
+                        <option value="discover">Discover</option>
+                        <option value="click-to-pay">Click to Pay</option>
+                    </select>
+                </div>
+                <!-- Card Details (shown for card options) -->
+                <div id="card-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="card-number"><i class="fas fa-credit-card"></i> Card Number</label>
+                        <input type="text" id="card-number" class="uniform-red-border" name="card-number" placeholder="4242 4242 4242 4242" maxlength="19" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="expiration-date"><i class="fas fa-calendar-alt"></i> Expiration Date</label>
+                                <input type="text" id="expiration-date" class="uniform-red-border" name="expiration-date" placeholder="MM/YY" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cvv"><i class="fas fa-lock"></i> CVV</label>
+                                <input type="text" id="cvv" class="uniform-red-border" name="cvv" placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Click to Pay (shown for Click to Pay option) -->
+                <div id="click-to-pay-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="click-to-pay-email"><i class="fas fa-envelope"></i> Email for Click to Pay</label>
+                        <input type="email" id="click-to-pay-email" class="uniform-red-border" name="click-to-pay-email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="click-to-pay-code"><i class="fas fa-key"></i> One-Time Code</label>
+                        <input type="text" id="click-to-pay-code" class="uniform-red-border" name="click-to-pay-code" placeholder="Enter code" required>
+                    </div>
+                    <button type="button" class="btn-register-regions" onclick="mockClickToPayAuth()">Request One-Time Code</button>
+                </div>
+                <div class="text-muted"><i class="fas fa-lock"></i> All transactions are securely encrypted</div>
+                <div class="modal-footer">
+                    <button type="submit" class="pay-btn" id="submit-payment-btn"><i class="fas fa-credit-card"></i> Pay</button>
+                </div>
+                
+            </form>
+            
+        </div>
+    </div>
+</div>
+<button type="button" class="submit-btn" id="submit-btn" onclick="submitCompanyProfile(); submitReviewPeriods();">
+    Save Company Profile
+</button>
+  
+<script>
+const regionInputDisplay = document.getElementById('region-input-display');
+const regionInput = document.getElementById('region-input');
+const regionList = document.getElementById('region-list');
+const addRegionButton = document.getElementById('add-region-button');
+
+let regions = [];
+
+addRegionButton.addEventListener('click', () => {
+  const region = regionInputDisplay.value.trim();
+  if (region && !regions.includes(region)) {
+    regions.push(region);
+    const regionElement = document.createElement('div');
+    regionElement.textContent = region;
+    regionElement.classList.add('region-item');
+    const removeButton = document.createElement('span');
+    removeButton.textContent = 'x';
+    removeButton.classList.add('remove-button');
+    removeButton.addEventListener('click', () => {
+      regionElement.remove();
+      regions = regions.filter(r => r !== region);
+      regionInput.value = regions.join(',');
+    });
+    regionElement.appendChild(removeButton);
+    regionList.appendChild(regionElement);
+    regionInputDisplay.value = '';
+    regionInput.value = regions.join(',');
+  } else if (regions.includes(region)) {
+    alert('Region already exists!');
+    regionInputDisplay.value = '';
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded: Script loaded');
+
+    // Check for critical DOM elements
+    const criticalElements = [
+        'reviewPeriodForm', 'company_code', 'company', 'start_date', 'end_date', 'review_number',
+        'start-date', 'end-date', 'review-cycle', 'total-reviews', 'areYouPartner', 'partnerCodeInput',
+        'partnerCode', 'num-users', 'custom-num-users', 'industry', 'otherIndustry', 'country',
+        'region-input', 'payment-method', 'payment-cycle', 'total-payable-amount', 'installment-amount',
+        'current-exchange-rate', 'street-address', 'city', 'email', 'phone', 'password', 'confirmPassword',
+        'create-account-btn', 'payment-overlay', 'payment-form'
+    ];
+    criticalElements.forEach(id => {
+        if (!document.getElementById(id)) {
+            console.error(`Missing DOM element: #${id}`);
+        }
+    });
+
+    // reviewPeriodForm submit
+    const reviewPeriodForm = document.getElementById('reviewPeriodForm');
+    if (reviewPeriodForm) {
+        reviewPeriodForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('Submitting reviewPeriodForm');
+
+            const payload = {
+                company_code: document.getElementById('company_code')?.value.trim(),
+                company: document.getElementById('company')?.value.trim(),
+                start_date: document.getElementById('start_date')?.value,
+                end_date: document.getElementById('end_date')?.value,
+                review_number: parseInt(document.getElementById('review_number')?.value)
+            };
+            console.log('reviewPeriodForm payload:', payload);
+
+            try {
+                const response = await fetch('/generate-review-periods/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                console.log('reviewPeriodForm response:', result);
+
+                if (response.ok) {
+                    alert('Success: ' + result.message);
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('reviewPeriodForm request failed:', error);
+                alert('Request failed. Check console for details.');
+            }
+        });
+    } else {
+        console.error('reviewPeriodForm not found');
+    }
+
+    // Total Review Cycles
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const reviewCycleInput = document.getElementById('review-cycle');
+    const totalReviewsElement = document.getElementById('total-reviews');
+
+    function calculateTotalReviews() {
+        if (!startDateInput || !endDateInput || !reviewCycleInput || !totalReviewsElement) {
+            console.error('Missing elements for calculateTotalReviews');
+            return;
+        }
+
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const reviewCycle = reviewCycleInput.value;
+        console.log('calculateTotalReviews inputs:', { startDate, endDate, reviewCycle });
+
+        if (isNaN(startDate) || isNaN(endDate) || startDate >= endDate) {
+            totalReviewsElement.textContent = '0';
+            console.log('Invalid dates, setting totalReviews to 0');
+            return;
+        }
+
+        const timeDiff = endDate - startDate;
+        const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+        let totalReviews = 0;
+        switch (reviewCycle) {
+            case 'monthly':
+                totalReviews = Math.ceil(daysDiff / 30);
+                break;
+            case 'quarterly':
+                totalReviews = Math.ceil(daysDiff / 90);
+                break;
+            case 'bi-annually':
+                totalReviews = Math.ceil(daysDiff / 180);
+                break;
+            case 'annually':
+                totalReviews = Math.ceil(daysDiff / 365);
+                break;
+            default:
+                console.error('Invalid review-cycle value:', reviewCycle);
+        }
+
+        totalReviewsElement.textContent = totalReviews > 0 ? totalReviews : '0';
+        console.log('Total Reviews:', totalReviews);
+        const event = new Event('input');
+        totalReviewsElement.dispatchEvent(event);
+    }
+
+    if (startDateInput && endDateInput && reviewCycleInput) {
+        startDateInput.addEventListener('change', () => {
+            console.log('start-date changed');
+            validateDates();
+            calculateTotalReviews();
+            calculateTotal();
+        });
+        endDateInput.addEventListener('change', () => {
+            console.log('end-date changed');
+            validateDates();
+            calculateTotalReviews();
+            calculateTotal();
+        });
+        reviewCycleInput.addEventListener('change', () => {
+            console.log('review-cycle changed');
+            calculateTotalReviews();
+            calculateTotal();
+        });
+        startDateInput.addEventListener('input', validateDates);
+        endDateInput.addEventListener('input', validateDates);
+    } else {
+        console.error('Missing elements for review cycle events');
+    }
+
+    // Partner Code Textbox
+    const areYouPartnerSelect = document.getElementById('areYouPartner');
+    const partnerCodeInput = document.getElementById('partnerCodeInput');
+    if (areYouPartnerSelect && partnerCodeInput) {
+        areYouPartnerSelect.addEventListener('change', () => {
+            console.log('areYouPartner changed:', areYouPartnerSelect.value);
+            if (areYouPartnerSelect.value === 'yes') {
+                partnerCodeInput.style.display = 'block';
+                document.getElementById('partnerCode').required = true;
+            } else {
+                partnerCodeInput.style.display = 'none';
+                document.getElementById('partnerCode').required = false;
+            }
+        });
+    } else {
+        console.error('Missing areYouPartner or partnerCodeInput');
+    }
+
+    // Initialize num-users select
+    const numUsersSelect = document.getElementById('num-users');
+    const customNumUsersInput = document.getElementById('custom-num-users');
+    if (numUsersSelect) {
+        const interval = 50;
+        const maxUsers = 10000;
+        numUsersSelect.innerHTML = '<option value="">Select Number of Users</option>';
+        for (let i = interval; i <= maxUsers; i += interval) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            numUsersSelect.appendChild(option);
+        }
+        numUsersSelect.innerHTML += '<option value="custom">Custom</option>';
+
+        numUsersSelect.addEventListener('change', () => {
+            console.log('num-users changed:', numUsersSelect.value);
+            if (numUsersSelect.value === 'custom' && customNumUsersInput) {
+                customNumUsersInput.style.display = 'block';
+                customNumUsersInput.type = 'number';
+                customNumUsersInput.min = 1;
+                customNumUsersInput.step = 1;
+            } else if (customNumUsersInput) {
+                customNumUsersInput.style.display = 'none';
+            }
+            calculateTotal();
+        });
+    } else {
+        console.error('Missing num-users select');
+    }
+
+    // Total calculation
+    const elements = {
+        tierSelect: numUsersSelect,
+        customInput: customNumUsersInput,
+        exchangeRate: document.getElementById('current-exchange-rate'),
+        totalReviews: totalReviewsElement,
+        totalAmount: document.getElementById('total-payable-amount'),
+        installmentAmount: document.getElementById('installment-amount'),
+        paymentCycle: document.getElementById('payment-cycle'),
+        startDate: startDateInput,
+        endDate: endDateInput,
+        currencySymbol: ''
+    };
+
+    function calculateTotal() {
+        if (!elements.exchangeRate || !elements.totalReviews || !elements.totalAmount || !elements.installmentAmount || !elements.paymentCycle) {
+            console.error('Missing elements for calculateTotal');
+            return;
+        }
+
+        const exchangeRateText = elements.exchangeRate.textContent;
+        const exchangeRateMatch = exchangeRateText.match(/[\d.]+/);
+        const exchangeRateValue = exchangeRateMatch ? parseFloat(exchangeRateMatch[0]) : 0;
+        const customValue = parseFloat(elements.customInput?.value) || 0;
+        const tierValue = parseFloat(elements.tierSelect?.value) || 0;
+        const totalReviewsValue = parseFloat(elements.totalReviews.textContent) || 0;
+        const paymentCycle = elements.paymentCycle.value;
+        console.log('calculateTotal inputs:', { exchangeRateValue, customValue, tierValue, totalReviewsValue, paymentCycle });
+
+        const numUsers = customValue > 0 ? customValue : tierValue;
+
+        const zarToUsdRate = 0.055;
+        const usdAmount = 50 * zarToUsdRate;
+        const amountInSelectedCurrency = usdAmount * exchangeRateValue;
+
+        let totalPayable = totalReviewsValue * numUsers * amountInSelectedCurrency;
+        totalPayable = isNaN(totalPayable) ? 0 : totalPayable;
+
+        const formattedTotal = `${elements.currencySymbol} ${totalPayable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        elements.totalAmount.textContent = formattedTotal;
+
+        let installmentAmount = 0;
+        if (paymentCycle === 'monthly' && totalReviewsValue > 0) {
+            installmentAmount = totalPayable / totalReviewsValue;
+        } else {
+            installmentAmount = totalPayable;
+        }
+        installmentAmount = isNaN(installmentAmount) ? 0 : installmentAmount;
+
+        const formattedInstallment = `${elements.currencySymbol} ${installmentAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        elements.installmentAmount.textContent = formattedInstallment;
+        console.log('Total Payable:', formattedTotal, 'Installment:', formattedInstallment);
+    }
+
+    if (elements.customInput) elements.customInput.addEventListener('input', calculateTotal);
+    if (elements.totalReviews) elements.totalReviews.addEventListener('input', calculateTotal);
+    if (elements.paymentCycle) elements.paymentCycle.addEventListener('change', calculateTotal);
+
+    // Industry selection
+    const industrySelect = document.getElementById('industry');
+    if (industrySelect) {
+        industrySelect.addEventListener('change', function() {
+            const otherInput = document.getElementById('otherIndustry');
+            if (!otherInput) {
+                console.error('Missing otherIndustry input');
+                return;
+            }
+            console.log('industry changed:', this.value);
+            if (this.value === 'other') {
+                otherInput.style.display = 'block';
+                otherInput.required = true;
+                otherInput.name = 'industry';
+                this.removeAttribute('name');
+            } else {
+                otherInput.style.display = 'none';
+                otherInput.required = false;
+                otherInput.removeAttribute('name');
+                this.name = 'industry';
+            }
+        });
+    }
+
+function fetchCountries() {
+    const countrySelect = document.getElementById('country');
+    if (!countrySelect) {
+        console.error('Missing country select element with ID "country"');
+        return;
+    }
+
+    const countriesUrl = 'https://restcountries.com/v3.1/all';
+
+    // Default list of countries with their currencies
+    const defaultCountries = [
+        { name: "Afghanistan", currencyCode: "AFN", currencySymbol: "؋" },
+        { name: "Albania", currencyCode: "ALL", currencySymbol: "L" },
+        { name: "Algeria", currencyCode: "DZD", currencySymbol: "د.ج" },
+        { name: "Andorra", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Angola", currencyCode: "AOA", currencySymbol: "Kz" },
+        { name: "Antigua and Barbuda", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Argentina", currencyCode: "ARS", currencySymbol: "$" },
+        { name: "Armenia", currencyCode: "AMD", currencySymbol: "֏" },
+        { name: "Australia", currencyCode: "AUD", currencySymbol: "$" },
+        { name: "Austria", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Azerbaijan", currencyCode: "AZN", currencySymbol: "₼" },
+        { name: "Bahamas", currencyCode: "BSD", currencySymbol: "$" },
+        { name: "Bahrain", currencyCode: "BHD", currencySymbol: ".د.ب" },
+        { name: "Bangladesh", currencyCode: "BDT", currencySymbol: "৳" },
+        { name: "Barbados", currencyCode: "BBD", currencySymbol: "$" },
+        { name: "Belarus", currencyCode: "BYN", currencySymbol: "Br" },
+        { name: "Belgium", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Belize", currencyCode: "BZD", currencySymbol: "$" },
+        { name: "Benin", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Bhutan", currencyCode: "BTN", currencySymbol: "Nu." },
+        { name: "Bolivia", currencyCode: "BOB", currencySymbol: "Bs." },
+        { name: "Bosnia and Herzegovina", currencyCode: "BAM", currencySymbol: "KM" },
+        { name: "Botswana", currencyCode: "BWP", currencySymbol: "P" },
+        { name: "Brazil", currencyCode: "BRL", currencySymbol: "R$" },
+        { name: "Brunei", currencyCode: "BND", currencySymbol: "$" },
+        { name: "Bulgaria", currencyCode: "BGN", currencySymbol: "лв" },
+        { name: "Burkina Faso", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Burundi", currencyCode: "BIF", currencySymbol: "FBu" },
+        { name: "Cambodia", currencyCode: "KHR", currencySymbol: "៛" },
+        { name: "Cameroon", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Canada", currencyCode: "CAD", currencySymbol: "$" },
+        { name: "Cape Verde", currencyCode: "CVE", currencySymbol: "$" },
+        { name: "Central African Republic", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Chad", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Chile", currencyCode: "CLP", currencySymbol: "$" },
+        { name: "China", currencyCode: "CNY", currencySymbol: "¥" },
+        { name: "Colombia", currencyCode: "COP", currencySymbol: "$" },
+        { name: "Comoros", currencyCode: "KMF", currencySymbol: "CF" },
+        { name: "Congo, Democratic Republic of the", currencyCode: "CDF", currencySymbol: "FC" },
+        { name: "Congo, Republic of the", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Costa Rica", currencyCode: "CRC", currencySymbol: "₡" },
+        { name: "Croatia", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Cuba", currencyCode: "CUP", currencySymbol: "$" },
+        { name: "Cyprus", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Czech Republic", currencyCode: "CZK", currencySymbol: "Kč" },
+        { name: "Denmark", currencyCode: "DKK", currencySymbol: "kr" },
+        { name: "Djibouti", currencyCode: "DJF", currencySymbol: "Fdj" },
+        { name: "Dominica", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Dominican Republic", currencyCode: "DOP", currencySymbol: "RD$" },
+        { name: "East Timor", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Ecuador", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Egypt", currencyCode: "EGP", currencySymbol: "£" },
+        { name: "El Salvador", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Equatorial Guinea", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Eritrea", currencyCode: "ERN", currencySymbol: "Nfk" },
+        { name: "Estonia", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Eswatini", currencyCode: "SZL", currencySymbol: "L" },
+        { name: "Ethiopia", currencyCode: "ETB", currencySymbol: "Br" },
+        { name: "Fiji", currencyCode: "FJD", currencySymbol: "$" },
+        { name: "Finland", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "France", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Gabon", currencyCode: "XAF", currencySymbol: "CFA" },
+        { name: "Gambia", currencyCode: "GMD", currencySymbol: "D" },
+        { name: "Georgia", currencyCode: "GEL", currencySymbol: "₾" },
+        { name: "Germany", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Ghana", currencyCode: "GHS", currencySymbol: "₵" },
+        { name: "Greece", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Grenada", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Guatemala", currencyCode: "GTQ", currencySymbol: "Q" },
+        { name: "Guinea", currencyCode: "GNF", currencySymbol: "FG" },
+        { name: "Guinea-Bissau", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Guyana", currencyCode: "GYD", currencySymbol: "$" },
+        { name: "Haiti", currencyCode: "HTG", currencySymbol: "G" },
+        { name: "Honduras", currencyCode: "HNL", currencySymbol: "L" },
+        { name: "Hungary", currencyCode: "HUF", currencySymbol: "Ft" },
+        { name: "Iceland", currencyCode: "ISK", currencySymbol: "kr" },
+        { name: "India", currencyCode: "INR", currencySymbol: "₹" },
+        { name: "Indonesia", currencyCode: "IDR", currencySymbol: "Rp" },
+        { name: "Iran", currencyCode: "IRR", currencySymbol: "﷼" },
+        { name: "Iraq", currencyCode: "IQD", currencySymbol: "ع.د" },
+        { name: "Ireland", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Israel", currencyCode: "ILS", currencySymbol: "₪" },
+        { name: "Italy", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Jamaica", currencyCode: "JMD", currencySymbol: "$" },
+        { name: "Japan", currencyCode: "JPY", currencySymbol: "¥" },
+        { name: "Jordan", currencyCode: "JOD", currencySymbol: "د.ا" },
+        { name: "Kazakhstan", currencyCode: "KZT", currencySymbol: "₸" },
+        { name: "Kenya", currencyCode: "KES", currencySymbol: "KSh" },
+        { name: "Kiribati", currencyCode: "AUD", currencySymbol: "$" },
+        { name: "Kuwait", currencyCode: "KWD", currencySymbol: "د.ك" },
+        { name: "Kyrgyzstan", currencyCode: "KGS", currencySymbol: "с" },
+        { name: "Laos", currencyCode: "LAK", currencySymbol: "₭" },
+        { name: "Latvia", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Lebanon", currencyCode: "LBP", currencySymbol: "ل.ل" },
+        { name: "Lesotho", currencyCode: "LSL", currencySymbol: "L" },
+        { name: "Liberia", currencyCode: "LRD", currencySymbol: "$" },
+        { name: "Libya", currencyCode: "LYD", currencySymbol: "ل.د" },
+        { name: "Liechtenstein", currencyCode: "CHF", currencySymbol: "CHF" },
+        { name: "Lithuania", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Luxembourg", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Madagascar", currencyCode: "MGA", currencySymbol: "Ar" },
+        { name: "Malawi", currencyCode: "MWK", currencySymbol: "MK" },
+        { name: "Malaysia", currencyCode: "MYR", currencySymbol: "RM" },
+        { name: "Maldives", currencyCode: "MVR", currencySymbol: "Rf" },
+        { name: "Mali", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Malta", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Marshall Islands", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Mauritania", currencyCode: "MRU", currencySymbol: "UM" },
+        { name: "Mauritius", currencyCode: "MUR", currencySymbol: "₨" },
+        { name: "Mexico", currencyCode: "MXN", currencySymbol: "$" },
+        { name: "Micronesia", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Moldova", currencyCode: "MDL", currencySymbol: "L" },
+        { name: "Monaco", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Mongolia", currencyCode: "MNT", currencySymbol: "₮" },
+        { name: "Montenegro", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Morocco", currencyCode: "MAD", currencySymbol: "د.م." },
+        { name: "Mozambique", currencyCode: "MZN", currencySymbol: "MT" },
+        { name: "Myanmar", currencyCode: "MMK", currencySymbol: "K" },
+        { name: "Namibia", currencyCode: "NAD", currencySymbol: "$" },
+        { name: "Nauru", currencyCode: "AUD", currencySymbol: "$" },
+        { name: "Nepal", currencyCode: "NPR", currencySymbol: "₨" },
+        { name: "Netherlands", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "New Zealand", currencyCode: "NZD", currencySymbol: "$" },
+        { name: "Nicaragua", currencyCode: "NIO", currencySymbol: "C$" },
+        { name: "Niger", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Nigeria", currencyCode: "NGN", currencySymbol: "₦" },
+        { name: "North Korea", currencyCode: "KPW", currencySymbol: "₩" },
+        { name: "North Macedonia", currencyCode: "MKD", currencySymbol: "ден" },
+        { name: "Norway", currencyCode: "NOK", currencySymbol: "kr" },
+        { name: "Oman", currencyCode: "OMR", currencySymbol: "ر.ع." },
+        { name: "Pakistan", currencyCode: "PKR", currencySymbol: "₨" },
+        { name: "Palau", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Palestine", currencyCode: "ILS", currencySymbol: "₪" },
+        { name: "Panama", currencyCode: "PAB", currencySymbol: "B/." },
+        { name: "Papua New Guinea", currencyCode: "PGK", currencySymbol: "K" },
+        { name: "Paraguay", currencyCode: "PYG", currencySymbol: "₲" },
+        { name: "Peru", currencyCode: "PEN", currencySymbol: "S/." },
+        { name: "Philippines", currencyCode: "PHP", currencySymbol: "₱" },
+        { name: "Poland", currencyCode: "PLN", currencySymbol: "zł" },
+        { name: "Portugal", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Qatar", currencyCode: "QAR", currencySymbol: "ر.ق" },
+        { name: "Romania", currencyCode: "RON", currencySymbol: "lei" },
+        { name: "Russia", currencyCode: "RUB", currencySymbol: "₽" },
+        { name: "Rwanda", currencyCode: "RWF", currencySymbol: "FRw" },
+        { name: "Saint Kitts and Nevis", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Saint Lucia", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Saint Vincent and the Grenadines", currencyCode: "XCD", currencySymbol: "$" },
+        { name: "Samoa", currencyCode: "WST", currencySymbol: "T" },
+        { name: "San Marino", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Sao Tome and Principe", currencyCode: "STN", currencySymbol: "Db" },
+        { name: "Saudi Arabia", currencyCode: "SAR", currencySymbol: "ر.س" },
+        { name: "Senegal", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Serbia", currencyCode: "RSD", currencySymbol: "дин" },
+        { name: "Seychelles", currencyCode: "SCR", currencySymbol: "₨" },
+        { name: "Sierra Leone", currencyCode: "SLL", currencySymbol: "Le" },
+        { name: "Singapore", currencyCode: "SGD", currencySymbol: "$" },
+        { name: "Slovakia", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Slovenia", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Solomon Islands", currencyCode: "SBD", currencySymbol: "$" },
+        { name: "Somalia", currencyCode: "SOS", currencySymbol: "Sh" },
+        { name: "South Africa", currencyCode: "ZAR", currencySymbol: "R" },
+        { name: "South Korea", currencyCode: "KRW", currencySymbol: "₩" },
+        { name: "South Sudan", currencyCode: "SSP", currencySymbol: "£" },
+        { name: "Spain", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Sri Lanka", currencyCode: "LKR", currencySymbol: "₨" },
+        { name: "Sudan", currencyCode: "SDG", currencySymbol: "£" },
+        { name: "Suriname", currencyCode: "SRD", currencySymbol: "$" },
+        { name: "Sweden", currencyCode: "SEK", currencySymbol: "kr" },
+        { name: "Switzerland", currencyCode: "CHF", currencySymbol: "CHF" },
+        { name: "Syria", currencyCode: "SYP", currencySymbol: "£" },
+        { name: "Taiwan", currencyCode: "TWD", currencySymbol: "NT$" },
+        { name: "Tajikistan", currencyCode: "TJS", currencySymbol: "SM" },
+        { name: "Tanzania", currencyCode: "TZS", currencySymbol: "TSh" },
+        { name: "Thailand", currencyCode: "THB", currencySymbol: "฿" },
+        { name: "Togo", currencyCode: "XOF", currencySymbol: "CFA" },
+        { name: "Tonga", currencyCode: "TOP", currencySymbol: "T$" },
+        { name: "Trinidad and Tobago", currencyCode: "TTD", currencySymbol: "$" },
+        { name: "Tunisia", currencyCode: "TND", currencySymbol: "د.ت" },
+        { name: "Turkey", currencyCode: "TRY", currencySymbol: "₺" },
+        { name: "Turkmenistan", currencyCode: "TMT", currencySymbol: "m" },
+        { name: "Tuvalu", currencyCode: "AUD", currencySymbol: "$" },
+        { name: "Uganda", currencyCode: "UGX", currencySymbol: "USh" },
+        { name: "Ukraine", currencyCode: "UAH", currencySymbol: "₴" },
+        { name: "United Arab Emirates", currencyCode: "AED", currencySymbol: "د.إ" },
+        { name: "United Kingdom", currencyCode: "GBP", currencySymbol: "£" },
+        { name: "United States", currencyCode: "USD", currencySymbol: "$" },
+        { name: "Uruguay", currencyCode: "UYU", currencySymbol: "$" },
+        { name: "Uzbekistan", currencyCode: "UZS", currencySymbol: "so'm" },
+        { name: "Vanuatu", currencyCode: "VUV", currencySymbol: "VT" },
+        { name: "Vatican City", currencyCode: "EUR", currencySymbol: "€" },
+        { name: "Venezuela", currencyCode: "VES", currencySymbol: "Bs." },
+        { name: "Vietnam", currencyCode: "VND", currencySymbol: "₫" },
+        { name: "Yemen", currencyCode: "YER", currencySymbol: "﷼" },
+        { name: "Zambia", currencyCode: "ZMW", currencySymbol: "ZK" },
+        { name: "Zimbabwe", currencyCode: "ZWL", currencySymbol: "$" }
+    ];
+
+    fetch(countriesUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(countriesData => {
+            const validCountries = countriesData
+                .filter(country =>
+                    country.name &&
+                    country.name.common &&
+                    country.currencies &&
+                    Object.keys(country.currencies).length > 0
+                )
+                .sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+            countrySelect.innerHTML = '<option value="">Select Country</option>';
+
+            validCountries.forEach(country => {
+                const currencyCodes = Object.keys(country.currencies);
+                const currencyCode = currencyCodes[0];
+                const currency = country.currencies[currencyCode];
+
+                const option = document.createElement('option');
+                option.value = country.name.common;
+                option.textContent = `${country.name.common} (${currencyCode})`;
+                option.setAttribute('data-currency-code', currencyCode);
+                option.setAttribute('data-currency-symbol', currency.symbol || currencyCode);
+                countrySelect.appendChild(option);
+            });
+
+            console.log('Countries and currencies loaded successfully');
+            // Initialize Select2 after loading
+            initializeSelect2('country', 'Select Country');
+        })
+        .catch(error => {
+            console.error('Error fetching countries:', error.message);
+            countrySelect.innerHTML = '<option value="">Select Country</option>';
+
+            // Use default countries list as fallback
+            defaultCountries
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.name;
+                    option.textContent = `${country.name} (${country.currencyCode})`;
+                    option.setAttribute('data-currency-code', country.currencyCode);
+                    option.setAttribute('data-currency-symbol', country.currencySymbol || country.currencyCode);
+                    countrySelect.appendChild(option);
+                });
+
+            console.log('Loaded default countries list');
+            // Initialize Select2 after loading fallback
+            initializeSelect2('country', 'Select Country');
+            alert('Failed to load countries from API. Using default country list.');
+        });
+}
+
+function fetchIndustries() {
+    const industrySelect = document.getElementById('industry');
+    if (!industrySelect) {
+        console.error('Missing industry select element with ID "industry"');
+        return;
+    }
+
+    fetch('http://127.0.0.1:8002/get_unique_industry/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') || ''
+        },
+        body: JSON.stringify({
+            company_code: document.getElementById('company_code')?.value.trim() || ''
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error fetching industries: Status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const industries = Array.isArray(data) ? data : (data.industries || []);
+            if (!industries.length) {
+                console.warn('No industries returned from API, using fallback');
+            }
+
+            industrySelect.innerHTML = '<option value="">Select Industry</option>';
+            const industryList = industries.length > 0 ? industries : [
+                'Technology', 'Finance', 'Healthcare', 'Education', 'Other'
+            ];
+            industryList.forEach(industry => {
+                const option = document.createElement('option');
+                option.value = industry;
+                option.textContent = industry;
+                industrySelect.appendChild(option);
+            });
+
+            if (typeof $ !== 'undefined' && $.fn.select2) {
+                $(industrySelect).select2('destroy');
+                $(industrySelect).select2({
+                    width: '100%',
+                    placeholder: 'Select Industry',
+                    allowClear: true
+                });
+            }
+
+            console.log('Industries loaded:', industryList);
+        })
+        .catch(error => {
+            console.error('Error fetching industries:', error.message);
+            industrySelect.innerHTML = '<option value="">Select Industry</option>';
+            const fallbackIndustries = [
+                'Technology', 'Finance', 'Healthcare', 'Education', 'Other'
+            ];
+            fallbackIndustries.forEach(industry => {
+                const option = document.createElement('option');
+                option.value = industry;
+                option.textContent = industry;
+                industrySelect.appendChild(option);
+            });
+
+            if (typeof $ !== 'undefined' && $.fn.select2) {
+                $(industrySelect).select2('destroy');
+                $(industrySelect).select2({
+                    width: '100%',
+                    placeholder: 'Select Industry',
+                    allowClear: true
+                });
+            }
+
+            alert('Failed to load industries from server. Using fallback options.');
+        });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    // Call optional functions
+    fetchCountries();
+    fetchIndustries();
+
+    // Other event listeners
+    function validateAddress() {
+        const addressInput = document.getElementById('street-address');
+        const errorMessage = document.getElementById('address-error');
+        if (!addressInput || !errorMessage) {
+            console.error('Missing addressInput or errorMessage');
+            return;
+        }
+        const addressRegex = /^[\d\w\s,.'-]+(\s+[a-zA-Z\s\-']+)?(\s+\d{5}(-\d{4})?)?$/;
+
+        if (!addressRegex.test(addressInput.value)) {
+            errorMessage.style.display = 'block';
+            addressInput.style.borderColor = '#FF0000';
+        } else {
+            errorMessage.style.display = 'none';
+            addressInput.style.borderColor = 'var(--border)';
+        }
+    }
+
+    function validateDates() {
+        if (!startDateInput || !endDateInput || !document.getElementById('date-error')) {
+            console.error('Missing elements for validateDates');
+            return;
+        }
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const dateErrorSpan = document.getElementById('date-error');
+
+        if (endDate < startDate) {
+            dateErrorSpan.textContent = 'End date cannot be before start date';
+            endDateInput.setCustomValidity('Invalid date');
+        } else if (endDate.getTime() - startDate.getTime() < 30 * 24 * 60 * 60 * 1000) {
+            dateErrorSpan.textContent = 'Our minimum review period is a month. Your End date must be at least a month after start date';
+            endDateInput.setCustomValidity('Invalid date');
+        } else {
+            dateErrorSpan.textContent = '';
+            endDateInput.setCustomValidity('');
+        }
+        console.log('validateDates:', { startDate, endDate });
+    }
+
+    function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        if (!passwordInput) {
+            console.error('Missing password input');
+            return;
+        }
+        const password = passwordInput.value;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!passwordRegex.test(password)) {
+            passwordInput.setCustomValidity('Password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character');
+            passwordInput.reportValidity();
+        } else {
+            passwordInput.setCustomValidity('');
+        }
+    }
+
+    function validateConfirmPassword() {
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordInput = document.getElementById('password');
+        if (!confirmPasswordInput || !passwordInput) {
+            console.error('Missing confirmPassword or password input');
+            return;
+        }
+        const confirmPassword = confirmPasswordInput.value;
+        const password = passwordInput.value;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!passwordRegex.test(confirmPassword)) {
+            confirmPasswordInput.setCustomValidity('Password must be at least 8 characters, contain at least one lowercase letter, one uppercase letter, one number, and one special character');
+            confirmPasswordInput.reportValidity();
+        } else if (confirmPassword !== password) {
+            confirmPasswordInput.setCustomValidity('Passwords do not match');
+            confirmPasswordInput.reportValidity();
+        } else {
+            confirmPasswordInput.setCustomValidity('');
+        }
+    }
+
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/[^0-9+]/g, '');
+            console.log('Phone input:', phoneInput.value);
+        });
+    }
+
+    const createAccountBtn = document.getElementById('create-account-btn');
+    if (createAccountBtn) {
+        createAccountBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            const form = document.querySelector('.form-content');
+            if (!form) {
+                console.error('Missing form-content');
+                return;
+            }
+            console.log('create-account-btn clicked');
+            if (form.checkValidity()) {
+                const paymentOverlay = document.getElementById('payment-overlay');
+                if (paymentOverlay) {
+                    paymentOverlay.classList.add('show');
+                } else {
+                    console.error('Missing payment-overlay');
+                }
+            } else {
+                form.reportValidity();
+            }
+        });
+    }
+
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    if (passwordInput) passwordInput.addEventListener('input', validatePassword);
+    if (confirmPasswordInput) confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const paymentMethod = document.getElementById('payment-method')?.value;
+            console.log('Payment form submitted, method:', paymentMethod);
+
+            const paymentPortals = {
+                'visa': 'https://www.visa.com/checkout',
+                'mastercard': 'https://www.mastercard.com/checkout',
+                'amex': 'https://www.americanexpress.com/checkout',
+                'discover': 'https://www.discover.com/checkout',
+                'click-to-pay': 'https://www.clicktopay.visa.com/checkout'
+            };
+
+            if (paymentMethod && paymentPortals[paymentMethod]) {
+                window.location.href = paymentPortals[paymentMethod];
+            } else {
+                alert('Please select a valid payment method.');
+            }
+        });
+
+        if (typeof $ !== 'undefined' && $.fn.select2) {
+            $('#payment-method').select2({
+                width: '100%',
+                placeholder: 'Select payment method',
+                allowClear: true
+            });
+        }
+    }
+
+    function handleRegisterRegionsClick() {
+        const regionInputGroup = document.getElementById('region-input-group');
+        if (regionInputGroup) {
+            regionInputGroup.style.display = 'block';
+            fetchCountries();
+            console.log('region-input-group displayed');
+        } else {
+            console.error('Missing region-input-group');
+        }
+    }
+
+    const registerRegionsBtn = document.querySelector('[onclick="handleRegisterRegionsClick()"]');
+    if (registerRegionsBtn) {
+        registerRegionsBtn.addEventListener('click', handleRegisterRegionsClick);
+    }
+});
+
+function createConfetti() {
+    for (let i = 0; i < 75; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        confetti.style.boxShadow = `0 0 8px ${confetti.style.backgroundColor}`;
+        document.body.appendChild(confetti);
+    }
+    setTimeout(() => {
+        document.querySelectorAll('.confetti').forEach(c => {
+            c.style.transition = 'opacity 0.5s ease-out';
+            c.style.opacity = '0';
+            setTimeout(() => c.remove(), 500);
+        });
+    }, 3000);
+}
+
+function showSuccessModal(company, companyCode, regions) {
+    createConfetti();
+    const regionHTML = regions.length
+        ? `<div class="region-section mt-4">
+             <h3 class="text-secondary mb-3">🌍 Registered Regions</h3>
+             <div class="d-grid gap-2">${
+               regions.map(r => `
+                 <div class="region-badge">
+                   <span>${r.region_branch}</span>
+                   <span class="code-badge">${r.region_code}</span>
+                 </div>`
+               ).join('')
+             }</div>
+           </div>`
+        : `<p class="text-muted text-center py-3">No regions registered</p>`;
+
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = `
+        <div class="modal-backdrop"
+             style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+                    display: flex; align-items: center; justify-content: center;
+                    z-index: 1000;"
+                    onclick="this.remove()">
+            <div class="success-modal" onclick="event.stopPropagation()">
+                <div class="modal-header text-white">
+                    <svg class="success-icon" width="60" height="60" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12l1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <h2 class="mb-1">Welcome ${company}!</h2>
+                    <p class="mb-0 opacity-75">Registration Complete</p>
+                </div>
+                <div class="modal-scroll-container">
+                    <div class="text-center mb-4">
+                        <div class="code-display">${companyCode}</div>
+                    </div>
+                    <p class="text-center text-muted mb-4">
+                        Use this code to log into the Performance Management Hub's <strong>Performa360 Portal</strong>.
+                        Proceed to register your employees and assign appropriate rights and permissions.
+                    </p>
+                    ${regionHTML}
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modalContainer);
+    console.log('Success modal shown for:', company);
+}
+
+function toggleTheme() {
+    const body = document.documentElement;
+    const currentTheme = body.getAttribute('data-theme');
+    const toggleIcon = document.querySelector('.theme-toggle i');
+    if (!toggleIcon) {
+        console.error('Missing theme-toggle icon');
+        return;
+    }
+
+    if (currentTheme === 'dark') {
+        body.removeAttribute('data-theme');
+        toggleIcon.classList.remove('fa-sun');
+        toggleIcon.classList.add('fa-moon');
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        toggleIcon.classList.remove('fa-moon');
+        toggleIcon.classList.add('fa-sun');
+    }
+    console.log('Theme toggled to:', currentTheme === 'dark' ? 'light' : 'dark');
+}
+
+function closeModal() {
+    const modal = document.getElementById('payment-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        console.log('Payment overlay closed');
+    } else {
+        console.error('Missing payment-overlay for closeModal');
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showFailureMessage(message) {
+    alert(message);
+    console.log('Failure message:', message);
+}
+
+function submitCompanyProfile() {
+    const csrfToken = getCookie('csrftoken');
+    if (!csrfToken) {
+        console.error('CSRF token missing');
+        showFailureMessage('❌ CSRF token not found. Please refresh the page.');
+        return;
+    }
+
+    const payload = {
+        company: document.getElementById('company')?.value.trim(),
+        country: document.getElementById('country')?.value.trim(),
+        'region-input': document.getElementById('region-input')?.selectedOptions.length > 0,
+        region: Array.from(document.getElementById('region-input')?.selectedOptions || []).map(opt => opt.value),
+        'street-address': document.getElementById('street-address')?.value.trim(),
+        city: document.getElementById('city')?.value.trim(),
+        industry: document.getElementById('industry')?.value.trim(),
+        otherIndustry: document.getElementById('otherIndustry')?.value.trim(),
+        'start-date': document.getElementById('start-date')?.value.trim(),
+        'end-date': document.getElementById('end-date')?.value.trim(),
+        'review-cycle': document.getElementById('review-cycle')?.value.trim(),
+        'payment-cycle': document.getElementById('payment-cycle')?.value.trim(),
+        'num-users': document.getElementById('num-users')?.value.trim(),
+        'custom-num-users': document.getElementById('custom-num-users')?.value.trim(),
+        email: document.getElementById('email')?.value.trim(),
+        phone: document.getElementById('phone')?.value.trim(),
+        partnerCode: document.getElementById('partnerCode')?.value.trim(),
+        'installment-amount': document.getElementById('installment-amount')?.textContent.trim(),
+        'total-payable-amount': document.getElementById('total-payable-amount')?.textContent.trim(),
+        'current-exchange-rate': document.getElementById('current-exchange-rate')?.textContent.trim().replace(/[^\d.-]/g, ''),
+        'total-reviews': document.getElementById('total-reviews')?.textContent.trim(),
+    };
+
+    console.log('submitCompanyProfile payload:', payload);
+
+    const selectedRegions = payload.region;
+
+    if (payload['region-input'] && selectedRegions.length === 0) {
+        showFailureMessage('⚠️ Please select at least one region from "Other Regions/Branches".');
+        return;
+    }
+
+    const requiredFields = [
+        'company', 'country', 'street-address', 'city',
+        'industry', 'start-date', 'end-date', 'review-cycle',
+        'payment-cycle', 'num-users', 'email', 'phone'
+    ];
+
+    for (let field of requiredFields) {
+        const label = field.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (!payload[field]) {
+            showFailureMessage(`⚠️ Missing required field: ${label}`);
+            return;
+        }
+    }
+
+    fetch('/populate-user-profiles/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify(payload),
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        console.log('submitCompanyProfile response:', body);
+        if (status === 200 && body.company_code) {
+            const { company_code, company } = body;
+
+            if (selectedRegions.length > 0) {
+                fetch('/save-regions/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ company_code, regions: selectedRegions })
+                })
+                .then(res => res.json())
+                .then(regionData => {
+                    console.log('save-regions response:', regionData);
+                    if (regionData.status === 'success') {
+                        showSuccessModal(company, company_code, regionData.regions || []);
+                    } else {
+                        showSuccessModal(company, company_code, []);
+                        showFailureMessage(`Company saved but regions failed: ${regionData.message}`);
+                    }
+                })
+                .catch(err => {
+                    console.error('Region saving error:', err);
+                    showSuccessModal(company, company_code, []);
+                    showFailureMessage('Company saved but failed to save regions.');
+                });
+            } else {
+                showSuccessModal(company, company_code, []);
+            }
+        } else {
+            showFailureMessage(`❌ Failed to save profile: ${body.message || 'Unknown error'}`);
+        }
+    })
+    .catch(error => {
+        console.error('Company profile error:', error);
+        showFailureMessage('❌ Error occurred while saving company profile.');
+    });
+}
+</script>
+</body>
+</html>

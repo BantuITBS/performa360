@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <title>SkillForge Pro</title>
+    <style>
+        :root {
+            /* Refined Professional Theme Variables */
+            --bg-primary: #0A1122;
+            --bg-secondary: rgba(255, 255, 255, 0.05);
+            --text-primary: #F5F7FA;
+            --text-secondary: #A1B0CC;
+            --border-color: rgba(255, 255, 255, 0.12);
+            --glass-bg: rgba(10, 17, 34, 0.92);
+            --gradient-start: #1E40AF;
+            --gradient-end: #047857;
+            --accent-primary: #3B82F6;
+            --accent-secondary: #22D3EE;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+    
+            /* Typography */
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --gradient-start: #6366f1;
+            --gradient-end: #3b82f6;
+            --modal-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #818cf8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #22d3ee 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .message-bubble:hover {
+            transform: translateY(-2px);
+        }
+
+        #progress-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #818cf8;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #progress-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.2);
+        }
+
+        .navbar {
+            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.85) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+
+
+        .chat-button:hover .chat-label {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            transition-delay: 0.1s;
+        }
+    
+        [data-theme="light"] {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border-color: #CBD5E1;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --gradient-start: #E0E7FF;
+            --gradient-end: #DBEAFE;
+        }
+    
+        /* Enhanced Base Styles */
+        body {
+            @apply font-body antialiased bg-[var(--bg-primary)] text-[var(--text-primary)];
+        }
+    
+        [data-theme="dark"] body {
+            background: var(--bg-primary); /* Matte background for dark mode */
+        }
+    
+        [data-theme="light"] body {
+            background: linear-gradient(180deg, var(--bg-primary) 0%, #E5E7EB 100%); /* Subtle gradient for light mode */
+        }
+    
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        }
+    
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .glass-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+    
+        /* Enhanced Navigation */
+        .performa-nav {
+            @apply fixed top-0 w-full h-16 px-6 z-50 flex items-center justify-between;
+        }
+    
+        [data-theme="dark"] .performa-nav {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(12px);
+        }
+    
+        [ composition
+        [data-theme="light"] .performa-nav {
+            background: transparent; /* No background for navbar in light mode */
+            box-shadow: none; /* Remove shadow for cleaner look */
+        }
+    
+        .navbar-brand {
+            @apply text-2xl font-heading font-bold tracking-tight;
+            background: linear-gradient(45deg, #A855F7, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    
+        [data-theme="light"] .navbar-brand {
+            background: linear-gradient(45deg, #7E22CE, #DB2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    
+        /* Improved Card Design */
+        .skill-card {
+            @apply glass-panel p-6 rounded-2xl transition-all duration-300;
+            border: 1px solid var(--border-color);
+        }
+    
+        .skill-card:hover {
+            border-color: var(--accent-primary);
+        }
+    
+        /* Professional Form Elements */
+        .pro-input {
+            @apply w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg px-4 py-3 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-transparent transition-all duration-200;
+        }
+    
+        .pro-select {
+            @apply pro-input pr-10 appearance-none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /></svg>");
+            background-size: 1.25rem;
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+        }
+    
+        /* Enhanced Chat Modal */
+        .chat-modal {
+            @apply rounded-2xl overflow-hidden shadow-2xl max-w-md w-full;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+        }
+    
+        .chat-header {
+            @apply bg-[var(--accent-primary)] px-6 py-4 flex items-center justify-between;
+        }
+    
+        .message-bubble {
+            @apply max-w-[80%] p-3 rounded-2xl text-sm;
+        }
+    
+        .message-bubble.message-in {
+            @apply bg-[var(--bg-secondary)] rounded-tl-none;
+        }
+    
+        .message-bubble.message-out {
+            @apply bg-[var(--accent-primary)/20] rounded-tr-none;
+        }
+    
+        /* Progress Elements */
+        .radial-progress {
+            @apply w-16 h-16 rounded-full flex items-center justify-center relative;
+            background: conic-gradient(var(--accent-primary) 75%, var(--bg-secondary) 0);
+        }
+    
+        .radial-progress::before {
+            @apply content-[''] absolute w-14 h-14 rounded-full bg-[var(--bg-primary)];
+        }
+    
+        .radial-progress span {
+            @apply relative text-xs font-semibold text-[var(--accent-primary)];
+        }
+    
+        /* Tooltip Styling */
+        .chat-button-tooltip {
+            @apply absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-3 py-2 rounded-lg shadow-lg;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+    
+        .chat-button-tooltip::before {
+            content: '';
+            @apply absolute bottom-full left-1/2 -translate-x-1/2 border-8 border-transparent border-b-purple-600;
+        }
+    
+        /* Smooth Transitions */
+        .transition-smooth {
+            @apply transition-all duration-300 ease-out;
+        }
+    
+        /* Scrollbar Styling */
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+    
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+    
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 3px;
+        }
+    
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .performa-nav {
+                @apply px-4;
+            }
+    
+            .navbar-brand {
+                @apply text-xl;
+            }
+    
+            .grid-cols-2 {
+                @apply grid-cols-1;
+            }
+    
+            .chat-modal {
+                @apply w-[90%];
+            }
+        }
+    </style>
+<style>
+    .auth-form {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 40;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        max-width: 1200px;
+        width: 90%;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        align-items: end;
+    }
+
+    .field-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .field-label {
+        font-size: 0.9em;
+        color: #444;
+        font-weight: 500;
+    }
+
+    .form-input {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 0.95em;
+        background: #f8f8f8;
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+
+    .checkbox-label {
+        font-size: 0.85em;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
+    }
+
+    #unique-chat-display {
+        background: #e9ecef;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        min-height: 36px;
+    }
+
+    @media (max-width: 768px) {
+        .auth-form {
+            width: calc(100% - 40px);
+            bottom: 10px;
+            left: 10px;
+        }
+    }
+</style>
+
+<style>
+    .auth-form {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 40;
+        background: #1a365d; /* Dark navy background */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        max-width: 1200px;
+        width: 90%;
+        color: #ffffff; /* White text for contrast */
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        align-items: end;
+    }
+
+    .field-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .field-label {
+        font-size: 0.9em;
+        color: #e0e0e0; /* Light gray for labels */
+        font-weight: 600;
+    }
+
+    .form-input {
+        padding: 10px 12px;
+        border: 2px solid #4a5568; /* Dark border */
+        border-radius: 6px;
+        font-size: 0.95em;
+        background: #ffffff; /* Pure white background */
+        color: #2d3748; /* Dark text */
+        transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #48bb78; /* High-contrast green */
+        box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3);
+    }
+
+    .checkbox-label {
+        font-size: 0.85em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        color: #e0e0e0;
+    }
+
+    #unique-chat-display {
+        background: #ffffff;
+        color: #2d3748;
+        padding: 10px;
+        border: 2px solid #4a5568;
+        border-radius: 6px;
+        font-size: 0.9em;
+        min-height: 40px;
+        font-weight: 500;
+    }
+
+    select.form-input {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .auth-form {
+            width: calc(100% - 40px);
+            bottom: 10px;
+            left: 10px;
+            padding: 15px;
+        }
+        
+        .form-grid {
+            gap: 12px;
+        }
+    }
+
+    .message-bubble {
+    @apply max-w-[80%] p-3 rounded-2xl text-sm;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.message-bubble.message-in {
+    @apply rounded-tl-none;
+    background: rgba(255, 255, 255, 0.25);
+    color: #e5e7eb;
+}
+
+.message-bubble.message-in .message-time {
+    color: #b0b8ca;
+}
+
+.message-bubble.message-out {
+    @apply rounded-tr-none;
+    background: rgba(16, 185, 129, 0.35);
+    color: #d1fae5;
+}
+
+.message-bubble.message-out .message-time {
+    color: #a7f3d0;
+}
+
+#dialogue-messages {
+    background: rgba(10, 17, 34, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+[data-theme="light"] .message-bubble {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .message-bubble.message-in {
+    background: rgba(0, 0, 0, 0.15);
+    color: #1f2937;
+}
+
+[data-theme="light"] .message-bubble.message-in .message-time {
+    color: #4b5563;
+}
+
+[data-theme="light"] .message-bubble.message-out {
+    background: rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+[data-theme="light"] .message-bubble.message-out .message-time {
+    color: #047857;
+}
+
+[data-theme="light"] #dialogue-messages {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+:root {
+    --header-bg: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+}
+#dialogue-modal .bg-[var(--header-bg)] {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+#dialogue-modal .w-10.h-10 {
+    border-color: var(--accent-primary);
+}
+#dialogue-modal .w-2.5.h-2.5 {
+    width: 3.5px;
+    height: 3.5px;
+    background-color: #22c55e; /* Brighter green for visibility */
+}
+[data-theme="light"] #dialogue-modal .w-2.5.h-2.5 {
+    background-color: #16a34a;
+}
+#chat-partner {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+</style>
+</head>
+
+<body class="gradient-bg text-white min-h-screen flex flex-col items-center p-6 font-[system-ui] pt-24">
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%); shadow-sm py-2; position: fixed; top: 0; width: 100%;margin-left:0px ;">
+        <button id="theme-toggle">
+            <i class="fas fa-moon text-[var(--text-secondary)]" style="margin-right: -2250px;"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="d-flex align-items-center" style="margin-left: 60px;font-size: 28px">
+                <div class="brand-logo me-3"></div>
+                <a class="navbar-brand main-title gradient-text fs-4" style="margin-left: -55px;top: -25px;">SkillForge Pro</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item dropdown"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<button 
+onclick="showModal('dialogue')" 
+style="position: fixed; top: 10px; right: 180px; z-index: 50; background: none; border: none; cursor: pointer; padding: 8px;"
+class="chat-button"
+>
+<div class="group relative inline-block">
+  <i class="fa fa-comment text-purple-400 hover:text-purple-600 text-xl transition-all duration-200 ease-in-out cursor-pointer"></i>
+  
+  <!-- Tooltip under the button -->
+  <div
+    class="chat-button-tooltip absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-purple-600 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap z-50"
+  >
+    Connect with your mentor or mentee
+  </div>
+</div>
+
+<!-- Optional label to the side -->
+<span class="chat-label" style="opacity: 0;position: absolute;left: 100%;top: 50%;transform: translateY(-50%);margin-left: 8px;background: var(--glass-bg);padding: 8px 12px;border-radius: 4px;box-shadow: 0 2px 8px rgba(0,0,0,0.1);transition: opacity 0.2s ease;white-space: nowrap;pointer-events: none;font-family: 'Segoe UI', sans-serif;color: var(--text-primary);font-size: 14px;min-width: 300px;">
+ Performa360 Chat
+</span>
+
+</button>
+
+    <div id="dialogue-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-50">
+        <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-[var(--modal-bg)] rounded-xl shadow-2xl flex flex-col h-[70vh]">
+            <!-- Header Section -->
+            <div class="bg-[var(--header-bg)] p-4 rounded-t-xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/40" 
+                             class="w-10 h-10 rounded-full border-2 border-white/80">
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-[var(--modal-bg)]"></span>
+                    </div>
+                    <div>
+                        <h2 id="chat-partner" class="text-base font-semibold text-white"></h2>
+                    </div>
+                </div>
+                <button class="text-white/70 hover:text-white transition-colors" onclick="hideModal('dialogue-modal')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+    
+            <!-- Message Container -->
+            <div class="flex-1 bg-[#efeae2] bg-opacity-50 p-4 overflow-y-auto scrollbar-thin">
+                <div id="dialogue-messages" class="space-y-2">
+                    <!-- Example Message -->
+                    <div class="message-bubble message-in">
+                        <div class="text-sm text-[var(--text-primary)]">Hello! How can I help you today?</div>
+                        <div class="message-time text-xs text-[var(--text-secondary)] mt-1">10:30 AM</div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Input Section -->
+            <div class="bg-[var(--bg-secondary)] p-4 border-t border-[var(--border)]">
+                <div class="flex gap-2 items-center">
+                    <input type="text" 
+                           id="message-input"
+                           class="flex-1 bg-white border border-[var(--border)] text-sm text-[var(--text-primary)] rounded-full py-2.5 px-4 focus:outline-none focus:border-[var(--accent-primary)] placeholder:text-[var(--text-secondary)]"
+                           placeholder="Type a message...">
+                    <button id="send-message-btn" class="w-9 h-9 rounded-full bg-[var(--accent-primary)] hover:bg-[var(--accent-secondary)] transition-colors flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Contact Selector -->
+            <select id="mentee-select" class="hidden mt-2 mx-4 bg-white border border-[var(--border)] text-[var(--text-primary)] rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[var(--accent-primary)]">
+                <option value="">Select a Contact...</option>
+            </select>
+        </div>
+    </div>
+    </div>
+
+    <a href="http://127.0.0.1:8002/employee-appraisal/?username=#" class="fixed top-1 right-1 z-50 group" style="background-color: transparent;">
+        <div class="glass-panel p-3 rounded-xl flex items-center space-x-2 hover:scale-105 transition-transform" style="background-color: transparent;">
+            <i class="fa fa-home text-cyan-300 group-hover:text-cyan-200 transition-colors" style="background-color: transparent;"></i>
+            <span class="text-sm font-medium text-[var(--text-primary)]" style="background-color: transparent;">Home</span>
+        </div>
+    </a>
+
+    <div class="glass-panel p-3 rounded-2xl mb-4 w-full max-w-xl fixed top-4 left-1/2 -translate-x-1/2 z-40" style="margin-left: -10px;margin-top: -11px;width: 25%;background-color: transparent;">
+        <div class="flex items-center space-x-2" style="background-color: transparent;background-color: transparent;">
+            <div class="relative" style="background-color: transparent;">
+                <img src="https://via.placeholder.com/50" class="w-14 h-14 rounded-full border-2 border-cyan-200/50" style="background-color: transparent;">
+                <div class="absolute -bottom-2 -right-2 glass-panel p-1.5 rounded-full" style="background-color: transparent;">
+                </div>
+            </div>
+            <div class="flex-1">
+                <input type="text" placeholder="username" id="username-input" readonly
+                      class="w-full bg-transparent text-xl font-medium border-b border-cyan-200/30 focus:border-cyan-400 focus:outline-none pb-1 placeholder-[var(--text-secondary)] text-[var(--text-primary)]">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+        <div class="glass-panel p-6 rounded-2xl space-y-6">
+            <h2 class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <i class="fa fa-graduation-cap mr-2"></i>Learning Hub
+            </h2>
+            
+            <div class="space-y-4">
+                <button onclick="showModal('register-course')" class="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-cyan-600/30 to-blue-600/30 hover:bg-gradient-to-l transition-all group">
+                    <span class="font-medium text-[var(--text-primary)]">Register New Course</span>
+                    <i class="fa fa-plus-circle text-cyan-300 group-hover:scale-125 transition-transform"></i>
+                </button>
+                <button onclick="showModal('recommendations')" 
+                    class="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-600/30 to-pink-600/30 hover:bg-gradient-to-l transition-all group">
+                    <span class="font-medium text-[var(--text-primary)]">Course Recommendations</span>
+                    <i class="fa fa-magic text-purple-300 group-hover:scale-125 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl space-y-6">
+            <h2 class="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                <i class="fa fa-bullseye mr-2"></i>Goals Tracker
+            </h2>
+            
+            <div class="space-y-4">
+                <button onclick="showModal('set-goal')" class="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-emerald-600/30 to-green-600/30 hover:bg-gradient-to-l transition-all group">
+                    <span class="font-medium text-[var(--text-primary)]">Set New Goal</span>
+                    <i class="fa fa-plus-circle text-emerald-300 group-hover:scale-125 transition-transform"></i>
+                </button>
+                <div class="w-full space-y-4">
+                    <select class="w-full bg-[var(--bg-secondary)] border border-cyan-400/30 rounded-xl p-3 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-cyan-400/50 text-[var(--text-primary)]">
+                        <option value="">Select a Goal...</option>
+                    </select>
+                    
+                    <button onclick="showModal('update-progress')" class="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-amber-600/30 to-orange-600/30 hover:bg-gradient-to-l transition-all group">
+                        <span class="font-medium text-[var(--text-primary)]">Update Progress</span>
+                        <i class="fa fa-chart-line text-amber-300 group-hover:scale-125 transition-transform"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl col-span-full">
+            <h2 class="text-xl font-bold mb-4 flex items-center text-[var(--text-primary)]">
+                <i class="fa fa-spinner mr-2 text-cyan-400"></i>Active Learning Paths
+            </h2>
+            
+            <div class="relative">
+                <select id="course-dropdown" class="w-full bg-[var(--bg-secondary)] border border-cyan-400/30 rounded-xl p-3 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-cyan-400/50 text-[var(--text-primary)]">
+                    <option value="">Select Active Program...</option>
+                </select>
+<!-- Course Info Modal -->
+<div id="course-info-modal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+    <div class="bg-[var(--bg-primary)] text-[var(--text-primary)] rounded-xl p-5 max-w-xl w-full mx-4 shadow-2xl relative transform transition-all duration-300 scale-95">
+      <button 
+        onclick="closeCourseModal()" 
+        class="absolute top-3 right-3 p-1 hover:bg-[var(--bg-secondary)] rounded-full transition-colors duration-200"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+  
+      <div class="space-y-4">
+        <h3 class="text-2xl font-bold text-[var(--text-primary)] pb-2 border-b border-[var(--border-color)]" id="modal-course-name">Course Info</h3>
+        
+        <div class="grid grid-cols-5 gap-y-3 gap-x-4 text-sm">
+          <div class="col-span-2 flex justify-between items-center">
+            
+            <span id="modal-institution" class="text-right font-semibold"></span>
+          </div>
+          
+          <div class="col-span-3 grid grid-cols-3 gap-4">
+            <div>
+              <p class="text-[var(--text-secondary)] mb-1">Duration</p>
+              <p id="modal-duration" class="font-medium"></p>
+            </div>
+            <div>
+              <p class="text-[var(--text-secondary)] mb-1">Progress</p>
+              <p id="modal-progress" class="font-semibold text-[var(--accent-color)]"></p>
+            </div>
+          </div>
+          
+          <div class="col-span-2 flex justify-between items-center">
+            <span id="modal-start-date" class="font-medium"></span>
+          </div>
+          
+          <div class="col-span-3 flex justify-between items-center">
+            <span id="modal-end-date" class="font-medium"></span>
+          </div>
+        </div>
+  
+        <div class="pt-4 border-t border-[var(--border-color)]">
+          <h4 class="text-lg font-semibold mb-3">Progress vs Timeline</h4>
+          <canvas id="combinedTimelineChart" class="w-full" height="120"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+            
+            <div class="mt-4 space-y-3">
+                <div class="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-secondary)]">
+                    <span class="text-[var(--text-primary)]">Current Progress</span>
+                    <div class="mb-4 flex items-center">
+                        <input type="range" id="progress-range" min="0" max="100" value="50" class="text-cyan-400">
+                        <span id="progress-percentage" class="text-[var(--text-primary)]"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="goal-info-modal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[var(--bg-primary)] text-[var(--text-primary)] rounded-xl p-5 max-w-xl w-full mx-4 shadow-2xl relative transform transition-all duration-300 scale-95">
+          <button 
+            onclick="closeGoalModal()" 
+            class="absolute top-3 right-3 p-1 hover:bg-[var(--bg-secondary)] rounded-full transition-colors duration-200"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+      
+          <div class="space-y-4">
+            <h3 class="text-2xl font-bold text-[var(--text-primary)] pb-2 border-b border-[var(--border-color)]" id="modal-goal-name">Goal Info</h3>
+      
+            <div class="grid grid-cols-5 gap-y-3 gap-x-4 text-sm">
+              <div class="col-span-2 flex justify-between items-center">
+                <span id="modal-goal-owner" class="text-right font-semibold"></span>
+              </div>
+      
+              <div class="col-span-3 grid grid-cols-3 gap-4">
+                <div>
+                  <p class="text-[var(--text-secondary)] mb-1">Category</p>
+                  <p id="modal-goal-category" class="font-medium"></p>
+                </div>
+                <div>
+                  <p class="text-[var(--text-secondary)] mb-1">Progress</p>
+                  <p id="modal-goal-progress" class="font-semibold text-[var(--accent-color)]"></p>
+                </div>
+              </div>
+      
+              <div class="col-span-2 flex justify-between items-center">
+                <span id="modal-goal-start-date" class="font-medium"></span>
+              </div>
+      
+              <div class="col-span-3 flex justify-between items-center">
+                <span id="modal-goal-end-date" class="font-medium"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="goal-info-modal" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[var(--bg-primary)] text-[var(--text-primary)] rounded-xl p-5 max-w-xl w-full mx-4 shadow-2xl relative transform transition-all duration-300 scale-95">
+          <button onclick="closeGoalModal()" class="absolute top-3 right-3 p-1 hover:bg-[var(--bg-secondary)] rounded-full transition-colors duration-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+      
+          <div class="space-y-4">
+            <h3 id="modal-goal-name" class="text-2xl font-bold pb-2 border-b border-[var(--border-color)]">Goal Info</h3>
+            <div class="grid grid-cols-5 gap-y-3 gap-x-4 text-sm">
+              <div class="col-span-2 font-semibold text-right" id="modal-goal-owner"></div>
+              <div class="col-span-3 text-[var(--text-secondary)]" id="modal-goal-description"></div>
+              <div class="col-span-3">
+                <p class="text-[var(--text-secondary)] mb-1">Progress</p>
+                <p id="modal-goal-progress" class="font-semibold text-[var(--accent-color)]"></p>
+              </div>
+              <div class="col-span-2 text-right">
+                <p id="modal-goal-start-date" class="font-medium"></p>
+              </div>
+              <div class="col-span-3">
+                <p id="modal-goal-end-date" class="font-medium"></p>
+              </div>
+            </div>
+      
+            <!-- Chart Container -->
+            <canvas id="combinedGoalTimelineChart" height="150"></canvas>
+          </div>
+        </div>
+      </div>
+      
+
+
+    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50">
+        <div class="min-h-screen flex items-center justify-center p-4">
+            <div class="glass-panel rounded-2xl max-w-xs w-full p-6 relative">
+                <button onclick="hideModal('modal')" class="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                    <i class="fa fa-times"></i>
+                </button>
+                <div id="modal-content"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+<form id="my-form" class="auth-form" style="display: none;">
+    <div class="form-grid">
+        <!-- Employee Section -->
+        <div class="field-container">
+            <label class="field-label" for="username">EMPLOYEE NAME:</label>
+            <input class="form-input" type="text" id="username" name="username" placeholder="John Doe">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="employee-password">EMPLOYEE CODE:</label>
+            <input class="form-input" type="password" id="employee-password" name="employee_password" placeholder="•••••">
+            <label class="checkbox-label">
+                <input type="checkbox" id="show-password"> SHOW CODE
+            </label>
+        </div>
+
+        <!-- Company Info -->
+        <div class="field-container">
+            <label class="field-label" for="company_code">COMPANY CODE:</label>
+            <input class="form-input" type="text" id="company_code" name="company_code" readonly>
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="branch_code">BRANCH CODE:</label>
+            <input class="form-input" type="text" id="branch_code" name="branch_code" readonly>
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="region_branch">REGION BRANCH:</label>
+            <input class="form-input" type="text" id="region_branch" name="region_branch" readonly>
+        </div>
+
+        <!-- Mentor Section -->
+        <div class="field-container">
+            <label class="field-label" for="reports_to_id">MENTOR CODE:</label>
+            <input class="form-input" type="text" id="reports_to_id" name="reports_to_id">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="reports_to_name_id">MENTOR NAME:</label>
+            <input class="form-input" type="text" id="reports_to_name_id" name="reports_to_name_id">
+        </div>
+
+        <!-- Mentee Section -->
+        <div class="field-container">
+            <label class="field-label" for="mentee_code_select">MENTEE CODE:</label>
+            <select class="form-input" id="mentee_code_select" name="mentee_code">
+                <option value="">-- SELECT --</option>
+            </select>
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="mentee_name_select">MENTEE NAME:</label>
+            <select class="form-input" id="mentee_name_select" name="mentee_name">
+                <option value="">-- SELECT --</option>
+            </select>
+        </div>
+
+        <!-- Chat Display -->
+        <div class="field-container">
+            <label class="field-label" for="unique-chat-display">UNIQUE CHAT ID:</label>
+            <div class="form-input" id="unique-chat-display">-- No Chat Selected --</div>
+        </div>
+    </div>
+</form>
+
+<script>
+function showCourseModal() {
+    const modal = document.getElementById('course-info-modal');
+    modal.classList.remove('hidden', 'opacity-0', 'scale-95');
+    modal.classList.add('opacity-100', 'scale-100');
+}
+
+function closeCourseModal() {
+    const modal = document.getElementById('course-info-modal');
+    modal.classList.remove('opacity-100', 'scale-100');
+    modal.classList.add('opacity-0', 'scale-95');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+function showGoalModal() {
+    const modal = document.getElementById('goal-info-modal');
+    modal.classList.remove('hidden', 'opacity-0', 'scale-95');
+    modal.classList.add('opacity-100', 'scale-100');
+}
+
+function closeGoalModal() {
+    const modal = document.getElementById('goal-info-modal');
+    modal.classList.remove('opacity-100', 'scale-100');
+    modal.classList.add('opacity-0', 'scale-95');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+function populateGoalsDropdownIfNonBlank() {
+    const employeeCode = document.getElementById('employee-password')?.value?.trim();
+    if (!employeeCode) return;
+
+    fetch(`http://127.0.0.1:8002/get_goals/?employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(res => res.json())
+        .then(data => {
+            const dropdown = document.getElementById('goal-dropdown');
+            dropdown.innerHTML = `<option value="">Select Active Goal...</option>`;
+
+            data.goals.forEach(goal => {
+                const option = document.createElement('option');
+                option.value = goal.title;
+                option.textContent = goal.title;
+                dropdown.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load goals:', err);
+        });
+}
+
+// Trigger on load
+populateGoalsDropdownIfNonBlank();
+
+// Live updates
+document.getElementById('employee-password').addEventListener('input', () => {
+    populateGoalsDropdownIfNonBlank();
+});
+
+document.getElementById('course-dropdown').addEventListener('change', async (event) => {
+    const selectedCourseName = event.target.value;
+    const employeeCode = document.getElementById('employee-password')?.value?.trim();
+
+    if (!selectedCourseName || !employeeCode) return;
+
+    try {
+        const response = await fetch(`/get_courses/?employee_code=${encodeURIComponent(employeeCode)}`);
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            const course = data.courses.find(c => c.course_name === selectedCourseName);
+            if (course) {
+                // Populate modal content
+                document.getElementById('modal-course-name').textContent = course.course_name;
+                document.getElementById('modal-institution').textContent = course.institution;
+                document.getElementById('modal-duration').textContent = course.duration;
+                document.getElementById('modal-progress').textContent = course.progress + '%';
+                document.getElementById('modal-start-date').textContent = course.start_date;
+                document.getElementById('modal-end-date').textContent = course.end_date;
+
+                // Show modal
+                showCourseModal();
+
+                // Destroy old chart if present
+                if (window.courseChartInstance) {
+                    window.courseChartInstance.destroy();
+                }
+
+                // Unified Timeline + Progress Chart
+                const ctx = document.getElementById('combinedTimelineChart').getContext('2d');
+
+                // Destroy previous chart if exists
+                if (window.courseChartInstance) {
+                    window.courseChartInstance.destroy();
+                }
+
+                window.courseChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [course.start_date, course.updated_at, course.end_date],
+                        datasets: [
+                            {
+                                label: 'Planned Timeline',
+                                data: [0, 50, 100], // even spacing makes it a visible straight line
+                                borderColor: 'rgba(0, 255, 255, 1)',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0,
+                                pointRadius: 0,
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Actual Progress',
+                                data: [0, course.progress, null],
+                                borderColor: 'rgba(50, 205, 50, 0.9)',
+                                backgroundColor: 'rgba(50,205,50,0.1)',
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 4,
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 100,
+                                title: { display: true, text: 'Progress (%)' },
+                                ticks: {
+                                    callback: value => `${value}%`
+                                }
+                            },
+                            x: {
+                                title: { display: true, text: 'Date' }
+                            }
+                        },
+                        plugins: {
+                            tooltip: { mode: 'index', intersect: false },
+                            legend: { display: true }
+                        }
+                    }
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching course info:', error);
+    }
+});
+
+function populateCoursesDropdownIfNonBlank() {
+    const employeeCode = document.getElementById('employee-password')?.value?.trim();
+
+    if (!employeeCode) {
+        console.log('Employee code is blank — skipping course fetch.');
+        return;
+    }
+
+    fetch(`/get_courses/?employee_code=${encodeURIComponent(employeeCode)}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch courses");
+            return response.json();
+        })
+        .then(data => {
+            const dropdown = document.getElementById('course-dropdown');
+            dropdown.innerHTML = `<option value="">Select Active Program...</option>`;
+
+            data.courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.course_name;
+                option.textContent = course.course_name;
+                option.className = "bg-[var(--bg-primary)]";
+                dropdown.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading courses:', error);
+        });
+}
+
+// Live input updates
+document.getElementById('employee-password').addEventListener('input', () => {
+    populateCoursesDropdownIfNonBlank();
+});
+
+// Theme toggle
+const themeToggle = document.getElementById('theme-toggle');
+const htmlElement = document.documentElement;
+
+function setTheme(theme) {
+    htmlElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-moon text-[var(--text-secondary)]' : 'fas fa-sun text-[var(--text-secondary)]';
+}
+
+const savedTheme = localStorage.getItem('theme') || 'dark';
+setTheme(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
+
+// Chat state
+let isMentor = false;
+let currentChatPartner = null;
+let currentUser = null;
+let currentUserCode = null;
+let currentChatPartnerCode = null;
+
+// Form and API handling
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('employee-password');
+    const menteeCodeSelect = document.getElementById('mentee_code_select');
+    const menteeNameSelect = document.getElementById('mentee_name_select');
+    const usernameInput = document.getElementById('username');
+    const usernameDisplay = document.getElementById('username-input');
+
+    // Populate form fields from session data
+    fetch('/get-active-login/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Populate the input fields with the returned data
+                usernameInput.value = data.data.username || '';
+                usernameDisplay.value = data.data.username || ''; // Sync username-input
+                document.getElementById('region_branch').value = data.data.region_branch || '';
+                document.getElementById('employee-password').value = data.data.employee_code || '';
+                document.getElementById('company_code').value = data.data.company_code || '';
+                document.getElementById('branch_code').value = data.data.region_code || '';
+            } else {
+                console.error('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Fetch error: ' + error));
+
+    // Sync username between form and display
+    usernameInput.addEventListener('change', () => {
+        usernameDisplay.value = usernameInput.value;
+    });
+    usernameDisplay.addEventListener('change', () => {
+        usernameInput.value = usernameDisplay.value;
+    });
+
+    // Populate employee codes for autocomplete
+    async function populateEmployeeCodes() {
+        try {
+            const response = await fetch('/valid-employee-codes/');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            const datalist = document.createElement('datalist');
+            datalist.id = 'employee-codes';
+            data.employee_codes.forEach(code => {
+                const option = document.createElement('option');
+                option.value = code;
+                datalist.appendChild(option);
+            });
+            document.body.appendChild(datalist);
+        } catch (error) {
+            console.error('Error fetching employee codes:', error);
+        }
+    }
+    populateEmployeeCodes();
+
+    // Fetch mentees for mentors
+    function fetchMenteesByMentorCode(mentorCode) {
+        if (!mentorCode) {
+            menteeCodeSelect.innerHTML = '<option value="">-- Select Mentee Code --</option>';
+            menteeNameSelect.innerHTML = '<option value="">-- Select Mentee Name --</option>';
+            updateUniqueChat();
+            return;
+        }
+
+        const urlWithParam = `/get-mentees-by-reports-to-code/?reports_to_code=${encodeURIComponent(mentorCode)}`;
+
+        fetch(urlWithParam, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error(`Mentee API error: HTTP ${response.status}, Response: ${text}`);
+                        throw new Error(`Failed to fetch mentees: HTTP ${response.status}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                menteeCodeSelect.innerHTML = '<option value="">-- Select Mentee Code --</option>';
+                menteeNameSelect.innerHTML = '<option value="">-- Select Mentee Name --</option>';
+
+                if (Array.isArray(data.mentees) && data.mentees.length > 0) {
+                    data.mentees.forEach(mentee => {
+                        const codeOption = new Option(mentee.employee_code, mentee.employee_code);
+                        const nameOption = new Option(mentee.employee_name, mentee.employee_name);
+                        menteeCodeSelect.appendChild(codeOption);
+                        menteeNameSelect.appendChild(nameOption);
+                    });
+                } else {
+                    console.warn('No mentees found for mentor code:', mentorCode);
+                }
+                updateUniqueChat();
+            })
+            .catch(error => {
+                console.error('Error fetching mentees:', error);
+                menteeCodeSelect.innerHTML = '<option value="">-- No Mentees Available --</option>';
+                menteeNameSelect.innerHTML = '<option value="">-- No Mentees Available --</option>';
+                updateUniqueChat();
+            });
+    }
+
+    // Sync mentee dropdowns
+    menteeNameSelect.addEventListener('change', function () {
+        const selectedName = this.value;
+        for (let i = 0; i < menteeCodeSelect.options.length; i++) {
+            if (menteeNameSelect.options[i] && menteeNameSelect.options[i].value === selectedName) {
+                menteeCodeSelect.selectedIndex = i;
+                break;
+            }
+        }
+        updateUniqueChat();
+    });
+
+    menteeCodeSelect.addEventListener('change', function () {
+        const selectedCode = this.value;
+        for (let i = 0; i < menteeNameSelect.options.length; i++) {
+            if (menteeCodeSelect.options[i] && menteeCodeSelect.options[i].value === selectedCode) {
+                menteeNameSelect.selectedIndex = i;
+                break;
+            }
+        }
+        updateUniqueChat();
+    });
+
+    // Fetch organizational data
+    async function fetchCompanyCode() {
+        const employeeCode = passwordInput.value.trim();
+        if (!employeeCode) {
+            document.getElementById('company_code').value = '';
+            updateUniqueChat();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/get_company_code/?employee_code=${encodeURIComponent(employeeCode)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            document.getElementById('company_code').value = data.company_code || '';
+            if (data.company_code) {
+                fetchRegionBranch(data.company_code, employeeCode);
+            }
+        } catch (error) {
+            console.error('Fetch company code error:', error);
+            document.getElementById('company_code').value = '';
+        }
+    }
+
+    async function fetchRegionBranch(companyCode, employeeCode) {
+        if (!companyCode || !employeeCode) {
+            document.getElementById('branch_code').value = '';
+            document.getElementById('region_branch').value = '';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/get-region-branch/?company_code=${encodeURIComponent(companyCode)}&employee_code=${encodeURIComponent(employeeCode)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            document.getElementById('branch_code').value = data.region_code || '';
+            document.getElementById('region_branch').value = data.region_branch || '';
+        } catch (error) {
+            console.error('Fetch region branch error:', error);
+            document.getElementById('branch_code').value = '';
+            document.getElementById('region_branch').value = '';
+        }
+    }
+
+    // Fetch mentor details and mentees
+    passwordInput.addEventListener('change', async () => {
+        const employeeCode = passwordInput.value.trim();
+        currentUserCode = employeeCode;
+
+        if (!employeeCode) {
+            updateUniqueChat();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/get-manager/?employee_code=${employeeCode}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            document.getElementById('reports_to_id').value = data.manager_employee_code || '';
+            document.getElementById('reports_to_name_id').value = data.reports_to || '';
+            fetchMenteesByMentorCode(employeeCode);
+        } catch (error) {
+            console.error('Error fetching mentor info:', error);
+            updateUniqueChat();
+        }
+
+        await fetchCompanyCode();
+    });
+
+    // Toggle password visibility
+    document.getElementById('show-password').addEventListener('change', (e) => {
+        passwordInput.type = e.target.checked ? 'text' : 'password';
+    });
+
+    // Click outside to close modals
+    document.querySelectorAll('#modal, #dialogue-modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal(modal.id);
+            }
+        });
+    });
+});
+
+// Update unique chat display
+function updateUniqueChat() {
+    const uniqueChatDisplay = document.getElementById('unique-chat-display');
+    const employeeCode = document.getElementById('employee-password').value.trim();
+    const menteeCode = document.getElementById('mentee_code_select').value.trim();
+    const mentorCode = document.getElementById('reports_to_id').value.trim();
+
+    if (!employeeCode) {
+        uniqueChatDisplay.textContent = '-- No Chat Selected --';
+        return;
+    }
+
+    let partnerCode = '';
+    if (menteeCode && menteeCode !== '-- Select Mentee Code --' && menteeCode !== '-- No Mentees Available --') {
+        partnerCode = menteeCode;
+    } else if (mentorCode) {
+        partnerCode = mentorCode;
+    }
+
+    if (partnerCode) {
+        const codes = [employeeCode, partnerCode].sort();
+        uniqueChatDisplay.textContent = codes.join('_');
+    } else {
+        uniqueChatDisplay.textContent = '-- No Chat Selected --';
+    }
+}
+
+// Fetch AI recommendation
+async function fetchAIRecommendations(employeeCode) {
+    if (!employeeCode) {
+        return { recommendation: null, error: 'Please enter an employee code.' };
+    }
+    if (!/^[A-Za-z0-9]+$/.test(employeeCode)) {
+        return { recommendation: null, error: 'Employee code must be alphanumeric.' };
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    try {
+        const response = await fetch(`/recommendation/${encodeURIComponent(employeeCode)}/`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error(`AI Recommendation API error: HTTP ${response.status}, Response: ${text}`);
+            if (response.status === 404) {
+                return { recommendation: null, error: `Employee code ${employeeCode} not found in the system.` };
+            }
+            throw new Error(`Failed to fetch recommendation: HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        return { recommendation: data.recommendation || null, error: data.error || null };
+    } catch (error) {
+        clearTimeout(timeoutId);
+        console.error('Error fetching AI recommendation:', error);
+        return { recommendation: null, error: error.message || 'Request timed out or failed.' };
+    }
+}
+
+// Modal handling
+async function showModal(type) {
+    const modalMap = {
+        'dialogue': 'dialogue-modal',
+        'register-course': 'modal',
+        'recommendations': 'modal',
+        'set-goal': 'modal',
+        'update-progress': 'modal'
+    };
+
+    const modalId = modalMap[type];
+    if (!modalId) return;
+
+    const modal = document.getElementById(modalId);
+    const content = modal.querySelector('#modal-content') || modal.querySelector('.fixed.top-1\\/2.left-4.-translate-y-1\\/2.w-80');
+
+    if (type === 'dialogue') {
+        const chatPartner = modal.querySelector('#chat-partner');
+        const messagesContainer = modal.querySelector('#dialogue-messages');
+        currentUser = document.getElementById('username-input').value.trim();
+        currentUserCode = document.getElementById('employee-password').value.trim();
+
+        if (!currentUser || !currentUserCode) {
+            chatPartner.textContent = 'Please enter username and employee code';
+            messagesContainer.innerHTML = '<p class="text-yellow-400 text-sm">Enter your username and employee code to start chatting.</p>';
+            modal.classList.remove('hidden');
+            updateUniqueChat();
+            return;
+        }
+
+        chatPartner.textContent = 'Loading...';
+        messagesContainer.innerHTML = '';
+        loadDialogueModal(modal);
+    } else {
+        let html = '';
+        switch (type) {
+            case 'register-course':
+                html = `
+                    <div class="max-w-lg w-full" style="background-color: transparent; color: var(--text-primary);">
+                        <h3 class="text-xl font-bold mb-4">Register New Course</h3>
+                        <div id="course-error" class="alert-box hidden"></div>
+                        <input type="text" id="course-name" placeholder="Course name"
+                               class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        <input type="text" id="institution" placeholder="Institution"
+                               class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        <div class="mb-4">
+                            <label class="block text-sm mb-2 text-[var(--text-primary)]">Start Date</label>
+                            <input type="date" id="start-date"
+                                   class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm mb-2 text-[var(--text-primary)]">End Date</label>
+                            <input type="date" id="end-date"
+                                   class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        </div>
+                        <input type="text" id="duration" placeholder="Duration"
+                               class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-3 border border-[var(--border-color)] text-[var(--text-primary)]" readonly>
+                        <button id="register-course-btn"
+                                class="w-full bg-cyan-500/30 hover:bg-cyan-500/40 rounded-xl p-3 text-[var(--text-primary)]">
+                            Register
+                        </button>
+                    </div>
+                `;
+                content.innerHTML = html;
+
+                const [
+                    startDateInput,
+                    endDateInput,
+                    durationInput,
+                    registerBtn,
+                    errorDiv
+                ] = [
+                    content.querySelector('#start-date'),
+                    content.querySelector('#end-date'),
+                    content.querySelector('#duration'),
+                    content.querySelector('#register-course-btn'),
+                    content.querySelector('#course-error')
+                ];
+
+                endDateInput.addEventListener('input', calculateDuration);
+
+                function calculateDuration() {
+                    const startDate = new Date(startDateInput.value);
+                    const endDate = new Date(endDateInput.value);
+                    if (startDate && endDate && endDate >= startDate) {
+                        const durationInMs = endDate - startDate;
+                        const months = Math.floor(durationInMs / (1000 * 60 * 60 * 24 * 30));
+                        durationInput.value = `${months} months`;
+                    } else {
+                        durationInput.value = '';
+                    }
+                }
+
+                registerBtn.addEventListener('click', async () => {
+                    const courseName = content.querySelector('#course-name').value.trim();
+                    const institution = content.querySelector('#institution').value.trim();
+                    const startDate = startDateInput.value;
+                    const endDate = endDateInput.value;
+
+                    // Dynamically get logged-in user values
+                    const employeeCode = document.getElementById('employee-password')?.value.trim() || '';
+                    const employeeName = document.getElementById('username-input')?.value.trim() || '';
+
+                    if (!courseName || !institution || !startDate || !endDate || !employeeCode || !employeeName) {
+                        errorDiv.textContent = 'Please fill in all fields.';
+                        errorDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (new Date(endDate) < new Date(startDate)) {
+                        errorDiv.textContent = 'End date must be after start date.';
+                        errorDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    errorDiv.classList.add('hidden');
+
+                    const payload = {
+                        course_name: courseName,
+                        institution: institution,
+                        start_date: startDate,
+                        end_date: endDate,
+                        employee_code: employeeCode,
+                        employee_name: employeeName
+                    };
+
+                    try {
+                        const response = await fetch('/register_course/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCsrfToken()
+                            },
+                            body: JSON.stringify(payload),
+                            credentials: 'include'
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.error || 'Failed to register course.');
+                        }
+
+                        alert('Course registered successfully!');
+                        hideModal('modal');
+                        await refreshCourses(employeeCode); // Optional refresh
+                    } catch (error) {
+                        console.error('Error registering course:', error);
+                        errorDiv.textContent = error.message;
+                        errorDiv.classList.remove('hidden');
+                    }
+                });
+                break;
+
+            case 'recommendations':
+                content.innerHTML = `
+                    <h3 class="text-2xl font-bold mb-6 text-[var(--text-primary)]">AI-Powered Recommendations</h3>
+                    <div id="recommendations-content" class="space-y-6 text-sm text-[var(--text-primary)]">
+                        <p class="text-[var(--text-secondary)]">Loading recommendations...</p>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+
+                const employeeCode = document.getElementById('employee-password').value.trim();
+                const { recommendation, error } = await fetchAIRecommendations(employeeCode);
+                const recommendationsContent = content.querySelector('#recommendations-content');
+
+                if (error) {
+                    recommendationsContent.innerHTML = `<p class="text-red-400">${escapeHtml(error)}</p>`;
+                    return;
+                }
+
+                if (!recommendation) {
+                    recommendationsContent.innerHTML = `<p class="text-[var(--text-secondary)]">No recommendations available for this employee code.</p>`;
+                    return;
+                }
+
+                recommendationsContent.innerHTML = `
+                    <div>
+                        <h4 class="font-semibold text-[var(--text-primary)] mb-2">Performance Recommendation</h4>
+                        <div class="p-4 bg-[var(--bg-secondary)] rounded-md">
+                            <p>${escapeHtml(recommendation.performance || 'No performance recommendation available.')}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-[var(--text-primary)] mb-2">Upskilling Recommendation</h4>
+                        <div class="p-4 bg-[var(--bg-secondary)] rounded-md">
+                            <p>${escapeHtml(recommendation.upskilling || 'No upskilling recommendation available.')}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-[var(--text-primary)] mb-2">Engagement Recommendation</h4>
+                        <div class="p-4 bg-[var(--bg-secondary)] rounded-md">
+                            <p>${escapeHtml(recommendation.engagement || 'No engagement recommendation available.')}</p>
+                        </div>
+                    </div>
+                `;
+                break;
+
+            case 'set-goal':
+                html = `
+                    <div class="max-w-lg w-full" style="background-color: transparent; color: var(--text-primary);">
+                        <h3 class="text-xl font-bold mb-4">Set New Goal</h3>
+                        <div id="goal-error" class="alert-box hidden"></div>
+                        <input type="text" id="goal-title" placeholder="Goal title" class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        <textarea id="description" placeholder="Description" class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-4 h-24 border border-[var(--border-color)] text-[var(--text-primary)]"></textarea>
+                        <div class="mb-4">
+                            <label class="block text-sm mb-2 text-[var(--text-primary)]">Start Date</label>
+                            <input type="date" id="start-date" class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm mb-2 text-[var(--text-primary)]">End Date</label>
+                            <input type="date" id="end-date" class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 border border-[var(--border-color)] text-[var(--text-primary)]">
+                        </div>
+                        <input type="text" id="duration" placeholder="Duration" class="w-full bg-[var(--bg-secondary)] rounded-xl p-3 mb-3 border border-[var(--border-color)] text-[var(--text-primary)]" readonly>
+                        <button id="create-goal-btn" class="w-full bg-emerald-500/30 hover:bg-emerald-500/40 rounded-xl p-3 text-[var(--text-primary)]">Create Goal</button>
+                    </div>
+                `;
+                content.innerHTML = html;
+
+                const [goalStartDateInput, goalEndDateInput, goalDurationInput, createGoalBtn, goalErrorDiv] = [
+                    content.querySelector('#start-date'),
+                    content.querySelector('#end-date'),
+                    content.querySelector('#duration'),
+                    content.querySelector('#create-goal-btn'),
+                    content.querySelector('#goal-error')
+                ];
+
+                // Calculate duration on input
+                goalEndDateInput.addEventListener('input', calculateGoalDuration);
+                goalStartDateInput.addEventListener('input', calculateGoalDuration);
+
+                function calculateGoalDuration() {
+                    const startDate = new Date(goalStartDateInput.value);
+                    const endDate = new Date(goalEndDateInput.value);
+                    if (startDate && endDate && endDate >= startDate) {
+                        const durationInMs = endDate - startDate;
+                        const years = Math.floor(durationInMs / (1000 * 60 * 60 * 24 * 365));
+                        const months = Math.floor((durationInMs % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+                        goalDurationInput.value = `${years} years, ${months} months`;
+                    } else {
+                        goalDurationInput.value = '';
+                    }
+                }
+
+                createGoalBtn.addEventListener('click', async () => {
+                    const goalTitle = content.querySelector('#goal-title').value.trim();
+                    const description = content.querySelector('#description').value.trim();
+                    const startDate = goalStartDateInput.value;
+                    const endDate = goalEndDateInput.value;
+                    const employeeCode = document.getElementById('employee-password').value.trim();
+                    const employeeName = document.getElementById('username-input').value.trim();
+
+                    if (!goalTitle || !description || !startDate || !endDate || !employeeCode || !employeeName) {
+                        goalErrorDiv.textContent = 'Please fill in all fields.';
+                        goalErrorDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (new Date(endDate) < new Date(startDate)) {
+                        goalErrorDiv.textContent = 'End date must be after start date.';
+                        goalErrorDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    const goalPayload = {
+                        employee_code: employeeCode,
+                        employee_name: employeeName,
+                        title: goalTitle,
+                        description: description,
+                        start_date: startDate,
+                        end_date: endDate
+                    };
+
+                    try {
+                        const response = await fetch('/create_goal/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCsrfToken(),
+                            },
+                            body: JSON.stringify(goalPayload),
+                            credentials: 'include'
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Failed to create goal');
+                        }
+
+                        alert('Goal created successfully!');
+                        hideModal('modal');
+                        // Optionally refresh goal list
+                    } catch (error) {
+                        console.error('Goal creation error:', error);
+                        goalErrorDiv.textContent = error.message;
+                        goalErrorDiv.classList.remove('hidden');
+                    }
+                });
+                break;
+
+            case 'update-progress':
+                html = `
+                    <div class="max-w-lg w-full" style="background-color: transparent; color: var(--text-primary);">
+                        <h3 class="text-xl font-bold mb-4">Update Progress</h3>
+                        <div class="mb-4 flex items-center space-x-4">
+                            <input type="range" id="progress-range-modal" min="0" max="100" value="50" class="text-cyan-400 flex-grow">
+                            <span id="progress-percentage-modal" class="text-[var(--text-primary)]">50%</span>
+                        </div>
+                        <button id="save-progress-btn" class="w-full bg-amber-500/30 hover:bg-amber-500/40 rounded-xl p-3 text-[var(--text-primary)]">Save Changes</button>
+                    </div>
+                `;
+                content.innerHTML = html;
+
+                const [progressRangeModal, progressPercentageModal, saveProgressBtn] = [
+                    content.querySelector('#progress-range-modal'),
+                    content.querySelector('#progress-percentage-modal'),
+                    content.querySelector('#save-progress-btn')
+                ];
+
+                progressRangeModal.addEventListener('input', (e) => {
+                    const percentage = e.target.value;
+                    progressPercentageModal.textContent = `${percentage}%`;
+                });
+
+                saveProgressBtn.addEventListener('click', () => {
+                    const progress = progressRangeModal.value;
+                    console.log('Progress updated:', progress);
+                    document.getElementById('progress-range').value = progress;
+                    document.getElementById('progress-percentage').textContent = `${progress}%`;
+                    alert('Progress updated successfully!');
+                    hideModal('modal');
+                });
+                break;
+        }
+    }
+
+    modal.classList.remove('hidden');
+}
+
+function hideModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('hidden');
+    if (modalId === 'modal') {
+        modal.querySelector('#modal-content').innerHTML = '';
+    } else if (modalId === 'dialogue-modal') {
+        currentChatPartner = null;
+        currentChatPartnerCode = null;
+        modal.querySelector('#chat-partner').textContent = 'Loading...';
+        modal.querySelector('#dialogue-messages').innerHTML = '';
+        modal.querySelector('#mentee-select').classList.add('hidden');
+        updateUniqueChat();
+    }
+}
+
+// Dialogue modal loading
+async function loadDialogueModal(modal) {
+    const menteeSelect = modal.querySelector('#mentee-select');
+    const chatPartner = modal.querySelector('#chat-partner');
+    const messagesContainer = modal.querySelector('#dialogue-messages');
+
+    try {
+        await fetch('/set-csrf/', {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        const mentorCode = document.getElementById('reports_to_id').value.trim();
+        const mentorName = document.getElementById('reports_to_name_id').value.trim();
+
+        const menteeResponse = await fetch(`/get-mentees-by-reports-to-code/?reports_to_code=${encodeURIComponent(currentUserCode)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        });
+
+        if (!menteeResponse.ok) {
+            const text = await menteeResponse.text();
+            console.error(`Mentee API error: HTTP ${menteeResponse.status}, Response: ${text}`);
+            throw new Error(`Failed to fetch mentees: HTTP ${menteeResponse.status}`);
+        }
+
+        const menteeData = await menteeResponse.json();
+
+        if (menteeData.mentees && menteeData.mentees.length > 0) {
+            isMentor = true;
+            menteeSelect.classList.remove('hidden');
+            menteeSelect.innerHTML = '<option value="">Select a Contact...</option>';
+
+            if (mentorCode && mentorName) {
+                const mentorOption = document.createElement('option');
+                mentorOption.value = mentorCode;
+                mentorOption.textContent = `Mentor: ${mentorName}`;
+                menteeSelect.appendChild(mentorOption);
+            }
+
+            menteeData.mentees.forEach(mentee => {
+                const option = document.createElement('option');
+                option.value = mentee.employee_code;
+                option.textContent = mentee.employee_name;
+                menteeSelect.appendChild(option);
+            });
+
+            const formMenteeCode = document.getElementById('mentee_code_select').value;
+            if (formMenteeCode && formMenteeCode !== '-- Select Mentee Code --' && formMenteeCode !== '-- No Mentees Available --') {
+                menteeSelect.value = formMenteeCode;
+                currentChatPartnerCode = formMenteeCode;
+                currentChatPartner = document.getElementById('mentee_name_select').value;
+                chatPartner.textContent = currentChatPartner;
+                updateUniqueChat();
+                await loadChatHistory();
+            } else if (mentorCode && mentorName) {
+                menteeSelect.value = mentorCode;
+                currentChatPartnerCode = mentorCode;
+                currentChatPartner = `Mentor: ${mentorName}`;
+                chatPartner.textContent = currentChatPartner;
+                document.getElementById('mentee_code_select').value = '';
+                document.getElementById('mentee_name_select').value = '';
+                updateUniqueChat();
+                await loadChatHistory();
+            } else {
+                chatPartner.textContent = 'Select a Contact';
+                messagesContainer.innerHTML = '<p class="text-[var(--text-secondary)] text-sm">Please select a contact to view messages.</p>';
+                updateUniqueChat();
+            }
+        } else {
+            isMentor = false;
+            menteeSelect.classList.add('hidden');
+            if (mentorCode && mentorName) {
+                currentChatPartnerCode = mentorCode;
+                currentChatPartner = mentorName;
+                chatPartner.textContent = currentChatPartner;
+                document.getElementById('mentee_code_select').value = '';
+                document.getElementById('mentee_name_select').value = '';
+                updateUniqueChat();
+                await loadChatHistory();
+            } else {
+                chatPartner.textContent = 'No Mentor Assigned';
+                messagesContainer.innerHTML = '<p class="text-yellow-400 text-sm">Enter your mentor’s code and name.</p>';
+                updateUniqueChat();
+            }
+        }
+    } catch (error) {
+        console.error('Chat initialization error:', error);
+        chatPartner.textContent = 'Chat Unavailable';
+        messagesContainer.innerHTML = `<p class="text-red-400 text-sm">Error: ${escapeHtml(error.message)}. Please check if the server is running and the employee code is valid.</p>`;
+        updateUniqueChat();
+    }
+}
+
+async function loadChatHistory() {
+    if (!currentChatPartnerCode || !currentUserCode) {
+        console.warn('No chat partner or user selected');
+        document.getElementById('dialogue-messages').innerHTML = '<p class="text-[var(--text-secondary)] text-sm">Please select a chat partner.</p>';
+        updateUniqueChat();
+        return;
+    }
+
+    const messagesContainer = document.getElementById('dialogue-messages');
+    messagesContainer.innerHTML = '<p class="text-[var(--text-secondary)] text-sm">Loading messages...</p>';
+
+    try {
+        const codes = [currentUserCode, currentChatPartnerCode].sort();
+        const uniqueChat = codes.join('_');
+        const response = await fetch(`/get_chat_messages/?unique_chat=${encodeURIComponent(uniqueChat)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error(`Chat API error: HTTP ${response.status}, Response: ${text}`);
+            throw new Error(`Failed to load messages: HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        messagesContainer.innerHTML = '';
+
+        if (!data.messages || data.messages.length === 0) {
+            messagesContainer.innerHTML = '<p class="text-[var(--text-secondary)] text-sm">No messages yet.</p>';
+            return;
+        }
+
+        data.messages.forEach(msg => {
+            const isSent = msg.sender_name === currentUser;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex flex-col ${isSent ? 'items-end' : 'items-start'}`;
+            messageDiv.innerHTML = `
+                <div class="max-w-[85%] ${isSent ? 'bg-emerald-500/20 rounded-tr-none' : 'bg-[var(--bg-secondary)] rounded-tl-none'} p-3 rounded-2xl">
+                    <p class="text-${isSent ? 'emerald-100' : '[var(--text-primary)]'} text-sm leading-relaxed">${escapeHtml(msg.message)}</p>
+                    <span class="text-xs ${isSent ? 'text-emerald-400/80' : 'text-[var(--text-secondary)]'} mt-1 block">${formatTimestamp(msg.timestamp)}</span>
+                </div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+        });
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (error) {
+        console.error('Load chat history error:', error);
+        messagesContainer.innerHTML = `<p class="text-red-400 text-sm">Failed to load messages: ${escapeHtml(error.message)}. Please check the server and chat identifier.</p>`;
+    }
+}
+
+async function sendMessage() {
+    const messageInput = document.getElementById('message-input');
+    const message = messageInput.value.trim();
+    const messagesContainer = document.getElementById('dialogue-messages');
+
+    if (!message) return;
+
+    if (!currentUser || !currentUserCode) {
+        messagesContainer.innerHTML = '<p class="text-yellow-400 text-sm">Please enter username and employee code.</p>';
+        return;
+    }
+
+    if (isMentor && !currentChatPartnerCode) {
+        messagesContainer.innerHTML = '<p class="text-yellow-400 text-sm">Please select a contact to chat with.</p>';
+        return;
+    }
+
+    if (!isMentor && !currentChatPartnerCode) {
+        messagesContainer.innerHTML = '<p class="text-yellow-400 text-sm">Please enter your mentor’s code and name.</p>';
+        return;
+    }
+
+    try {
+        const codes = [currentUserCode, currentChatPartnerCode].sort();
+        const uniqueChat = codes.join('_');
+        const response = await fetch('/send-message/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: JSON.stringify({
+                message: message,
+                unique_chat: uniqueChat,
+                recipient_code: currentChatPartnerCode,
+            }),
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error(`Send message error: HTTP ${response.status}, Response: ${text}`);
+            throw new Error(`Failed to send message: HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.status === 'Message sent') {
+            messageInput.value = '';
+            await loadChatHistory();
+        } else {
+            throw new Error(data.error || 'Failed to send message');
+        }
+    } catch (error) {
+        console.error('Send message error:', error);
+        messagesContainer.innerHTML = `<p class="text-red-400 text-sm">Error sending message: ${escapeHtml(error.message)}</p>`;
+    }
+}
+
+function getCsrfToken() {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+    return cookieValue || '';
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatTimestamp(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+}
+
+document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+document.getElementById('message-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+document.getElementById('mentee-select').addEventListener('change', async (e) => {
+    const selectedCode = e.target.value;
+    const chatPartner = document.getElementById('chat-partner');
+    const messagesContainer = document.getElementById('dialogue-messages');
+    const menteeCodeSelect = document.getElementById('mentee_code_select');
+    const menteeNameSelect = document.getElementById('mentee_name_select');
+
+    if (selectedCode && selectedCode !== 'Select a Contact...') {
+        currentChatPartnerCode = selectedCode;
+        currentChatPartner = Array.from(document.getElementById('mentee-select').options)
+            .find(option => option.value === selectedCode).text;
+        chatPartner.textContent = currentChatPartner;
+
+        const menteeOptions = Array.from(menteeCodeSelect.options);
+        if (menteeOptions.some(option => option.value === selectedCode)) {
+            menteeCodeSelect.value = selectedCode;
+            menteeNameSelect.value = currentChatPartner;
+        } else {
+            menteeCodeSelect.value = '';
+            menteeNameSelect.value = '';
+        }
+
+        updateUniqueChat();
+        await loadChatHistory();
+    } else {
+        currentChatPartner = null;
+        currentChatPartnerCode = null;
+        chatPartner.textContent = 'Select a Contact';
+        messagesContainer.innerHTML = '<p class="text-[var(--text-secondary)] text-sm">Please select a contact to view messages.</p>';
+        menteeCodeSelect.value = '';
+        menteeNameSelect.value = '';
+        updateUniqueChat();
+    }
+});
+
+// Initialize progress percentage
+const progressRange = document.getElementById('progress-range');
+const progressPercentage = document.getElementById('progress-percentage');
+progressRange.addEventListener('input', (e) => {
+    const percentage = e.target.value;
+    progressPercentage.textContent = `${percentage}%`;
+});
+progressPercentage.textContent = `${progressRange.value}%`;
+
+    </script>
+</body>
+</html>

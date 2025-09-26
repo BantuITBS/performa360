@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Goal Management</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    
+    <style>
+        :root, [data-theme="light"] {
+            --primary: #1ABB9C;
+            --secondary: #14A085;
+            --accent: #1ABB9C;
+            --surface: #FFFFFF;
+            --background: #F1F5F9;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --modal-bg: #FFFFFF;
+            --modal-border: #E2E8F0;
+            --modal-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            --modal-overlay: rgba(15, 23, 42, 0.85);
+            --modal-header-bg: #1ABB9C;
+            --input-bg: #F8FAFC;
+            --btn-primary: #1ABB9C;
+            --btn-primary-hover: #14A085;
+            --btn-secondary: #FFFFFF;
+            --btn-secondary-border: #E2E8F0;
+            --btn-secondary-text: #64748B;
+            --btn-secondary-hover: #F8FAFC;
+            --select2-choice-bg: var(--primary);
+            --select2-choice-text: #FFFFFF;
+            --scrollbar-track: var(--background);
+            --scrollbar-thumb: var(--primary);
+            --gradient: linear-gradient(to top, #1ABB9C 50%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        [data-theme="dark"] {
+            --primary: #1ABB9C;
+            --secondary: #0F7B66;
+            --accent: #34D399;
+            --surface: #1E293B;
+            --background: #0F172A;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --border: #475569;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --modal-bg: #1E293B;
+            --modal-border: #475569;
+            --modal-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --modal-header-bg: #1ABB9C;
+            --input-bg: #334155;
+            --btn-primary: #1ABB9C;
+            --btn-primary-hover: #0F7B66;
+            --btn-secondary: #334155;
+            --btn-secondary-border: #475569;
+            --btn-secondary-text: #D1D5DB;
+            --btn-secondary-hover: #4B5563;
+            --select2-choice-bg: var(--primary);
+            --select2-choice-text: #000000;
+            --scrollbar-track: #334155;
+            --scrollbar-thumb: var(--primary);
+            --gradient: linear-gradient(to top, #1ABB9C 50%, rgba(255, 255, 255, 0.2) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        /* Layout Structure */
+        .app-container {
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "sidebar main";
+            grid-template-columns: 20vw 80vw;
+            grid-template-rows: 70px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .app-header {
+            grid-area: header;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            text-decoration: none;
+            position: relative;
+            padding: 10px 20px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2));
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .logo-container:hover::before {
+            transform: translateX(200%);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: #4facfe;
+            animation: spin 2s linear infinite;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .user-display {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            width: 220px;
+        }
+
+        .home-link {
+            color: purple;
+            font-size: 1.5rem;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .home-link:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sidebar */
+        .app-sidebar {
+            grid-area: sidebar;
+            background: var(--surface);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border-right: 1px solid var(--border);
+        }
+
+        /* Main Content */
+        .app-main {
+            grid-area: main;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        /* Assessment Tiles */
+        .assessment-tile {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .assessment-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .tile-icon-container {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .tile-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .tile-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .tile-info {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .card-header-icon {
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-list {
+            list-style: none;
+        }
+
+        .card-list-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .card-list-item:hover {
+            background: var(--background);
+        }
+
+        .perspective-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .financial-tag { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .customer-tag { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .internal-tag { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .learning-tag { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-overlay);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--modal-border);
+            box-shadow: var(--modal-shadow);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background: var(--modal-header-bg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 187, 156, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.925rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 187, 156, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary);
+            color: var(--btn-secondary-text);
+            border: 1px solid var(--btn-secondary-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--btn-secondary-hover);
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .app-container {
+                grid-template-areas:
+                    "header"
+                    "main";
+                grid-template-columns: 1fr;
+                grid-template-rows: 70px 1fr;
+            }
+            
+            .app-sidebar {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+            }
+            
+            .modal-header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .modal-body {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .app-header {
+                padding: 0 1rem;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            .user-display {
+                width: 150px;
+            }
+        }
+
+/* Modal Styles */
+.sg-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sg-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sg-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+.sg-modal-overlay.active .sg-modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .modal-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+/* Balanced Scorecard Info */
+.bsc-info-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.bsc-info-box h4 {
+    color: #3498db;
+    margin: 15px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bsc-perspectives {
+    list-style: none;
+    margin: 15px 0;
+}
+
+.bsc-perspectives li {
+    margin-bottom: 12px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.bsc-perspectives li:before {
+    content: "•";
+    position: absolute;
+    left: 15px;
+    color: #3498db;
+    font-size: 1.2rem;
+}
+
+.bsc-benefits {
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+/* Target Configuration Tiles */
+.target-tile {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.target-tile:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Form Elements */
+.sg-form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sg-form-group {
+    margin-bottom: 15px;
+}
+
+.sg-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sg-form-select, .date-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: border 0.3s ease;
+}
+
+.sg-form-select:focus, .date-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.sg-form-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: black;
+    transition: border-color 0.2s ease, background 0.3s ease;
+}
+
+.sg-form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 3px rgba(26, 187, 156, 0.3);
+}
+
+.modern-input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.beautiful-select2 {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Date Picker */
+.date-picker-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.date-input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.date-action-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.date-action-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #2573a7);
+}
+
+.btn-arrow {
+    width: 18px;
+    height: 18px;
+}
+
+/* Goal Types Container */
+.goal-types-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+    min-height: 200px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.goal-type-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 15px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 5px;
+}
+
+.goal-type-card:hover {
+    border-color: #3498db;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.15);
+    transform: translateX(5px);
+}
+
+.goal-type-card i {
+    margin-right: 10px;
+    color: #3498db;
+    font-size: 1.2rem;
+}
+
+.goal-type-card.dragging {
+    opacity: 0.5;
+    background: #f0f7ff;
+    transform: scale(0.98);
+}
+
+/* Priority Textboxes */
+.priority-textbox {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.highest-priority {
+    background-color: #34C759;
+    color: #fff;
+}
+
+.high-priority {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.medium-priority {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.lowest-priority {
+    background-color: #F44336;
+    color: #fff;
+}
+
+/* Tags Container */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    min-height: 40px;
+}
+
+.tag {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #2573a7);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+}
+
+/* Instructions */
+.instructions {
+    background: #e8f4fc;
+    border-left: 4px solid #3498db;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.instructions h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.instructions ul {
+    padding-left: 25px;
+}
+
+.instructions li {
+    margin-bottom: 8px;
+}
+
+/* Refresh Icon */
+.refresh-icon {
+    padding: 8px 12px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.refresh-icon .icon {
+    display: none;
+}
+
+.refresh-icon:hover .text {
+    display: none;
+}
+
+.refresh-icon:hover .icon {
+    display: inline-block;
+    animation: spin 0.5s linear;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Supplemental styles for modal-actions buttons */
+.modal-actions {
+    overflow-x: auto; /* Allow horizontal scrolling if buttons overflow */
+    white-space: nowrap; /* Prevent premature wrapping */
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #2980b9, #2573a7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.btn-primary:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    .modal-actions {
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        gap: 8px;
+        padding: 12px 16px;
+    }
+    .btn-primary {
+        width: 100px; /* Slightly smaller buttons */
+        height: 36px;
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-actions {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch;
+    }
+    .btn-primary {
+        width: 100%; /* Full-width buttons */
+        height: 40px;
+        min-width: unset;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <a href="#" class="logo-container">
+                <i class="fas fa-cog logo-icon"></i>
+                <span class="logo-text">Setting</span>
+            </a>
+            
+            <input type="text" id="username-display" class="user-display" readonly>
+            
+            <a href="http://127.0.0.1:8002/employee-appraisal/?username=#" class="home-link">
+                <i class="fa fa-home"></i>
+            </a>
+        </header>
+        
+        <!-- Sidebar -->
+        <aside class="app-sidebar">
+            <!-- Peer Review Tile -->
+            <div class="assessment-tile" onclick="openModal('peerModal')">
+                <div class="tile-icon-container" style="background: rgba(52, 152, 219, 0.1);">
+                    <svg style="width: 40px; height: 40px;" viewBox="0 0 24 24">
+                        <path fill="#3498db" d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9A3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42c-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3a3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3a3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.536 5.536 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13v-1.75M0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9c-.59.68-.95 1.62-.95 2.65V20H0m24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65c2.56.34 4.45 1.51 4.45 2.9V20z"/>
+                    </svg>
+                </div>
+                <h3 class="tile-title">Peer Review</h3>
+                <p class="tile-description">Cross-functional assessment</p>
+                <div class="tile-info">
+                    <i class="fas fa-info-circle" style="color: #3498db;"></i> 
+                    <span>Evaluate collaboration across departments</span>
+                </div>
+            </div>
+            
+            <!-- Self Assessment Tile -->
+            <div class="assessment-tile" onclick="openModal('selfModal')">
+                <div class="tile-icon-container" style="background: rgba(46, 204, 113, 0.1);">
+                    <svg style="width: 40px; height: 40px;" viewBox="0 0 24 24">
+                        <path fill="#2ecc71" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zM7.07 18.28c.43-.9 3.05-1.78 4.93-1.78s4.51.88 4.93 1.78C15.57 19.36 13.86 20 12 20s-3.57-.64-4.93-1.72zm11.29-1.45c-1.43-1.74-4.9-2.33-6.36-2.33s-4.93.59-6.36 2.33A7.95 7.95 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8c0 1.82-.62 3.5-1.64 4.83zM12 6c-1.94 0-3.5 1.56-3.5 3.5S10.06 13 12 13s3.5-1.56 3.5-3.5S13.94 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/>
+                    </svg>
+                </div>
+                <h3 class="tile-title">Self Assessment</h3>
+                <p class="tile-description">Personal performance reflection</p>
+                <div class="tile-info">
+                    <i class="fas fa-info-circle" style="color: #2ecc71;"></i> 
+                    <span>Reflect on personal achievements</span>
+                </div>
+            </div>
+            
+            <!-- Employee Feedback Tile -->
+            <div class="assessment-tile" onclick="openModal('feedbackModal')">
+                <div class="tile-icon-container" style="background: rgba(155, 89, 182, 0.1);">
+                    <svg style="width: 40px; height: 40px;" viewBox="0 0 24 24">
+                        <path fill="#9b59b6" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7v-2h10v2zm0-3H7V6h10v2z"/>
+                    </svg>
+                </div>
+                <h3 class="tile-title">Employee Feedback</h3>
+                <p class="tile-description">Organizational sentiment analysis</p>
+                <div class="tile-info">
+                    <i class="fas fa-info-circle" style="color: #9b59b6;"></i> 
+                    <span>Measure employee satisfaction</span>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="app-main">
+            <header>
+                <h1>Strategic Goal Management</h1>
+                <p class="tile-description">Configure and manage your organization's strategic objectives with the Balanced Scorecard framework</p>
+            </header>
+            
+            <div class="dashboard-grid">
+                <!-- BSC Perspectives Card -->
+                <div class="dashboard-card">
+                    <div class="card-header" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                        <div class="card-header-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h2 class="card-title">BSC Perspectives</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-list">
+                            <li class="card-list-item">
+                                <div>Increase Market Share</div>
+                                <span class="perspective-tag financial-tag">Financial</span>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Improve Customer Satisfaction</div>
+                                <span class="perspective-tag customer-tag">Customer</span>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Streamline Operations</div>
+                                <span class="perspective-tag internal-tag">Internal</span>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Employee Development</div>
+                                <span class="perspective-tag learning-tag">Learning</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Goal Weight Card -->
+                <div class="dashboard-card">
+                    <div class="card-header" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                        <div class="card-header-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h2 class="card-title">Goal Weight</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+                            Strategic Prioritization
+                        </h3>
+                        <ul class="card-list">
+                            <li class="card-list-item">
+                                <div>Assign percentage weights to each goal</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Balance short-term with long-term vision</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Ensure total allocation equals 100%</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Department Allocation Card -->
+                <div class="dashboard-card">
+                    <div class="card-header" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                        <div class="card-header-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h2 class="card-title">Department Allocation</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 2px solid #9b59b6; padding-bottom: 0.5rem;">
+                            Organizational Alignment
+                        </h3>
+                        <ul class="card-list">
+                            <li class="card-list-item">
+                                <div>Assign primary and secondary owners</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Establish clear accountability</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Map interdependencies</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Timeline Card -->
+                <div class="dashboard-card">
+                    <div class="card-header" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+                        <div class="card-header-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <h2 class="card-title">Set Timelines</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 1rem; border-bottom: 2px solid #2ecc71; padding-bottom: 0.5rem;">
+                            Execution Roadmap
+                        </h3>
+                        <ul class="card-list">
+                            <li class="card-list-item">
+                                <div>Define milestones for each goal</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Establish review cadences</div>
+                            </li>
+                            <li class="card-list-item">
+                                <div>Align with budgeting cycles</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="openStrategicGoalsModal" style="margin-top: 2rem; width: 100%; max-width: 300px; display: block; margin-left: auto; margin-right: auto;">
+                <i class="fas fa-cog"></i> Configure Goals
+            </button>
+        </main>
+    </div>
+    
+<!-- Strategic Goals Modal -->
+<div id="sg-modal-overlay" class="sg-modal-overlay" style="display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 1000; transition: opacity 0.3s ease;">
+    <div class="sg-modal-content" onclick="event.stopPropagation()" style="background: white; border-radius: 12px; width: 85%; max-width: 900px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: translateY(20px); transition: transform 0.4s ease;">
+        <div class="modal-header" style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0;">
+            <h2 class="modal-title" style="font-size: 1.6rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-bullseye"></i>
+                Strategic Goal Configuration
+            </h2>
+            <button class="modal-close" onclick="closeModal('sg-modal-overlay')" style="background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: transform 0.3s ease;">×</button>
+        </div>
+        <div class="modal-body" style="padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+            <!-- Balanced Scorecard Info -->
+            <div class="bsc-info-box" style="background: #f8f9fa; border-radius: 10px; padding: 20px; box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);">
+                <h4 style="color: #3498db; margin: 10px 0; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+                    <i class="fas fa-info-circle"></i> About the Balanced Scorecard (BSC)
+                </h4>
+                <p style="font-size: 0.95rem; color: #34495e; line-height: 1.6;">The Balanced Scorecard (BSC) is a strategic management framework that helps organizations translate their vision and strategy into actionable objectives across four key perspectives.</p>
+                <h4 style="color: #3498db; margin: 15px 0 10px; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+                    <i class="fas fa-layer-group"></i> The Four Perspectives:
+                </h4>
+                <ul class="bsc-perspectives" style="list-style: none; margin: 10px 0; font-size: 0.9rem; color: #34495e;">
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;"><strong>Financial Perspective:</strong> Focuses on financial outcomes and creating shareholder value. Measures: ROI, revenue growth, cost reduction.</li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;"><strong>Customer Perspective:</strong> Measures customer satisfaction, retention, and market share. Focuses on customer value proposition.</li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;"><strong>Internal Business Processes:</strong> Emphasizes operational efficiency, quality, and innovation in key processes.</li>
+                    <li style="margin-bottom: 10px; padding-left: 25px; position: relative;"><strong>Learning & Growth:</strong> Focuses on human capital development, organizational culture, and technology capabilities.</li>
+                </ul>
+                <br>
+                <h4 style="color: #3498db; margin: 15px 0 10px; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+                    <i class="fas fa-star"></i> Key Benefits:
+                </h4>
+                <div class="bsc-benefits" style="background: rgba(52, 152, 219, 0.1); border-radius: 8px; padding: 15px; font-size: 0.9rem; color: #34495e;">
+                    <p><i class="fas fa-check" style="color: #3498db; margin-right: 8px;"></i> Provides a holistic view of organizational performance<br>
+                    <i class="fas fa-check" style="color: #3498db; margin-right: 8px;"></i> Aligns day-to-day work with strategic objectives<br>
+                    <i class="fas fa-check" style="color: #3498db; margin-right: 8px;"></i> Identifies areas for improvement and innovation<br>
+                    <i class="fas fa-check" style="color: #3498db; margin-right: 8px;"></i> Enables data-driven decision making</p>
+                </div>
+                <br>
+                <div class="instructions" style="background: #e8f4fc; border-left: 4px solid #3498db; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <h3 style="display: flex; align-items: center; gap: 8px; color: #2c3e50; margin-bottom: 10px; font-size: 1.2rem;">
+                        <i class="fas fa-info-circle"></i> How to Prioritize Goals
+                    </h3>
+                    <ul style="padding-left: 20px; font-size: 0.9rem; color: #34495e;">
+                        <li style="margin-bottom: 6px;">Drag and drop goal types to order them based on priority or select the only priority as the highest priority.</li>
+                        <li style="margin-bottom: 6px;">Goals at the top have higher strategic importance.</li>
+                        <li style="margin-bottom: 6px;">Click on a goal to configure its details.</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Target Configuration (Long/Medium/Short-term) -->
+            <div class="target-configuration" style="display: flex; flex-direction: column; gap: 20px; margin: 15px 0;">
+                               <div class="sg-form-group" style="margin-bottom: 15px;">
+                    <label class="sg-form-label" for="sg-type-select" style="display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50; font-size: 1rem;">
+                        <i class="fas fa-drag-icon" style="text-align: center;"></i> Goal Type (Drag to reorder priority)
+                    </label>
+                    <div class="goal-types-container" id="goalTypesContainer" style="background: #f8f9fa; border-radius: 10px; padding: 12px; min-height: 180px; display: flex; flex-direction: column; gap: 8px;">
+                        <div class="goal-type-card" draggable="true" data-type="Internal Business Processes" style="background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 12px; cursor: grab; display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                            <i class="fas fa-cogs" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> Internal Business Processes
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Financial Perspective" style="background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 12px; cursor: grab; display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                            <i class="fas fa-seedling" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> Financial Perspective
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Customer Perspective" style="background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 12px; cursor: grab; display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                            <i class="fas fa-shield-alt" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> Customer Perspective
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Learning & Growth" style="background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 12px; cursor: grab; display: flex; align-items: center; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                            <i class="fas fa-users" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> Learning & Growth
+                        </div>
+                    </div>
+                    <div class="priority-textboxes" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px;">
+                        <input type="text" class="priority-textbox highest-priority" value="Highest Priority" readonly style="padding: 8px; border: none; border-radius: 4px; text-align: center; font-size: 0.85rem; background-color: #34C759; color: white;">
+                        <input type="text" class="priority-textbox high-priority" value="High Priority" readonly style="padding: 8px; border: none; border-radius: 4px; text-align: center; font-size: 0.85rem; background-color: #4CAF50; color: white;">
+                        <input type="text" class="priority-textbox medium-priority" value="Medium Priority" readonly style="padding: 8px; border: none; border-radius: 4px; text-align: center; font-size: 0.85rem; background-color: #FFC107; color: black;">
+                        <input type="text" class="priority-textbox lowest-priority" value="Lowest Priority" readonly style="padding: 8px; border: none; border-radius: 4px; text-align: center; font-size: 0.85rem; background-color: #F44336; color: white;">
+                    </div>
+                    <button id="reset-button" class="refresh-icon" title="Refresh" style="margin-top: 8px; padding: 6px 12px; border: #f3f4f6; border-radius: 4px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: #fff;">
+                        <span class="text">Reset</span>
+                        <span class="icon" style="display: none;">↻</span>
+                    </button>
+                </div>
+                <div class="sg-form-group" style="margin-bottom: 10px;">
+                    <label class="sg-form-label" for="sg-goal-select" style="goal-label: 1rem; display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50;">
+                        <i class="fas fa-bullseye"></i> Strategic Goal
+                    </label>
+                    <select id="sg-goal-select" class="sg-form-select" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; width: 100%;">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="sg-form-group" style="margin-bottom: 10px;">
+                    <label class="sg-form-label" for="sg-weight-input" style="display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50;">
+                        <i class="fas fa-balance-scale"></i> Weight Allocation
+                    </label>
+                    <input list="sg-weight-options" id="sg-weight-input" class="sg-form-input" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; width: 100%; color: black;">
+                    <datalist id="sg-weight-options">
+                        <option value="0%">0%</option>
+                        <option value="5%">5%</option>
+                        <option value="10%">10%</option>
+                        <option value="15%">15%</option>
+                        <option value="20%">20%</option>
+                        <option value="25%">25%</option>
+                        <option value="30%">30%</option>
+                        <option value="35%">35%</option>
+                        <option value="40%">40%</option>
+                        <option value="45%">45%</option>
+                        <option value="50%">50%</option>
+                        <option value="55%">55%</option>
+                        <option value="60%">60%</option>
+                        <option value="65%">65%</option>
+                        <option value="70%">70%</option>
+                        <option value="75%">75%</option>
+                        <option value="80%">80%</option>
+                        <option value="85%">85%</option>
+                        <option value="90%">90%</option>
+                        <option value="95%">95%</option>
+                        <option value="100%">100%</option>
+                    </datalist>
+                </div>
+                
+                <div class="date-picker-card" style="background: #f8f9fa; border-radius: 8px; padding: 10px;">
+                    <label for="sg-date-picker" class="sg-form-label" style="display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50; font-size: 1rem;">
+                        <i class="fas fa-calendar-alt"></i> Due Date
+                    </label>
+                    <div class="date-input-group" style="display: flex; gap: 8px; margin-top: 8px;">
+                        <input type="date" id="sg-date-picker" class="date-input" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; flex-grow: 1;">
+                        <button type="button" id="end-of-review-btn" class="date-action-btn" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; border: none; border-radius: 6px; padding: 10px 15px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;">
+                            <span>End of Appraisal Period</span>
+                            <svg class="btn-arrow" style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sg-form-group" style="margin-bottom: 15px;">
+                    <label class="sg-form-label" for="departmentSelect" style="display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50;">
+                        <i class="fas fa-building"></i> Primary Goal Owner (Department)
+                    </label>
+                    <select id="departmentSelect" class="sg-form-select" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; width: 100%; color: black;">
+                        <option value="">Select an option</option>
+                    </select>
+                    <div class="tags-container" id="tags-container" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 30px;">
+                        <div class="tag" style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; border-radius: 16px; padding: 4px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                            <span class="tag-remove" onclick="removeTag(this)" style="cursor: pointer;">×</span> <span>Dept</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sg-form-group" style="margin-bottom: 20px;">
+                    <label class="departmentSelect1" for="sg-form-select" style="display: flex; align-items: center; gap: 8px; font-weight: 500; color: #2c3e50;">
+                        <i class="fas fa-building"></i> Secondary Goal Owner(s) (Department(s))
+                    </label>
+                    <select id="departmentSelect1" class="sg-form-select" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; width: 100%; color: black;">
+                        <option value="">Select an option</option>
+                    </select>
+                    <div class="tags-container" id="tags-container1" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 30px;">
+                        <div class="tag" style="background: linear-gradient(135deg, #3498db, #2c3e50); color: white; border-radius: 16px; padding: 4px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                            <span class="tag-remove" onclick="removeTag(this)" style="cursor: pointer;">×</span> <span>Dept</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Long-term Target Tile -->
+                <div class="target-tile" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 10px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-left: 4px solid #6c757d;">
+                    <div class="sg-form-group" style="margin-bottom: 12px;">
+                        <label class="sg-form-label" style="display: flex; align-items: center; color: #495057; font-weight: 600; margin-bottom: 12px; font-size: 1rem;">
+                            <i class="fas fa-long-arrow-alt-right" style="color: #6c757d; margin-right: 8px;"></i> 
+                            Long-term Target
+                            <select id="long-term-target-type" class="beautiful-select2" style="margin-left: 8px; flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <option value="">Auto set deadline</option>
+                                <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                <option value="one-month">One month</option>
+                                <option value="review-period-mid-term">Review period mid-term</option>
+                                <option value="review-period-end-date">Review period end-date</option>
+                                <option value="review-period-quarter">Review period quarter</option>
+                                <option value="review-period-third-quarter">Review period third quarter</option>
+                            </select>
+                        </label>
+                        <div class="target-container" style="display: grid; gap: 10px;">
+                            <div class="target-input-group" style="display: grid; grid-template-columns: 1fr 90px 110px; gap: 8px;">
+                                <input type="number" id="long-term-target" class="modern-input" placeholder="Target Value" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="long-term-target-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">UoM</option>
+                                </select>
+                                <input type="date" id="long-term-target-end-date" class="modern-input" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                            </div>
+                            <div class="budget-input-group" style="display: grid; grid-template-columns: 1fr 1fr 90px; gap: 8px;">
+                                <input type="number" id="long-term-target-required-budget" class="modern-input" placeholder="Req. Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <input type="number" id="long-term-target-actual-budget" class="modern-input" placeholder="Actual Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="long-term-budget-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">Currency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Medium-term Target Tile -->
+                <div class="target-tile" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 10px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-left: 4px solid #0d6efd;">
+                    <div class="sg-form-group" style="margin-bottom: 12px;">
+                        <label class="sg-form-label" style="display: flex; align-items: center; color: #495057; font-weight: 600; margin-bottom: 12px; font-size: 1rem;">
+                            <i class="fas fa-arrow-right" style="color: #0d6efd; margin-right: 8px;"></i> 
+                            Medium-term Target
+                            <select id="medium-term-target-type" class="beautiful-select2" style="margin-left: 8px; flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <option value="">Auto set deadline</option>
+                                <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                <option value="one-month">One month</option>
+                                <option value="review-period-mid-term">Review period mid-term</option>
+                                <option value="review-period-end-date">Review period end-date</option>
+                                <option value="review-period-quarter">Review period quarter</option>
+                                <option value="review-period-third-quarter">Review period third quarter</option>
+                            </select>
+                        </label>
+                        <div class="target-container" style="display: grid; gap: 10px;">
+                            <div class="target-input-group" style="display: grid; grid-template-columns: 1fr 90px 110px; gap: 8px;">
+                                <input type="number" id="medium-term-target" class="modern-input" placeholder="Target Value" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="medium-term-target-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">UoM</option>
+                                </select>
+                                <input type="date" id="medium-term-target-end-date" class="modern-input" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                            </div>
+                            <div class="budget-input-group" style="display: grid; grid-template-columns: 1fr 1fr 90px; gap: 8px;">
+                                <input type="number" id="medium-term-target-required-budget" class="modern-input" placeholder="Req. Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <input type="number" id="medium-term-target-actual-budget" class="modern-input" placeholder="Actual Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="medium-term-budget-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">Currency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Short-term Target Tile -->
+                <div class="target-tile" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 10px; padding: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-left: 4px solid #198754;">
+                    <div class="sg-form-group" style="margin-bottom: 12px;">
+                        <label class="sg-form-label" style="display: flex; align-items: center; color: #495057; font-weight: 600; margin-bottom: 12px; font-size: 1rem;">
+                            <i class="fas fa-arrow-right" style="color: #198754; margin-right: 8px;"></i> 
+                            Short-term Target
+                            <select id="short-term-target-type" class="beautiful-select2" style="margin-left: 8px; flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <option value="">Auto set deadline</option>
+                                <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                <option value="one-month">One month</option>
+                                <option value="review-period-mid-term">Review period mid-term</option>
+                                <option value="review-period-end-date">Review period end-date</option>
+                                <option value="review-period-quarter">Review period quarter</option>
+                                <option value="review-period-third-quarter">Review period third quarter</option>
+                            </select>
+                        </label>
+                        <div class="target-container" style="display: grid; gap: 10px;">
+                            <div class="target-input-group" style="display: grid; grid-template-columns: 1fr 90px 110px; gap: 8px;">
+                                <input type="number" id="short-term-target" class="modern-input" placeholder="Target Value" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="short-term-target-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">UoM</option>
+                                </select>
+                                <input type="date" id="short-term-target-end-date" class="modern-input" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                            </div>
+                            <div class="budget-input-group" style="display: grid; grid-template-columns: 1fr 1fr 90px; gap: 8px;">
+                                <input type="number" id="short-term-target-required-budget" class="modern-input" placeholder="Req. Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <input type="number" id="short-term-target-actual-budget" class="modern-input" placeholder="Actual Budget" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                <select id="short-term-budget-uom" class="beautiful-select2" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;">
+                                    <option value="">Currency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+ 
+<!-- End of .modal-body (omitted for brevity) -->
+<!-- Button group replacing .modal-actions -->
+
+
+    <button id="openStrategicGoalsRetrieveModal" class="btn btn-primary" style="width: 120px; height: 40px; padding: 8px 12px; font-size: 0.85rem; background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.3s ease; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <i class="fas fa-download" style="font-size: 0.8rem;"></i> Retrieve
+    </button>
+    <button class="btn btn-primary" onclick="saveStrategicGoals()" style="width: 120px; height: 40px; padding: 8px 12px; font-size: 0.85rem; background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.3s ease; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <i class="fas fa-save" style="font-size: 0.8rem;"></i> Save
+    </button>
+    <button class="btn btn-primary" onclick="refreshSettings()" style="width: 120px; height: 40px; padding: 8px 12px; font-size: 0.85rem; background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.3s ease; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <i class="fas fa-sync" style="font-size: 0.8rem;"></i> Refresh
+    </button>
+    <button class="btn btn-primary" onclick="updateSettings()" style="width: 120px; height: 40px; padding: 8px 12px; font-size: 0.85rem; background: linear-gradient(45deg, #3498db, #2980b9); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.3s ease; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <i class="fas fa-edit" style="font-size: 0.8rem;"></i> Update
+    </button>
+
+</div>
+</div>
+    
+    <!-- Peer Review Modal -->
+    <div id="peerModal" class="modal-overlay">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
+                <h2 class="modal-title">
+                    <i class="fas fa-users"></i>
+                    360° Peer Review Configuration
+                </h2>
+                <button class="modal-close" onclick="closeModal('peerModal')">×</button>
+            </div>       
+        <div style="padding: 25px; overflow-y: auto; flex: 1;">
+            <!-- Dropdown Configuration Section with inline styling -->
+            <div class="dropdown-container">
+                <div class="dropdown-row" style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px;">
+                    <div class="dropdown-group" style="flex: 1; min-width: 300px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <label class="dropdown-label" style="display: block; margin-bottom: 12px; color: #4a5568; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-random" style="color: #6a11cb;"></i>Reviewer Selection Method
+                        </label>
+                        <select class="dropdown-select" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; color: #2d3748; font-size: 1rem; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%236a11cb" viewBox="0 0 16 16"><path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;">
+                            <option>Random Peer Selection</option>
+                            <option>Employee-Chosen Peers</option>
+                            <option selected>Manager-Assigned Peers</option>
+                        </select>
+                    </div>
+                    
+                    <div class="dropdown-group" style="flex: 1; min-width: 300px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <label class="dropdown-label" style="display: block; margin-bottom: 12px; color: #4a5568; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-eye" style="color: #6a11cb;"></i>Feedback Visibility
+                        </label>
+                        <select class="dropdown-select" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; color: #2d3748; font-size: 1rem; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%236a11cb" viewBox="0 0 16 16"><path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;">
+                            <option>Anonymous to Reviewee</option>
+                            <option>Identified Feedback</option>
+                            <option selected>Manager-Only Visibility</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="f_form_group" class="form-group" style="margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <label id="f_assessment_frequency_label" class="form-label" style="display: block; margin-bottom: 10px; font-weight: 600; color: #2d3748; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-history" style="color: #0c4b6e;"></i>Assessment Frequency
+            </label>
+            <select id="f_assessment_frequency" class="form-control" style="width: 100%; padding: 12px 16px;color: black; border: 1px solid #e2e8f0; border-radius: 8px; background: white; font-size: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); transition: all 0.3s ease;" onfocus="this.style.borderColor='#1a6ea9'; this.style.boxShadow='0 0 0 3px rgba(26, 110, 169, 0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.05)'">
+                <option id="p_auto_set_deadline" value="">Auto set deadline</option>
+                <option id="p_specify_end_of_cycle" value="specify-end-of-cycle">Specify cycle (end of cycle deadline)</option>
+                <option id="p_one_month" value="one-month">One month</option>
+                <option id="p_review_period_mid_term" value="review-period-mid-term">Review period mid-term</option>
+                <option id="p_review_period_end_date" value="review-period-end-date">Review period end-date</option>
+                <option id="p_review_period_quarter" value="review-period-quarter">Review period quarter</option>
+                <option id="p_review_period_third_quarter" value="review-period-third-quarter">Review period third quarter</option>
+            </select>
+            </div>              
+            <!-- Criteria Cards Section -->
+            <div style="border-top: 2px solid #e2e8f0; padding-top: 25px; margin-top: 15px;">
+                <h4 style="font-size: 1.4rem; color: #6a11cb; margin-bottom: 25px; display: flex; align-items: center;">
+                    <i class="fas fa-star" style="margin-right: 10px;"></i>Review Criteria Configuration
+                </h4>
+                
+                <!-- First row of criteria cards -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <!-- Innovation Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'innovation')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #8a2be2; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(138, 43, 226, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-lightbulb" style="color: #8a2be2; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #6a11cb; margin: 0;">Innovation</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Ability to generate new ideas and solutions
+                        </p>
+                    </div>
+                    
+                    <!-- Communication Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'communication')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #4a86e8; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(74, 134, 232, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-comments" style="color: #4a86e8; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #4a86e8; margin: 0;">Communication</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Clarity and effectiveness in conveying ideas
+                        </p>
+                    </div>
+                    
+                    <!-- Collaboration Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'collaboration')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #5bbfba; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(91, 191, 186, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-hands-helping" style="color: #5bbfba; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #5bbfba; margin: 0;">Collaboration</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Effectiveness in working with others
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Second row of criteria cards -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                    <!-- Problem Solving Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'problem-solving')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #ff6b6b; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255, 107, 107, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-puzzle-piece" style="color: #ff6b6b; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #ff6b6b; margin: 0;">Problem Solving</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Ability to analyze and resolve complex issues
+                        </p>
+                    </div>
+                    
+                    <!-- Leadership Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'leadership')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #4ecdc4; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(78, 205, 196, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-chess-king" style="color: #4ecdc4; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #4ecdc4; margin: 0;">Leadership</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Ability to guide and inspire team members
+                        </p>
+                    </div>
+                    
+                    <!-- Adaptability Card -->
+                    <div class="criteria-card" onclick="openCriteriaSection(this, 'adaptability')" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #ffd166; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; background: rgba(255, 209, 102, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-sync-alt" style="color: #ffd166; font-size: 1.3rem;"></i>
+                            </div>
+                            <h5 style="font-size: 1.25rem; color: #ffd166; margin: 0;">Adaptability</h5>
+                        </div>
+                        <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.5;">
+                            Ability to adjust to new conditions and challenges
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Full-width question section -->
+                <div id="question-section" style="display: none; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); margin-top: 20px; animation: fadeIn 0.4s ease-out;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h5 id="active-criteria-title" style="font-size: 1.4rem; color: #6a11cb; margin: 0;"></h5>
+                        <button id="add-question-btn" style="background: #6a11cb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; display: flex; align-items: center; transition: all 0.3s ease;">
+                            <i class="fas fa-plus" style="margin-right: 8px;"></i>Add Question
+                        </button>
+                    </div>
+                    <p id="active-criteria-desc" style="color: #4a5568; margin-bottom: 20px; font-style: italic; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0;"></p>
+                    
+                    <div id="question-container" style="margin-top: 20px;">
+                        <!-- Questions will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+<div style="background: #f8f9fa; padding: 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 -4px 10px rgba(0,0,0,0.03);">
+  <button id="p_refresh" onclick="p_refreshSettings()" style="background: #718096; color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 3px 8px rgba(113, 128, 150, 0.2); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; width: 150px;">
+    <i class="fas fa-sync-alt" style="margin-right: 8px;"></i>Refresh
+  </button>
+  <button id="p_retrieve" onclick="p_retrieveSettings()" style="background: #38a169; color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 3px 8px rgba(56, 161, 105, 0.2); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; width: 150px;">
+    <i class="fas fa-download" style="margin-right: 8px;"></i>Retrieve
+  </button>
+  <button id="p_update" onclick="p_updateSettings()" style="background: #3182ce; color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 3px 8px rgba(49, 130, 206, 0.2); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; width: 150px;">
+    <i class="fas fa-cloud-upload-alt" style="margin-right: 8px;"></i>Update
+  </button>
+  <button id="p_save" onclick="p_savePeerSettings()" style="background: #805ad5; color: white; border: none; padding: 12px 0px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 3px 8px rgba(128, 90, 213, 0.2); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; width: 150px;">
+    <i class="fas fa-save" style="margin-right: 8px;"></i>Save
+  </button>
+</div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Self Assessment Modal -->
+    <div id="selfModal" class="modal-overlay">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header" style="background: linear-gradient(135deg, #0c4b6e, #1a6ea9);">
+                <h2 class="modal-title">
+                    <i class="fas fa-user-check"></i>
+                    Self Assessment Setup
+                </h2>
+                <button class="modal-close" onclick="closeModal('selfModal')">×</button>
+            </div>
+
+        
+        <!-- Modal Content -->
+        <div style="padding: 25px; overflow-y: auto; flex: 1;">          
+            <!-- Assessment Frequency -->
+            <div class="form-group" style="margin-bottom: 25px;">
+                <label class="form-label" style="display: block; margin-bottom: 10px; font-weight: 600; color: #2d3748; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                   <i class="fas fa-history" style="color: #0c4b6e;"></i>Assessment Frequency
+                </label> 
+                <select class="form-control" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: white;color: #000; font-size: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); transition: all 0.3s ease;" onfocus="this.style.borderColor='#1a6ea9'; this.style.boxShadow='0 0 0 3px rgba(26, 110, 169, 0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.05)'">                   
+                    <option id="s_specify_end_of_cycle" value="specify-end-of-cycle">Specify cycle (end of cycle deadline)</option>
+                    <option id="s_one_month" value="one-month">One month</option>
+                    <option id="s_review_period_quarter" value="review-period-quarter">Review period quarter</option>
+                    <option id="s_review_period_mid_term" value="review-period-mid-term">Review period mid-term</option>
+                    <option id="s_review_period_third_quarter" value="review-period-third-quarter">Review period third quarter</option>
+                    <option id="s_review_period_end_date" value="review-period-end-date">Review period end-date</option>
+                </select>
+            </div>
+            
+            <!-- Competence Areas -->
+            <div class="form-group" style="margin-bottom: 25px;">
+                <label class="form-label" style="display: block; margin-bottom: 15px; font-weight: 600; color: #2d3748; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-shapes" style="color: #0c4b6e;"></i>Competence Areas
+                </label>
+                <div id="competence-buttons" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;">
+                    <!-- Communication Skills -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Communication Skills')" style="background: linear-gradient(135deg, #f0f7ff 0%, #c9e2ff 100%); color: #1a4b8c; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(25, 113, 194, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-comments" style="margin-right: 8px;"></i>Communication Skills
+                    </button>
+                    
+                    <!-- Managing Multigenerational Teams -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Managing Multigenerational Teams')" style="background: linear-gradient(135deg, #fff5f0 0%, #ffd9c9 100%); color: #8c3a1a; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(194, 65, 25, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-users" style="margin-right: 8px;"></i>Managing Multigenerational Teams
+                    </button>
+                    
+                    <!-- Performance Feedback -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Performance Feedback')" style="background: linear-gradient(135deg, #f0fff4 0%, #c9ffd9 100%); color: #1a8c3a; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(25, 194, 113, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-chart-line" style="margin-right: 8px;"></i>Performance Feedback
+                    </button>
+                    
+                    <!-- Career Development Support -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Career Development Support')" style="background: linear-gradient(135deg, #f5f0ff 0%, #d9c9ff 100%); color: #4a1a8c; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(113, 25, 194, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-briefcase" style="margin-right: 8px;"></i>Career Development Support
+                    </button>
+                    
+                    <!-- Strengths-Based Leadership -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Strengths-Based Leadership')" style="background: linear-gradient(135deg, #fff0f5 0%, #ffc9d9 100%); color: #8c1a4a; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(194, 25, 113, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-chess-queen" style="margin-right: 8px;"></i>Strengths-Based Leadership
+                    </button>
+                    
+                    <!-- Change Advocacy -->
+                    <button class="btn" type="button" onclick="createCompetenceArea('Change Advocacy')" style="background: linear-gradient(135deg, #f0f9ff 0%, #c9e9ff 100%); color: #1a5d8c; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(25, 144, 194, 0.1); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);"></div>
+                        <i class="fas fa-exchange-alt" style="margin-right: 8px;"></i>Change Advocacy
+                    </button>
+                </div>
+
+                <div id="competence-container" style="display: flex; flex-direction: column; gap: 20px; margin-top: 25px;"></div>
+            </div>
+        </div>
+        
+        <!-- Modal Footer - Centered Action Buttons -->
+        <div style="background: #f8f9fa; padding: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 -4px 10px rgba(0,0,0,0.03);">
+            <button id="s_refresh" onclick="s_refreshSettings()" style="background: linear-gradient(135deg, #a0aec0 0%, #718096 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;">
+                <i class="fas fa-sync-alt"></i>Refresh
+            </button>
+            <button id="s_retrieve" onclick="s_retrieveSettings()" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;">
+                <i class="fas fa-download"></i>Retrieve
+            </button>
+            <button id="s_update" onclick="s_updateSettings()" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;">
+                <i class="fas fa-cloud-upload-alt"></i>Update
+            </button>
+            <button id="s_save" onclick="s_saveSettings()" style="background: linear-gradient(135deg, #0c4b6e 0%, #1a6ea9 100%); color: white; border: none; padding: 14px 28px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center; box-shadow: 0 4px 6px rgba(12, 75, 110, 0.3);">
+                <i class="fas fa-save"></i>Save
+            </button>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal-overlay">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header" style="background: linear-gradient(135deg, #2c5282, #3182ce);">
+                <h2 class="modal-title">
+                    <i class="fas fa-comments"></i>
+                    Employee Feedback Configuration
+                </h2>
+                <button class="modal-close" onclick="closeModal('feedbackModal')">×</button>
+            </div>
+        <!-- Modal Content -->
+        <div style="padding: 25px; overflow-y: auto; flex: 1;">
+            <!-- Assessment Frequency -->
+            <div id="f_form_group" class="form-group" style="margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <label id="f_assessment_frequency_label" class="form-label" style="display: block; margin-bottom: 10px; font-weight: 600; color: #2d3748; font-size: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-history" style="color: #0c4b6e;"></i>Assessment Frequency
+            </label>
+            <select id="f_assessment_frequency" class="form-control" style="width: 100%; padding: 12px 16px;color: black; border: 1px solid #e2e8f0; border-radius: 8px; background: white; font-size: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); transition: all 0.3s ease;" onfocus="this.style.borderColor='#1a6ea9'; this.style.boxShadow='0 0 0 3px rgba(26, 110, 169, 0.1)'" onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.05)'">
+                <option id="f_auto_set_deadline" value="">Auto set deadline</option>
+                <option id="f_specify_end_of_cycle" value="specify-end-of-cycle">Specify cycle (end of cycle deadline)</option>
+                <option id="f_one_month" value="one-month">One month</option>
+                <option id="f_review_period_mid_term" value="review-period-mid-term">Review period mid-term</option>
+                <option id="f_review_period_end_date" value="review-period-end-date">Review period end-date</option>
+                <option id="f_review_period_quarter" value="review-period-quarter">Review period quarter</option>
+                <option id="f_review_period_third_quarter" value="review-period-third-quarter">Review period third quarter</option>
+            </select>
+            </div>           
+            <!-- Feedback Configuration Sections -->
+            <div style="border-top: 2px solid #e2e8f0; padding-top: 25px; margin-top: 15px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h4 style="font-size: 1.3rem; color: #2c5282; margin-bottom: 25px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-tasks" style="margin-right: 10px;"></i>Feedback Aspect Configuration
+                </h4>
+                
+                <!-- Job Satisfaction Section -->
+                <div style="background: rgba(26, 187, 156, 0.08); border-radius: 12px; padding: 20px; margin-bottom: 25px; border-left: 4px solid #1ABB9C;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h5 style="font-size: 1.2rem; color: #1a936f; display: flex; align-items: center;">
+                            <i class="fas fa-smile" style="margin-right: 10px;"></i>Job Satisfaction
+                        </h5>
+                        <button onclick="addQuestion(this)" style="background: #1ABB9C; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; display: flex; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(26, 187, 156, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                            <i class="fas fa-plus" style="margin-right: 6px;"></i>Add Question
+                        </button>
+                    </div>
+                    <p style="color: #4a5568; margin-bottom: 20px; font-style: italic; background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center;">
+                        Evaluate your work fulfillment and engagement levels
+                    </p>
+                    
+                    <div class="question-container">
+                        <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
+                            <input type="text" placeholder="Enter question text" value="How satisfied are you with your current role?" style="flex: 1; padding: 12px 16px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px;">
+                            <select style="padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px; min-width: 170px;">
+                                <option>Rating Scale (1-5)</option>
+                                <option>Multiple Choice</option>
+                                <option>Text Answer</option>
+                                <option>True / False</option>
+                            </select>
+                            <button onclick="removeQuestion(this)" style="background: #e53e3e; color: white; border: none; border-radius: 8px; padding: 12px 16px; cursor: pointer; min-width: 40px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(229, 62, 62, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Work-Life Balance Section -->
+                <div style="background: rgba(66, 153, 225, 0.08); border-radius: 12px; padding: 20px; margin-bottom: 25px; border-left: 4px solid #4299e1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h5 style="font-size: 1.2rem; color: #2b6cb0; display: flex; align-items: center;">
+                            <i class="fas fa-balance-scale" style="margin-right: 10px;"></i>Work-Life Balance
+                        </h5>
+                        <button onclick="addQuestion(this)" style="background: #4299e1; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; display: flex; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(66, 153, 225, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                            <i class="fas fa-plus" style="margin-right: 6px;"></i>Add Question
+                        </button>
+                    </div>
+                    <p style="color: #4a5568; margin-bottom: 20px; font-style: italic; background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center;">
+                        Measure your equilibrium between professional and personal life
+                    </p>
+                    
+                    <div class="question-container">
+                        <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
+                            <input type="text" placeholder="Enter question text" value="How manageable is your current workload?" style="flex: 1; padding: 12px 16px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px;">
+                            <select style="padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px; min-width: 170px;">
+                                <option>Rating Scale (1-5)</option>
+                                <option>Multiple Choice</option>
+                                <option selected>Text Answer</option>
+                                <option>True / False</option>
+                            </select>
+                            <button onclick="removeQuestion(this)" style="background: #e53e3e; color: white; border: none; border-radius: 8px; padding: 12px 16px; cursor: pointer; min-width: 40px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(229, 62, 62, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Growth & Development Section -->
+                <div style="background: rgba(214, 158, 46, 0.08); border-radius: 12px; padding: 20px; margin-bottom: 10px; border-left: 4px solid #d69e2e;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h5 style="font-size: 1.2rem; color: #b7791f; display: flex; align-items: center;">
+                            <i class="fas fa-seedling" style="margin-right: 10px;"></i>Growth & Development
+                        </h5>
+                        <button onclick="addQuestion(this)" style="background: #d69e2e; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 14px; display: flex; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(214, 158, 46, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                            <i class="fas fa-plus" style="margin-right: 6px;"></i>Add Question
+                        </button>
+                    </div>
+                    <p style="color: #4a5568; margin-bottom: 20px; font-style: italic; background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center;">
+                        Evaluate learning opportunities and career progression
+                    </p>
+                    
+                    <div class="question-container">
+                        <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
+                            <input type="text" placeholder="Enter question text" value="Do you feel you have opportunities for growth in your current role?" style="flex: 1; padding: 12px 16px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px;">
+                            <select style="padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px; min-width: 170px;">
+                                <option selected>True / False</option>
+                                <option>Rating Scale (1-5)</option>
+                                <option>Multiple Choice</option>
+                                <option>Text Answer</option>
+                            </select>
+                            <button onclick="removeQuestion(this)" style="background: #e53e3e; color: white; border: none; border-radius: 8px; padding: 12px 16px; cursor: pointer; min-width: 40px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(229, 62, 62, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
+                            <input type="text" placeholder="Enter question text" value="How satisfied are you with the learning resources provided?" style="flex: 1; padding: 12px 16px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px;">
+                            <select style="padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 8px; background: white; font-size: 15px; min-width: 170px;">
+                                <option>Rating Scale (1-5)</option>
+                                <option selected>Multiple Choice</option>
+                                <option>Text Answer</option>
+                                <option>True / False</option>
+                            </select>
+                            <button onclick="removeQuestion(this)" style="background: #e53e3e; color: white; border: none; border-radius: 8px; padding: 12px 16px; cursor: pointer; min-width: 40px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(229, 62, 62, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Footer - Centered Action Buttons -->
+        <div style="background: #f8f9fa; padding: 20px; border-top: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 -4px 10px rgba(0,0,0,0.03);">
+        <button id="f_refresh" onclick="f_refreshSettings()" style="background: linear-gradient(135deg, #a0aec0 0%, #718096 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(113, 128, 150, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+            <i class="fas fa-sync-alt"></i>Refresh
+        </button>
+        <button id="f_retrieve" onclick="f_retrieveSettings()" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(56, 161, 105, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+            <i class="fas fa-download"></i>Retrieve
+        </button>
+        <button id="f_update" onclick="f_updateSettings()" style="background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(49, 130, 206, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'">
+            <i class="fas fa-cloud-upload-alt"></i>Update
+        </button>
+        <button id="f_save" onclick="f_saveSettings()" style="background: linear-gradient(135deg, #2c5282 0%, #1a6ea9 100%); color: white; border: none; padding: 14px 28px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: center; box-shadow: 0 4px 6px rgba(12, 75, 110, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 12px rgba(44, 82, 130, 0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 6px rgba(12, 75, 110, 0.3)'">
+            <i class="fas fa-save"></i>Save
+        </button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // Set username from localStorage
+        document.getElementById('username-display').value = localStorage.getItem('username') || '';
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Open strategic goals modal
+        document.getElementById('openStrategicGoalsModal').addEventListener('click', () => {
+            openModal('sg-modal-overlay');
+        });
+        
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
+        });
+        
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+
+
+
+async function populateSelect() {
+    const companyCode = document.getElementById('company_code')?.value.trim();
+    const selectElements = [
+        document.getElementById('departmentSelect'),
+        document.getElementById('departmentSelect1')
+    ].filter(el => el); // Filter out null elements
+
+    if (!companyCode) {
+        selectElements.forEach(select => {
+            select.innerHTML = '<option value="">Select departments</option>';
+        });
+        return;
+    }
+
+    const departments = await fetchDepartments(companyCode);
+    selectElements.forEach(select => {
+        select.innerHTML = '<option value="">Select departments</option>';
+        departments.forEach(department => {
+            const option = document.createElement('option');
+            option.value = department;
+            option.textContent = department;
+            select.appendChild(option);
+        });
+        $(select).select2({
+            placeholder: 'Select departments',
+            allowClear: true,
+            dropdownCssClass: 'select2-dropdown'
+        });
+    });
+}
+
+// State management for selected departments
+let selectedValuesArray = [];
+const selectedValuesTextBox = document.getElementById('selectedValues');
+
+['departmentSelect', 'departmentSelect1'].forEach(selectId => {
+    const selectElement = document.getElementById(selectId);
+    if (selectElement) {
+        selectElement.addEventListener('change', function() {
+            const selectedOptions = Array.from(this.selectedOptions);
+            selectedOptions.forEach(option => {
+                if (option.value && !selectedValuesArray.includes(option.value)) {
+                    selectedValuesArray.push(option.value);
+                    addDepartmentTag(option.value, selectId === 'departmentSelect' ? 'tags-container' : 'tags-container1');
+                }
+            });
+            selectedValuesTextBox.value = selectedValuesArray.join(', ');
+            this.value = '';
+            $(this).trigger('change.select2'); // Update Select2
+        });
+    }
+});
+
+function addDepartmentTag(department, containerId) {
+    const container = document.getElementById(containerId);
+    const exists = [...container.querySelectorAll('.tag')].some(tag => 
+        tag.dataset.department.toLowerCase() === department.toLowerCase()
+    );
+    if (!exists) {
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.dataset.department = department;
+        tag.innerHTML = `${capitalizeFirstLetter(department)} <span class="tag-remove" onclick="removeTag(this, '${containerId}')">×</span>`;
+        container.appendChild(tag);
+    }
+}
+
+function removeTag(element, containerId) {
+    const tag = element.parentElement;
+    const department = tag.dataset.department;
+    tag.remove();
+    selectedValuesArray = selectedValuesArray.filter(dep => dep !== department);
+    selectedValuesTextBox.value = selectedValuesArray.join(', ');
+    const selectId = containerId === 'tags-container' ? 'departmentSelect' : 'departmentSelect1';
+    const selectElement = document.getElementById(selectId);
+    if (selectElement) {
+        const option = Array.from(selectElement.options).find(opt => opt.value === department);
+        if (option) option.disabled = false;
+        $(selectElement).trigger('change.select2');
+    }
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Drag-and-drop functionality
+function initializeDragAndDrop() {
+    const cards = goalTypesContainer.querySelectorAll('.goal-type-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('dragstart', function() {
+            draggedItem = this;
+            this.classList.add('dragging');
+        });
+        
+        card.addEventListener('dragend', function() {
+            this.classList.remove('dragging');
+            draggedItem = null;
+            updatePriorityIndicators();
+            saveToLocalStorage();
+        });
+    });
+
+    goalTypesContainer.addEventListener('dragover', e => {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(goalTypesContainer, e.clientY);
+        const currentItem = document.querySelector('.dragging');
+        if (!afterElement) {
+            goalTypesContainer.appendChild(currentItem);
+        } else {
+            goalTypesContainer.insertBefore(currentItem, afterElement);
+        }
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.goal-type-card:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        }
+        return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function updatePriorityIndicators() {
+    const cards = goalTypesContainer.querySelectorAll('.goal-type-card');
+    cards.forEach(card => {
+        const label = card.querySelector('.priority-label');
+        if (label) card.removeChild(label);
+    });
+
+    if (cards.length > 0) {
+        const firstCard = cards[0];
+        const lastCard = cards[cards.length - 1];
+        firstCard.innerHTML += '<div class="priority-label" style="font-size: 0.8rem; color: #3498db; margin-top: 4px;"><i class="fas fa-arrow-up"></i> Highest Priority</div>';
+        lastCard.innerHTML += '<div class="priority-label" style="font-size: 0.8rem; color: #e74c3c; margin-top: 4px;"><i class="fas fa-arrow-down"></i> Lowest Priority</div>';
+    }
+}
+
+// Reset functionality
+resetButton.addEventListener('click', () => {
+    const cards = goalTypesContainer.querySelectorAll('.goal-type-card');
+    const defaultOrder = [
+        'Internal Business Processes',
+        'Financial Perspective',
+        'Customer Perspective',
+        'Learning & Growth'
+    ];
+
+    // Clear and recreate cards in default order
+    goalTypesContainer.innerHTML = '';
+    defaultOrder.forEach(type => {
+        const card = document.createElement('div');
+        card.className = 'goal-type-card';
+        card.draggable = true;
+        card.dataset.type = type;
+        card.innerHTML = `
+            <i class="fas fa-${type === 'Internal Business Processes' ? 'cogs' : type === 'Financial Perspective' ? 'seedling' : type === 'Customer Perspective' ? 'shield-alt' : 'users'}" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> 
+            ${type}
+        `;
+        goalTypesContainer.appendChild(card);
+    });
+
+    // Reinitialize drag-and-drop
+    initializeDragAndDrop();
+    updatePriorityIndicators();
+
+    // Clear priority textboxes
+    document.querySelectorAll('.priority-textbox').forEach((textbox, index) => {
+        const originalValues = ['Highest Priority', 'High Priority', 'Medium Priority', 'Lowest Priority'];
+        textbox.value = originalValues[index];
+        textbox.readOnly = true;
+        textbox.style.background = index === 0 ? '#34C759' : index === 1 ? '#4CAF50' : index === 2 ? '#FFC107' : '#F44336';
+        textbox.style.color = index ===  Thrown: index === 2 ? 'black' : 'white';
+    });
+
+    // Clear local storage
+    localStorage.removeItem('priorities');
+});
+
+// Save priorities to local storage
+function saveToLocalStorage() {
+    const priorities = [...goalTypesContainer.querySelectorAll('.goal-type-card')]
+        .map(card => card.dataset.type);
+    localStorage.setItem('priorities', JSON.stringify(priorities));
+}
+
+// Load priorities from local storage
+function loadFromLocalStorage() {
+    const priorities = JSON.parse(localStorage.getItem('priorities'));
+    if (priorities) {
+        goalTypesContainer.innerHTML = '';
+        priorities.forEach(type => {
+            const card = document.createElement('div');
+            card.className = 'goal-type-card';
+            card.draggable = true;
+            card.dataset.type = type;
+            card.innerHTML = `
+                <i class="fas fa-${type === 'Internal Business Processes' ? 'cogs' : type === 'Financial Perspective' ? 'seedling' : type === 'Customer Perspective' ? 'shield-alt' : 'users'}" style="margin-right: 8px; color: #3498db; font-size: 1.1rem;"></i> 
+                ${type}
+            `;
+            goalTypesContainer.appendChild(card);
+        });
+        initializeDragAndDrop();
+        updatePriorityIndicators();
+    } else {
+        initializeDragAndDrop();
+        updatePriorityIndicators();
+    }
+}
+
+// Populate date picker with latest review period
+async function fetchLatestReviewPeriod(companyCode) {
+    if (!companyCode) return null;
+    try {
+        const response = await fetch(`/review-periods/?company_code=${encodeURIComponent(companyCode)}`);
+        if (!response.ok) throw new Error('Failed to fetch review periods');
+        const reviewPeriods = await response.json();
+        return reviewPeriods.length > 0 ? reviewPeriods.reduce((latest, current) => {
+            return current.review > latest.review ? current : latest;
+        }) : null;
+    } catch (error) {
+        console.error('Error fetching review periods:', error);
+        return null;
+    }
+}
+
+async function populateDatePicker() {
+    const companyCode = document.getElementById('company_code')?.value.trim();
+    const dateInput = document.getElementById('sg-date-picker');
+    if (!companyCode || !dateInput) return;
+
+    const reviewPeriod = await fetchLatestReviewPeriod(companyCode);
+    dateInput.value = reviewPeriod ? reviewPeriod.period_end_date : new Date().toISOString().split('T')[0];
+}
+
+// Initialize Flatpickr
+document.addEventListener('DOMContentLoaded', () => {
+    flatpickr('#sg-date-picker', {
+        dateFormat: 'Y-m-d',
+        minDate: 'today'
+    });
+    fetchUOMs();
+    loadFromLocalStorage();
+    populateSelect();
+});
+
+// End of appraisal period button
+document.getElementById('end-of-review-btn').addEventListener('click', async () => {
+    const companyCode = document.getElementById('company_code')?.value.trim();
+    const dateInput = document.getElementById('sg-date-picker');
+    if (!companyCode) {
+        alert('Please enter a company code.');
+        return;
+    }
+
+    const reviewPeriod = await fetchLatestReviewPeriod(companyCode);
+    if (reviewPeriod) {
+        dateInput.value = reviewPeriod.period_end_date;
+    } else {
+        alert('No review periods found for this company code.');
+        dateInput.value = '';
+    }
+});
+
+// Placeholder button functions
+function saveStrategicGoals() {
+    alert('Strategic goals saved successfully!');
+    sgCloseModal();
+}
+
+function refreshSettings() {
+    alert('Settings refreshed to last saved version');
+}
+
+function updateSettings() {
+    alert('Settings updated with current changes');
+}
+
+
+
+
+    </script>
+</body>
+</html>

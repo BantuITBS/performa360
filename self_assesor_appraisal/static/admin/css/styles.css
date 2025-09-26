@@ -1,0 +1,13 @@
+
+body {
+    background-image: url('{% static 'admin/img/ai_background.jpeg' %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 1;
+}
+
+body {
+    background: url('{% static 'admin/img/ai_background.jpeg' %}') no-repeat center center fixed;
+    background-size: 100% 100%;
+}

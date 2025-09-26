@@ -1,0 +1,4871 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+    
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+</head>
+    <style>
+        :root, [data-theme="light"] {
+            --primary: #1ABB9C; /* Turquoise from gradient */
+            --secondary: #14A085; /* Darker turquoise for contrast */
+            --accent: #1ABB9C; /* Same as primary for consistency */
+            --surface: #FFFFFF;
+            --background: #F1F5F9; /* Slate-100 */
+            --text-primary: #1E293B; /* Slate-800 */
+            --text-secondary: #64748B; /* Slate-500 */
+            --border: #E2E8F0; /* Slate-200 */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --modal-bg: #FFFFFF;
+            --modal-border: #E2E8F0;
+            --modal-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            --modal-overlay: rgba(15, 23, 42, 0.85);
+            --modal-header-bg: #1ABB9C;
+            --input-bg: #F8FAFC;
+            --btn-primary: #1ABB9C; /* Solid turquoise */
+            --btn-primary-hover: #14A085; /* Darker turquoise */
+            --btn-secondary: #FFFFFF;
+            --btn-secondary-border: #E2E8F0;
+            --btn-secondary-text: #64748B;
+            --btn-secondary-hover: #F8FAFC;
+            --select2-choice-bg: var(--primary);
+            --select2-choice-text: #FFFFFF;
+            --scrollbar-track: var(--background);
+            --scrollbar-thumb: var(--primary);
+            --gradient: linear-gradient(to top, #1ABB9C 50%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        [data-theme="dark"] {
+            --primary: #1ABB9C; /* Keep turquoise for continuity */
+            --secondary: #0F7B66; /* Even darker turquoise */
+            --accent: #34D399; /* Lighter turquoise for accents */
+            --surface: #1E293B; /* Slate-800 */
+            --background: #0F172A; /* Slate-900 */
+            --text-primary: #F1F5F9; /* Slate-100 */
+            --text-secondary: #94A3B8; /* Slate-400 */
+            --border: #475569; /* Slate-600 */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --modal-bg: #1E293B;
+            --modal-border: #475569;
+            --modal-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --modal-header-bg: #1ABB9C;
+            --input-bg: #334155; /* Slate-700 */
+            --btn-primary: #1ABB9C;
+            --btn-primary-hover: #0F7B66;
+            --btn-secondary: #334155;
+            --btn-secondary-border: #475569;
+            --btn-secondary-text: #D1D5DB;
+            --btn-secondary-hover: #4B5563;
+            --select2-choice-bg: var(--primary);
+            --select2-choice-text: #000000;
+            --scrollbar-track: #334155;
+            --scrollbar-thumb: var(--primary);
+            --gradient: linear-gradient(to top, #1ABB9C 50%, rgba(255, 255, 255, 0.2) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+  
+
+
+
+        .theme-toggle:hover {
+            color: var(--accent);
+        }
+
+        /* Navigation */
+        .navbar.performa-nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-top: 0;
+        }
+
+        .main-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), #FFFFFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .user-info-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #FFFFFF;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .user-status span, .user-status input, .user-status label {
+            flex: 1;
+            text-align: center;
+        }
+
+        .user-status input {
+            max-width: 100px;
+        }
+
+        .navbar-nav .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .navbar-nav .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Login Form */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .field-container {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .field-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #FFFFFF;
+            margin-bottom: 0.25rem;
+        }
+
+        .input-small {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: transparent;
+            color: #FFFFFF;
+            transition: border-color 0.2s ease, background 0.3s ease;
+        }
+
+        .input-small:focus {
+            background: var(--input-bg);
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Strategic Configuration Button */
+        .config-button {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: #FFFFFF;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .config-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .connection-graphic {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0.5;
+        }
+
+        .floating-node {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .button-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .button-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .button-text {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .connection-line {
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--accent);
+            opacity: 0.3;
+        }
+
+        .highlight-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .dots-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 4px);
+            background-size: 8px 8px;
+            opacity: 0.5;
+        }
+
+        .animated-grid {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.2;
+            animation: gridMove 10s linear infinite;
+        }
+
+        /* Tiles */
+        .tiles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .config-tile {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .config-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .icon-wrapper {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .tile-icon {
+            width: 32px;
+            height: 32px;
+            color: #FFFFFF;
+        }
+
+        .tile-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .tile-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Modals */
+        .config-modal, .sg-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--modal-overlay);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-card, .sg-modal-content {
+            background: var(--modal-bg);
+            border-radius: 12px;
+            padding: 0;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--modal-border);
+            box-shadow: var(--modal-shadow);
+            animation: fadeIn 0.3s ease;
+            transition: background 0.3s ease;
+        }
+
+        .sg-modal-content {
+            max-width: 700px;
+        }
+
+        .modal-header {
+            background: var(--modal-header-bg);
+            padding: 0.75rem 1.125rem; /* Reduced to 75% of original 1rem 1.5rem */
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.925rem;
+            transition: background 0.2s ease, border 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: #FFFFFF;
+            border: 1px solid var(--btn-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            border-color: var(--btn-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary);
+            color: var(--btn-secondary-text);
+            border: 0px solid var(--btn-secondary-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--btn-secondary-hover);
+        }
+
+        /* Form Elements */
+        .form-group, .sg-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label, .sg-form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--text-primary);
+        }
+
+        .form-control, .sg-form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, background 0.3s ease;
+        }
+
+        .form-control:focus, .sg-form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .select2-container .select2-selection--multiple,
+        .select2-container .select2-selection--single {
+            border: 1px solid var(--border) !important;
+            border-radius: 6px !important;
+            min-height: 38px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: var(--select2-choice-bg);
+            color: var(--select2-choice-text);
+            border: none;
+            border-radius: 4px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: var(--text-primary);
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: var(--select2-choice-text);
+        }
+
+        .select2-dropdown {
+            background: var(--modal-bg);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        /* Dropdown for Departments */
+        .dropdown-container {
+            position: relative;
+        }
+
+        .select-box {
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: background 0.3s ease;
+        }
+
+        .options-container {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--modal-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .option-item {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .option-item:hover {
+            background: var(--input-bg);
+        }
+
+        .option-item input[type="checkbox"] {
+            accent-color: var(--accent);
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .selected-tag {
+            background: var(--accent);
+            color: #FFFFFF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Balanced Scorecard Info */
+        .bsc-info-box {
+            background: var(--input-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .bsc-info-box h4 {
+            font-size: 1.1rem;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .bsc-info-box p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .bsc-perspectives {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .bsc-perspectives li {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .bsc-benefits {
+            background: var(--surface);
+            padding: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .bsc-benefits p {
+            columns: 2;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Scrollbar */
+        .sg-modal-content::-webkit-scrollbar,
+        .modal-card::-webkit-scrollbar,
+        .bsc-info-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sg-modal-content::-webkit-scrollbar-track,
+        .modal-card::-webkit-scrollbar-track,
+        .bsc-info-box::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 4px;
+        }
+
+        .sg-modal-content::-webkit-scrollbar-thumb,
+        .modal-card::-webkit-scrollbar-thumb,
+        .bsc-info-box::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 20px 20px; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar.performa-nav {
+                padding: 1rem;
+            }
+
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+            .tiles-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-card, .sg-modal-content {
+                width: 95%;
+                padding: 0;
+            }
+
+            .modal-header {
+                padding: 0.5625rem 0.84375rem; /* 75% of reduced values */
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .modal-actions {
+                padding: 0.75rem 1rem;
+            }
+
+            .bsc-perspectives {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info-container {
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .user-status {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+            }
+
+            .user-status span, .user-status input, .user-status label {
+                text-align: center;
+                flex: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .config-button {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .user-status {
+                font-size: 0.75rem;
+            }
+
+            .user-status input {
+                max-width: 80px;
+            }
+        }
+
+
+
+/* Style the custom goal input field */
+#custom-goal-input input {
+    width: 100%; /* Double the width of its container */
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 2px solid #4CAF50;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #f8fff8;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+#custom-goal-input input:focus {
+    outline: none;
+    border-color: #45a049;
+    box-shadow: 0 0 12px rgba(76,175,80,0.25);
+    background-color: #ffffff;
+}
+
+#my-form input { display: block; }
+
+
+:root {
+    --primary-blue: #2563eb;
+    --hover-blue: #1d4ed8;
+    --light-gray: #f3f4f6;
+    --border-gray: #e5e7eb;
+}
+
+.date-picker-card {
+    max-width: 400px;
+    padding: 1.2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-gray);
+}
+
+.date-picker-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.calendar-icon {
+    font-size: 1.25rem;
+}
+
+.date-input-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
+.date-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-gray);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.date-action-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 1.15rem;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-action-btn:hover {
+    background: var(--hover-blue);
+    transform: translateY(-1px);
+}
+
+.date-action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-arrow {
+    width: 18px;
+    height: 18px;
+    margin-left: 0.5rem;
+}
+
+@media (min-width: 480px) {
+    .date-input-group {
+        flex-direction: row;
+    }
+    
+    .date-input {
+        width: 60%;
+    }
+    
+    .date-action-btn {
+        width: 40%;
+    }
+}
+
+.date-picker-card {
+    max-width: 200px; /* Half of 400px */
+    padding: 0.6rem; /* Half of 1.2rem */
+    background: white;
+    border-radius: 6px; /* Half of 12px */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05); /* Scaled down shadow */
+    border: 1px solid var(--border-gray);
+}
+
+.date-picker-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem; /* Half of 0.75rem */
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 0.5rem; /* Half of 1rem */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+}
+
+.calendar-icon {
+    font-size: 0.75rem; /* Reduced from 1.25rem */
+}
+
+.date-input-group {
+    display: flex;
+    gap: 0.25rem; /* Half of 0.5rem */
+    flex-direction: column;
+}
+
+.date-input {
+    width: 100%;
+    padding: 0.375rem 0.5rem; /* Half of 0.75rem 1rem */
+    border: 1px solid var(--border-gray); /* Reduced border thickness */
+    border-radius: 4px; /* Half of 8px */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+    transition: all 0.2s ease;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 1.5px rgba(37, 99, 235, 0.1); /* Scaled down shadow */
+}
+
+.date-action-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.325rem 0.565rem; /* Half of 0.65rem 1.15rem */
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 4px; /* Half of 8px */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-action-btn:hover {
+    background: var(--hover-blue);
+    transform: translateY(-0.5px); /* Half of -1px */
+}
+
+.date-action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-arrow {
+    width: 9px; /* Half of 18px */
+    height: 4px; /* Half of 18px */
+    margin-left: 0.25rem; /* Half of 0.5rem */
+}
+
+@media (min-width: 480px) {
+    .date-input-group {
+        flex-direction: row;
+    }
+    
+    .date-input {
+        width: 60%;
+    }
+    
+    .date-action-btn {
+        width: 40%;
+    }
+}
+
+#retrieve-modal-overlay {
+  position: fixed;
+  z-index: 1100; /* higher than sg-modal */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#retrieve-modal-content {
+  background: white;
+  padding: 20px;
+  z-index: 1110; /* also higher if needed */
+  position: relative;
+  border-radius: 8px;
+}
+.sg-modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  /* other styles */
+}
+
+  .question-text {
+      flex-grow: 1;
+  }
+  .delete-btn {
+      background: transparent;
+      border: none;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .retrieve-modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .retrieve-modal-content {
+      background: #fff;
+      border-radius: 10px;
+      z-index: 1110;
+      width: 95vw;
+      max-width: 95vw;
+      max-height: 95vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+  
+    .modal-close {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  
+    /* Consistency for inputs */
+    table input {
+      width: 100%;
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.855rem;
+    }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .dashboard-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .dashboard-content {
+            min-height: 120px;
+        }
+
+        .goal-list {
+            list-style: none;
+        }
+
+        .goal-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-open {
+            display: block;
+            width: 220px;
+            margin: 20px auto 40px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-open:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Modal Styles */
+        .sg-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sg-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sg-modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-modal-overlay.active .sg-modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .bsc-info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .bsc-info-box h4 {
+            color: #3498db;
+            margin: 15px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bsc-perspectives {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .bsc-perspectives li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .bsc-perspectives li:before {
+            content: "•";
+            position: absolute;
+            left: 15px;
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+
+        .bsc-benefits {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .sg-form-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sg-form-group {
+            margin-bottom: 15px;
+        }
+
+        .sg-form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sg-form-select, .date-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            transition: border 0.3s ease;
+        }
+
+        .sg-form-select:focus, .date-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .date-picker-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .date-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .date-input {
+            flex: 1;
+        }
+
+        .date-action-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .date-action-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #2573a7);
+        }
+
+        .btn-arrow {
+            width: 18px;
+            height: 18px;
+        }
+
+        .goal-types-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 200px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .goal-type-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .goal-type-card:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.15);
+            transform: translateX(5px);
+        }
+
+        .goal-type-card i {
+            margin-right: 10px;
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+
+        .goal-type-card.dragging {
+            opacity: 0.5;
+            background: #f0f7ff;
+            transform: scale(0.98);
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9, #2573a7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .perspective-highlight {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-left: 8px;
+        }
+
+        .financial { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .customer { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .internal { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; }
+        .learning { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+
+        .instructions {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            padding-left: 25px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .priority-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
+
+
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .dashboard-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+        }
+        
+        .dashboard-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .dashboard-header i {
+            font-size: 1.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dashboard-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .dashboard-content {
+            padding: 25px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .icon-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon-container i {
+            font-size: 4.5rem;
+            opacity: 0.9;
+        }
+        
+        .content-text {
+            flex-grow: 1;
+        }
+        
+        .content-text h4 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        
+        .content-text p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .action-list {
+            list-style: none;
+            padding: 15px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 20px;
+        }
+        
+        .action-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .action-list li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .priority-highlight {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .financial { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .weight { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .department { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .timeline { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        
+        .financial-icon { color: #3498db; }
+        .weight-icon { color: #e74c3c; }
+        .department-icon { color: #9b59b6; }
+        .timeline-icon { color: #2ecc71; }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto 1fr;
+            gap: 25px;
+            height: 75vh;
+        }
+        
+        .dashboard-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+        
+        .dashboard-header i {
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dashboard-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .dashboard-content {
+            padding: 25px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .goal-list {
+            list-style: none;
+        }
+        
+        .goal-list li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .goal-list li:hover {
+            background: #f8f9fa;
+        }
+        
+        .perspective-highlight {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .financial { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .customer { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .internal { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .learning { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        
+        .content-text h4 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        
+        .content-text p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .action-list {
+            list-style: none;
+            padding: 15px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 20px;
+        }
+        
+        .action-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .action-list li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .progress-container {
+            margin-top: 15px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .financial-progress { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .customer-progress { background: linear-gradient(90deg, #3498db, #2980b9); }
+        .internal-progress { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+        .learning-progress { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
+        
+        .financial-bg { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .weight-bg { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .department-bg { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .timeline-bg { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                height: auto;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+
+.sg-form-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: black;
+    transition: border-color 0.2s ease, background 0.3s ease;
+}
+
+.sg-form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 3px rgba(26, 187, 156, 0.3);
+}
+
+.target-tile {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.target-tile:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.sg-form-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.modern-input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.beautiful-select2 {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+.sg-form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sg-form-select:focus {
+    outline: none;
+    border-color: #aaa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sg-form-select option {
+    padding: 10px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.sg-form-select option:hover {
+    background-color: #ddd;
+}
+
+
+.priority-textbox {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.goal-type-card {
+    margin-bottom: 5px;
+}
+
+.priority-textbox {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.highest-priority {
+    background-color: #34C759;
+    color: #fff;
+}
+
+.high-priority {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.medium-priority {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.lowest-priority {
+    background-color: #F44336;
+    color: #fff;
+}
+
+.goal-type-card {
+    margin-bottom: 5px;
+}
+
+
+  .refresh-icon {
+    padding: 8px 12px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .refresh-icon .icon {
+    display: none;
+  }
+  
+  .refresh-icon:hover .text {
+    display: none;
+  }
+  
+  .refresh-icon:hover .icon {
+    display: inline-block;
+    animation: spin 0.5s linear;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+
+.animated-text {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+
+/* Style the left margin container */
+.left-margin-container {
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    width: 250px; /* Adjust the width as needed */
+    background: linear-gradient(135deg, #f7d2c4, #fbc2eb);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* Style the icon containers */
+.icon-container {
+    margin-bottom: 20px;
+    text-align: center;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.icon-container i {
+    font-size: 24px; /* Adjust the icon size as needed */
+    margin-bottom: 10px;
+    color: #ff69b4;
+}
+
+.icon-container p {
+    font-size: 14px; /* Adjust the font size as needed */
+    color: #333;
+}
+
+
+/* Modern Left Navigation Styles */
+.left-nav-container {
+    position: fixed;
+    top: 85px;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+    color: white;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 16px;
+}
+
+.nav-header {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.nav-items {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.nav-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.nav-icon {
+    margin-right: 15px;
+    font-size: 1.4rem;
+    color: #3498db;
+    min-width: 30px;
+    padding-top: 3px;
+}
+
+.nav-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #ecf0f1;
+    opacity: 0.9;
+}
+
+.nav-footer {
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Scrollbar styling */
+.nav-items::-webkit-scrollbar {
+    width: 5px;
+}
+
+.nav-items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.nav-items::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        /* Modal Overlay */
+        .sg-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        /* Modal Content */
+        .sg-modal-content {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Modal Header */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .modal-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        
+        /* Modal Body */
+        .modal-body {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* Target Configuration Section */
+        .milestones-targets-container {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .container-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .container-content {
+            padding: 24px;
+        }
+        
+        .progress-overview {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .progress-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .target-configuration {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .target-tile {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+        }
+        
+        .sg-form-label {
+            display: flex;
+            align-items: center;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .target-container {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .target-input-group, .budget-input-group {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .container-footer {
+            background: #f8f9fa;
+            padding: 16px 24px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Form Column */
+        .sg-form-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4a6491;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .goal-types-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .goal-type-card {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px dashed #ced4da;
+        }
+        
+        .priority-textboxes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .priority-textbox {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border: none;
+            background: #f8f9fa;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+        
+        .highest-priority { color: #dc3545; }
+        .high-priority { color: #fd7e14; }
+        .medium-priority { color: #ffc107; }
+        .lowest-priority { color: #6c757d; }
+        
+        #reset-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        
+        .sg-form-select, .modern-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: #fff;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .sg-form-select:focus, .modern-input:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .date-picker-card {
+            margin-bottom: 15px;
+        }
+        
+        .date-input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-input {
+            flex: 1;
+        }
+        
+        .date-action-btn {
+            background: #4a6491;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .btn-arrow {
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .tag {
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tag-remove {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        
+        /* Modal Actions */
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .btn-primary {
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #1abb9c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        
+        /* Select2 Customization */
+        .select2-container--default .select2-selection--multiple {
+            min-height: 38px;
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+        }
+        
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #e9ecef !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 3px !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .modal-body {
+                flex-direction: column;
+            }
+            
+            .target-input-group {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .budget-input-group {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+/* Date Picker Card */
+.date-picker-card {
+    max-width: 200px; /* Half of 400px */
+    padding: 0.6rem; /* Half of 1.2rem */
+    background: white;
+    border-radius: 6px; /* Half of 12px */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05); /* Scaled down shadow */
+    border: 1px solid var(--border-gray);
+}
+
+.date-picker-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem; /* Half of 0.75rem */
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 0.5rem; /* Half of 1rem */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+}
+
+.calendar-icon {
+    font-size: 0.75rem; /* Reduced from 1.25rem */
+}
+
+.date-input-group {
+    display: flex;
+    gap: 0.25rem; /* Half of 0.5rem */
+    flex-direction: column;
+}
+
+.date-input {
+    width: 100%;
+    padding: 0.375rem 0.5rem; /* Half of 0.75rem 1rem */
+    border: 1px solid var(--border-gray); /* Reduced border thickness */
+    border-radius: 4px; /* Half of 8px */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+    transition: all 0.2s ease;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 1.5px rgba(37, 99, 235, 0.1); /* Scaled down shadow */
+}
+
+.date-action-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.325rem 0.565rem; /* Half of 0.65rem 1.15rem */
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 4px; /* Half of 8px */
+    font-size: 0.75rem; /* Reduced from 0.875rem */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-action-btn:hover {
+    background: var(--hover-blue);
+    transform: translateY(-0.5px); /* Half of -1px */
+}
+
+.date-action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-arrow {
+    width: 9px; /* Half of 18px */
+    height: 4px; /* Half of 18px */
+    margin-left: 0.25rem; /* Half of 0.5rem */
+}
+
+/* Form Group and Select */
+.sg-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.sg-form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sg-form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sg-form-select:focus {
+    outline: none;
+    border-color: #aaa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sg-form-select option {
+    padding: 10px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.sg-form-select option:hover {
+    background-color: #ddd;
+}
+
+/* Tags Container */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    min-height: 40px;
+}
+
+.tag {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Variables */
+:root {
+    --primary-blue: #2563eb;
+    --hover-blue: #1d4ed8;
+    --border-gray: #e5e7eb;
+    --text-primary: #333; /* Adjust based on your theme */
+    --text-secondary: #555; /* Adjust based on your theme */
+}
+
+/* Responsive Design */
+@media (min-width: 480px) {
+    .date-input-group {
+        flex-direction: row;
+    }
+    
+    .date-input {
+        width: 60%;
+    }
+    
+    .date-action-btn {
+        width: 40%;
+    }
+}
+    </style>
+</head>
+
+<body>
+<!-- Remove the unnecessary container div -->
+<!-- <div class="container" style="margin-left: 20vw; width: 80vw; margin-top: 58px; border-radius: 5px;"> -->
+    <!-- Content goes here -->
+<!-- </div> -->
+<form id="my-form" style="display: none; justify-content: center; align-items: flex-start; flex-wrap: wrap; position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; background: black; z-index: 9999; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: white;">
+    <div class="form-row" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        
+        <div class="field-container" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label class="field-label" for="employee-password" style="margin-bottom: 4px; color: white;">Password:</label>
+            <input class="input-small" type="text" id="employee-password" name="employee_password" placeholder="Password" style="padding: 5px; width: 150px; background: white; color: black;">
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <input class="input-small" type="text" id="username" name="username" style="padding: 5px; max-width: 350px; border: none; margin-bottom: 4px; background: white; color: black;">
+            <label class="field-label" for="region_branch" style="display: none;">Region:</label>
+            <input class="input-small" type="text" id="region_branch" name="region_branch" readonly style="max-width: 200px; border: none; display: none; background: white; color: black;">
+        </div>
+
+        <div class="field-container" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label class="field-label" for="company_code" style="margin-bottom: 4px; color: white;">Company Code:</label>
+            <input class="input-small" type="text" id="company_code" name="company_code" placeholder="Company Code" style="padding: 5px; width: 150px; background: white; color: black;">
+        </div>
+
+        <div class="field-container" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label class="field-label" for="branch_code" style="margin-bottom: 4px; color: white;">Branch Code:</label>
+            <input class="input-small" type="text" id="branch_code" name="branch_code" placeholder="Branch Code" style="padding: 5px; width: 150px; background: white; color: black;">
+        </div>
+        
+    </div>
+</form>
+<!-- Elegant Left Navigation Container -->
+<div class="left-nav-container">
+    <div class="nav-header">
+        <h3>Performance Excellence</h3>
+    </div>
+    <div class="nav-items">
+        <div class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="nav-content">
+                <p>Strategic goals are specific, measurable, achievable, relevant, and time-bound (SMART).</p>
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="nav-content">
+                <p>Performance management helps organizations align individual goals with overall business objectives.</p>
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="nav-content">
+                <p>Effective performance management involves regular feedback, coaching, and development opportunities.</p>
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="nav-content">
+                <p>Strategic goal setting involves identifying key performance indicators (KPIs) to measure progress.</p>
+            </div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="nav-content">
+                <p>Performance management encourages a culture of continuous learning and improvement.</p>
+            </div>
+        </div>
+    </div>
+    <div class="nav-footer">
+        <p>Strategic Performance</p>
+    </div>
+</div>
+<!-- Tiles Header -->
+<div class="tiles-header" style="width: 102%; height: 1.5cm;margin-left: 1px; position: fixed; top: -10px; padding: 0.75rem 1rem; background: linear-gradient(to right, #3498db, #2ecc71); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); z-index: 1000;">
+     <!-- Navigation -->
+   
+        <div class="container-fluid">
+        <nav class="navbar">
+            <a class="navbar-brand" href="#" style="color: white; font-weight: 700; font-size: 2.3rem;display: flex;align-items: center;gap: 1rem;text-decoration: none;position: relative;padding: 10px 20px;border-radius: 15px;background: linear-gradient(45deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2));backdrop-filter: blur(5px);box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);border: 1px solid rgba(255, 255, 255, 0.1);overflow: hidden;">
+                <i class="fas fa-cog fa-spin" style="color: #4facfe; font-size: 2rem;"></i>
+                <span class="animated-text">Goal Setting</span>
+                <div style="position: absolute;top: -5px;left: 0;width: 30%;height: 100%;background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);transform: translateX(-100%);transition: transform 0.6s;"></div>                                   
+                            <span style="font-size: 0.9rem; font-weight: 500;margin-right: 700px;"></span>
+                            <input type="text" id="username-display" placeholder="" style="width: 220px; background: transparent !important; color: white; border: none !important; padding: 0.5rem; border-radius: 6px; font-size: 0.9rem; margin-top: -10px;" readonly>
+                           
+                            <a href="http://127.0.0.1:8002/employee-appraisal/?username=#">
+
+                            </a>
+                        </li>
+                         <i class="fa fa-home text-cyan-300 group-hover:text-cyan-200 transition-colors" style="color: purple;margin-bottom: 55px;margin-left: 1199px;"></i>
+                       </a>
+                    </nav>                                                                   
+                    <ul class="navbar-nav align-items-center" style="list-style: none; padding: 0; margin: 0; display: flex;margin-right: 980px;">
+                  </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);">
+    <div class="container" style="margin-left: 20vw; width: 80vw; margin-top: 58px; border-radius: 5px;">
+        <header style="text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); color: white;">
+            <h1 style="font-size: 1.8rem; font-weight: 1.8rem; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <i class="fas fa-chess-queen" style="font-size: 1.5rem; color: #ffffff; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 50%;"></i>
+                Strategic Goal Management
+            </h1>
+            <p class="subtitle" style="font-size: 0.9rem; opacity: 0.9; max-width: 700px; margin: 0 auto; line-height: 1.4;">
+                Configure and manage your organization's strategic objectives with the Balanced Scorecard framework
+            </p>
+        </header>
+
+        <!-- Enhanced Balanced Scorecard Explanation -->
+        <div style="background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: flex-start; gap: 20px;">
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.5rem; color: #2c3e50; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-balance-scale" style="color: #6a11cb;"></i> The Balanced Scorecard Framework
+                    </h3>
+                    <p style="line-height: 1.6; margin-bottom: 20px;">The Balanced Scorecard (BSC) is a strategic management framework that helps organizations translate their vision and strategy into actionable objectives across four key perspectives.</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="background: rgba(106, 17, 203, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #6a11cb;">
+                            <h4 style="margin-top: 0; color: #6a11cb; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-chart-line"></i> Financial Perspective
+                            </h4>
+                            <p style="font-size: 0.9rem; margin-bottom: 0;">Focuses on financial outcomes and creating shareholder value. Key measures include ROI, revenue growth, and cost reduction.</p>
+                        </div>
+                        <div style="background: rgba(106, 17, 203, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #6a11cb;">
+                            <h4 style="margin-top: 0; color: #6a11cb; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-users"></i> Customer Perspective
+                            </h4>
+                            <p style="font-size: 0.9rem; margin-bottom: 0;">Measures customer satisfaction, retention, and market share. Focuses on delivering customer value proposition.</p>
+                        </div>
+                        <div style="background: rgba(106, 17, 203, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #6a11cb;">
+                            <h4 style="margin-top: 0; color: #6a11cb; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-cogs"></i> Internal Processes
+                            </h4>
+                            <p style="font-size: 0.9rem; margin-bottom: 0;">Emphasizes operational efficiency, quality, and innovation in key business processes.</p>
+                        </div>
+                        <div style="background: rgba(106, 17, 203, 0.05); padding: 15px; border-radius: 8px; border-left: 4px solid #6a11cb;">
+                            <h4 style="margin-top: 0; color: #6a11cb; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-brain"></i> Learning & Growth
+                            </h4>
+                            <p style="font-size: 0.9rem; margin-bottom: 0;">Focuses on human capital development, organizational culture, and technology capabilities.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="width: 300px; background: #f8f9fa; border-radius: 8px; padding: 20px;">
+                    <h4 style="margin-top: 0; color: #6a11cb; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-star"></i> Key Benefits
+                    </h4>
+                    <ul style="padding-left: 20px;">
+                        <li style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px;">
+                            <i class="fas fa-check" style="color: #6a11cb; margin-top: 3px;"></i>
+                            Provides a holistic view of organizational performance
+                        </li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px;">
+                            <i class="fas fa-check" style="color: #6a11cb; margin-top: 3px;"></i>
+                            Aligns day-to-day work with strategic objectives
+                        </li>
+                        <li style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px;">
+                            <i class="fas fa-check" style="color: #6a11cb; margin-top: 3px;"></i>
+                            Identifies areas for improvement and innovation
+                        </li>
+                        <li style="display: flex; align-items: flex-start; gap: 8px;">
+                            <i class="fas fa-check" style="color: #6a11cb; margin-top: 3px;"></i>
+                            Enables data-driven decision making
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+               <!-- Balanced Scorecard Principle -->
+                <div style="background: rgba(46, 204, 113, 0.05); border-radius: 10px; padding: 15px; border-left: 4px solid #2ecc71;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-balance-scale" style="color: #2ecc71; font-size: 1.2rem;"></i>
+                        <h4 style="margin: 0; color: #2ecc71;">Balanced Scorecard</h4>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem;">
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 8px; border-radius: 5px;">
+                            <i class="fas fa-chart-line" style="color: #2ecc71;"></i> Financial
+                        </div>
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 8px; border-radius: 5px;">
+                            <i class="fas fa-users" style="color: #2ecc71;"></i> Customer
+                        </div>
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 8px; border-radius: 5px;">
+                            <i class="fas fa-cogs" style="color: #2ecc71;"></i> Processes
+                        </div>
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 8px; border-radius: 5px;">
+                            <i class="fas fa-brain" style="color: #2ecc71;"></i> Growth
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cascading Alignment Principle -->
+                <div style="background: rgba(155, 89, 182, 0.05); border-radius: 10px; padding: 15px; border-left: 4px solid #9b59b6;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-sitemap" style="color: #9b59b6; font-size: 1.2rem;"></i>
+                        <h4 style="margin: 0; color: #9b59b6;">Cascading Alignment</h4>
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <div style="background: rgba(155, 89, 182, 0.1); padding: 8px; border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-building" style="color: #9b59b6;"></i>
+                                Organizational
+                                <i class="fas fa-arrow-down" style="margin-left: auto; color: #9b59b6;"></i>
+                            </div>
+                            <div style="background: rgba(155, 89, 182, 0.1); padding: 8px; border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-network-wired" style="color: #9b59b6;"></i>
+                                Departmental
+                                <i class="fas fa-arrow-down" style="margin-left: auto; color: #9b59b6;"></i>
+                            </div>
+                            <div style="background: rgba(155, 89, 182, 0.1); padding: 8px; border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-user" style="color: #9b59b6;"></i>
+                                Individual
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Horizons Principle -->
+                <div style="background: rgba(231, 76, 60, 0.05); border-radius: 10px; padding: 15px; border-left: 4px solid #e74c3c;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-hourglass-half" style="color: #e74c3c; font-size: 1.2rem;"></i>
+                        <h4 style="margin: 0; color: #e74c3c;">Time Horizons</h4>
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 10px; height: 10px; background: #e74c3c; border-radius: 50%;"></div>
+                                <span><strong>Long-term</strong> (3-5 years)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 10px; height: 10px; background: #3498db; border-radius: 50%;"></div>
+                                <span><strong>Medium-term</strong> (1-2 years)</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 10px; height: 10px; background: #2ecc71; border-radius: 50%;"></div>
+                                <span><strong>Short-term</strong> (0-12 months)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+        <!-- Floating action button remains unchanged -->
+        <button class="btn-open" id="openStrategicGoalsModal" style="position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; border: none; border-radius: 50px; padding: 15px 25px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
+            <i class="fas fa-cog" style="font-size: 1.2rem; animation: spin 4s linear infinite;"></i> 
+            Configure Goals
+        </button>
+    </div>
+</body>
+
+<!-- Strategic Goals Modal -->
+<div id="sg-modal-overlay" class="sg-modal-overlay">
+    <div class="sg-modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 class="modal-title">Strategic Goal Configuration Modal</h2>
+            <button class="modal-close" onclick="sgCloseModal()">×</button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Left Column - Targets and Risks -->
+            <div class="milestones-targets-container">
+                <!-- Header Section -->
+                <div class="container-header">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-bullseye" style="font-size: 24px; color: #ffffff;"></i>
+                        <h2 style="margin: 0; font-size: 20px; font-weight: 600;">Milestones & Targets</h2>
+                    </div>
+                    <div>
+                        <button class="add-milestone-btn" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                            <i class="fas fa-plus"></i> Add Milestone
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Content Section -->
+                <div class="container-content">
+                    <!-- Progress Overview -->
+                    <div class="progress-overview">
+                        <div class="progress-item">
+                            <div class="progress-circle" style="background: conic-gradient(#198754 75%, #e9ecef 0%);">
+                                <span style="font-weight: 600; color: #198754;"></span>
+                            </div>
+                            <span style="font-size: 14px; color: #6c757d;">Short-term</span>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-circle" style="background: conic-gradient(#0d6efd 50%, #e9ecef 0%);">
+                                <span style="font-weight: 600; color: #0d6efd;"></span>
+                            </div>
+                            <span style="font-size: 14px; color: #6c757d;">Medium-term</span>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-circle" style="background: conic-gradient(#6c757d 25%, #e9ecef 0%);">
+                                <span style="font-weight: 600; color: #6c757d;"></span>
+                            </div>
+                            <span style="font-size: 14px; color: #6c757d;">Long-term</span>
+                        </div>
+                    </div>
+<br>                   
+                    <!-- Targets Configuration -->
+                    <div class="target-configuration">
+                        <!-- Long-term Target Tile -->
+                        <div class="target-tile" style="border-left-color: #6c757d;">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label">
+                                    <i class="fas fa-long-arrow-alt-right" style="color: #6c757d; margin-right: 8px;"></i> 
+                                    Long-term Target
+                                    <select id="long-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
+                                        <option value="">Auto set deadline</option>
+                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                        <option value="one-month">One month</option>
+                                        <option value="cycle-quarter">Cycle quarter</option>
+                                        <option value="cycle-mid-term">Cycle mid-term</option>
+                                        <option value="cycle-third-quarter">Cycle third quarter</option>
+                                        <option value="cycle-end-date">Cycle end-date</option>
+                                        <option value="review-period-quarter">Review period quarter</option>
+                                        <option value="review-period-mid-term">Review period mid-term</option>
+                                        <option value="review-period-third-quarter">Review period third quarter</option>
+                                        <option value="period-end-date">Review Period end-date</option>
+                                    </select>
+                                </label>
+                                <div class="target-container">
+                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
+                                        <input type="number" id="long-term-target" class="modern-input" placeholder="Target Value">
+                                        <select id="long-term-target-uom" class="beautiful-select2">
+                                            <option value="">UoM</option>
+                                        </select>
+                                        <input type="date" id="long-term-target-end-date" class="modern-input">
+                                    </div>
+                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
+                                        <input type="number" id="long-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
+                                        <input type="number" id="long-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
+                                        <select id="long-term-budget-uom" class="beautiful-select2">
+                                            <option value="">Currency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<br>
+                        <!-- Medium-term Target Tile -->
+                        <div class="target-tile" style="border-left-color: #0d6efd;">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label">
+                                    <i class="fas fa-arrow-right" style="color: #0d6efd; margin-right: 8px;"></i> 
+                                    Medium-term Target
+                                    <select id="medium-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
+                                        <option value="">Auto set deadline</option>
+                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                        <option value="one-month">One month</option>
+                                        <option value="cycle-quarter">Cycle quarter</option>
+                                        <option value="cycle-mid-term">Cycle mid-term</option>
+                                        <option value="cycle-third-quarter">Cycle third quarter</option>
+                                        <option value="cycle-end-date">Cycle end-date</option>
+                                        <option value="review-period-quarter">Review period quarter</option>
+                                        <option value="review-period-mid-term">Review period mid-term</option>
+                                        <option value="review-period-third-quarter">Review period third quarter</option>
+                                        <option value="period-end-date">Review Period end-date</option>
+                                    </select>
+                                </label>
+                                <div class="target-container">
+                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
+                                        <input type="number" id="medium-term-target" class="modern-input" placeholder="Target Value">
+                                        <select id="medium-term-target-uom" class="beautiful-select2">
+                                            <option value="">UoM</option>
+                                        </select>
+                                        <input type="date" id="medium-term-target-end-date" class="modern-input">
+                                    </div>
+                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
+                                        <input type="number" id="medium-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
+                                        <input type="number" id="medium-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
+                                        <select id="medium-term-budget-uom" class="beautiful-select2">
+                                            <option value="">Currency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<br>
+                        <!-- Short-term Target Tile -->
+                        <div class="target-tile" style="border-left-color: #198754;">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label">
+                                    <i class="fas fa-arrow-right" style="color: #198754; margin-right: 8px;"></i> 
+                                    Short-term Target
+                                    <select id="short-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
+                                        <option value="">Auto set deadline</option>
+                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
+                                        <option value="one-month">One month</option>
+                                        <option value="cycle-quarter">Cycle quarter</option>
+                                        <option value="cycle-mid-term">Cycle mid-term</option>
+                                        <option value="cycle-third-quarter">Cycle third quarter</option>
+                                        <option value="cycle-end-date">Cycle end-date</option>
+                                        <option value="review-period-quarter">Review period quarter</option>
+                                        <option value="review-period-mid-term">Review period mid-term</option>
+                                        <option value="review-period-third-quarter">Review period third quarter</option>
+                                        <option value="period-end-date">Review Period end-date</option>
+                                    </select>
+                                </label>
+                                <div class="target-container">
+                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
+                                        <input type="number" id="short-term-target" class="modern-input" placeholder="Target Value">
+                                        <select id="short-term-target-uom" class="beautiful-select2">
+                                            <option value="">UoM</option>
+                                        </select>
+                                        <input type="date" id="short-term-target-end-date" class="modern-input">
+                                    </div>
+                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
+                                        <input type="number" id="short-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
+                                        <input type="number" id="short-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
+                                        <select id="short-term-budget-uom" class="beautiful-select2">
+                                            <option value="">Currency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer Section -->
+                <div class="container-footer">
+                    <div style="font-size: 14px; color: #6c757d;">
+                        <i class="fas fa-info-circle" style="margin-right: 8px;"></i> Targets help track progress toward strategic objectives
+                    </div>
+                </div>
+<br>
+<!-- Risk Assessment Section -->
+<div class="risk-assessment-section" style="margin-top: 30px;">
+<!-- Section Header (Reduced Width by 10%) -->
+<div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; width: 90%; margin-left: auto; margin-right: auto;">
+    <div class="icon-wrapper" style="background: rgba(220, 53, 69, 0.1); width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-shield-alt" style="font-size: 25px; color: #dc3545;"></i>
+    </div>
+    <div>
+        <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 1.1rem;">Risk Management Framework</h3>
+        <p style="color: #6c757d; line-height: 1.5; font-size: 0.9rem;">
+            Proactively identify and mitigate potential risks that could impact your strategic objectives. 
+            Assess risk severity, assign ownership, and document mitigation strategies to ensure 
+            organizational resilience and goal achievement.
+        </p>
+    </div>
+</div>
+<br>
+<!-- Risk Assessment Indicators (Reduced Width by 10%) -->
+<div class="risk-indicators" style="display: flex; gap: 12px; margin-bottom: 25px; width: 90%; margin-left: auto; margin-right: auto;">
+    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 5px;">
+        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
+            <i class="fas fa-thermometer-quarter"></i>
+        </div>
+        <div>
+            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Risk Exposure</div>
+            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
+        </div>
+    </div>
+    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div>
+            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Response Time</div>
+            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
+        </div>
+    </div>
+    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div>
+            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Ownership</div>
+            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
+        </div>
+    </div>
+</div>
+<br>
+<!-- Risk Assessment Tile (Reduced Width by 10%) -->
+<div class="target-tile" style="border-left-color: #dc3545; width: 90%; margin-left: auto; margin-right: auto;">
+    <div class="sg-form-group">
+        <label class="sg-form-label" style="font-size: 0.95rem;">
+            <i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 6px; font-size: 16px;"></i> 
+            Risk Assessment
+        </label>
+        <div class="target-container">
+            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                <select id="risk-assessment-type" class="beautiful-select2" style="padding: 10px 12px;">
+                    <option value="">Select Risk Type</option>
+                    <option value="financial">Financial Risk</option>
+                    <option value="operational">Operational Risk</option>
+                    <option value="strategic">Strategic Risk</option>
+                    <option value="compliance">Compliance Risk</option>
+                </select>
+                <select id="risk-severity" class="beautiful-select2" style="padding: 10px 12px;">
+                    <option value="">Severity Level</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+            </div>
+            <div class="budget-input-group" style="grid-template-columns: 1fr; margin-top: 10px;">
+                <textarea id="risk-mitigation" class="modern-input" placeholder="Mitigation Strategy" rows="2" style="padding: 10px 12px;"></textarea>
+            </div>
+            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                <select id="risk-owner" class="beautiful-select2" style="padding: 10px 12px;">
+                    <option value="">Risk Owner</option>
+                    <option value="finance">Finance Department</option>
+                    <option value="operations">Operations Team</option>
+                    <option value="it">IT Department</option>
+                    <option value="management">Senior Management</option>
+                </select>
+                <input type="date" id="risk-mitigation-date" class="modern-input" placeholder="Target Mitigation Date" style="padding: 10px 12px;">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+            <!-- Right Column - Strategic Goal Form -->
+            <div class="sg-form-column">
+                <div class="instructions">
+                    <h3><i class="fas fa-drag-icon"></i> How to Prioritize Goals</h3>
+                    <ul>
+                        <li>Drag and drop goal types to order them based on priority or select the only priority as the highest priority</li>
+                        <li>Goals at the top have higher strategic importance</li>
+                        <li>Click on a goal to configure its details</li>
+                    </ul>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="sg-type-select">
+                        <i class="fas fa-drag-icon"></i> Goal Type (Drag to reorder priority)
+                    </label>
+                    <div class="goal-types-container" id="goalTypesContainer">
+                        <div class="goal-type-card" draggable="true" data-type="Internal Business Processes">
+                            <i class="fas fa-cogs"></i> Internal Business Processes
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Financial Perspective">
+                            <i class="fas fa-seedling"></i> Financial Perspective
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Customer Perspective">
+                            <i class="fas fa-shield-alt"></i> Customer Perspective
+                        </div>
+                        <div class="goal-type-card" draggable="true" data-type="Learning & Growth">
+                            <i class="fas fa-users"></i> Learning & Growth
+                        </div>
+                    </div>
+                    <div class="priority-textboxes">
+                        <input type="text" class="priority-textbox highest-priority" value="Highest Priority" readonly>
+                        <input type="text" class="priority-textbox high-priority" value="High Priority" readonly>
+                        <input type="text" class="priority-textbox medium-priority" value="Medium Priority" readonly>
+                        <input type="text" class="priority-textbox lowest-priority" value="Lowest Priority" readonly>
+                    </div>
+                    <button id="reset-button" class="refresh-icon" title="Refresh">
+                        <span class="text">Reset</span>
+                        <span class="icon">↻</span>
+                    </button>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="sg-goal-select">
+                        <i class="fas fa-bullseye"></i> Strategic Goal
+                    </label>
+                    <select id="sg-goal-select" class="sg-form-select">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="sg-weight-input">
+                        <i class="fas fa-balance-scale"></i> Weight Allocation
+                    </label>
+                    <input list="sg-weight-options" class="sg-form-select" id="sg-weight-input">
+                    <datalist id="sg-weight-options">
+                        <option value="0%">0%</option>
+                        <option value="5%">5%</option>
+                        <option value="10%">10%</option>
+                        <option value="15%">15%</option>
+                        <option value="20%">20%</option>
+                        <option value="25%">25%</option>
+                        <option value="30%">30%</option>
+                        <option value="35%">35%</option>
+                        <option value="40%">40%</option>
+                        <option value="45%">45%</option>
+                        <option value="50%">50%</option>
+                        <option value="55%">55%</option>
+                        <option value="60%">60%</option>
+                        <option value="65%">65%</option>
+                        <option value="70%">70%</option>
+                        <option value="75%">75%</option>
+                        <option value="80%">80%</option>
+                        <option value="85%">85%</option>
+                        <option value="90%">90%</option>
+                        <option value="95%">95%</option>
+                        <option value="100%">100%</option>
+                    </datalist>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="individual-goal-select">
+                        <i class="fas fa-user-tie"></i> Individual Based Strategic Goal
+                    </label>
+                    <select id="individual-goal-select" class="beautiful-select2">
+                        <option value="">Select Individual Goal</option>
+                        <option value="kpi">Key Performance Indicator</option>
+                        <option value="development">Professional Development</option>
+                        <option value="innovation">Innovation Contribution</option>
+                        <option value="leadership">Leadership Objective</option>
+                    </select>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="informed-select">
+                        <i class="fas fa-info-circle"></i> Informed
+                    </label>
+                    <select id="informed-select" class="beautiful-select2" multiple="multiple">
+                        <option value="stakeholders">Key Stakeholders</option>
+                        <option value="team">Team Members</option>
+                        <option value="management">Senior Management</option>
+                        <option value="board">Board of Directors</option>
+                    </select>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="dependencies-input">
+                        <i class="fas fa-project-diagram"></i> Dependencies
+                    </label>
+                    <textarea id="dependencies-input" class="modern-input" placeholder="List any dependencies or prerequisites" rows="2"></textarea>
+                </div>
+
+                <div class="date-picker-card" style="width: 200%;">
+                    <label for="sg-date-picker" class="sg-form-label">
+                        <i class="fas fa-calendar-alt"></i> Due Date
+                    </label>
+                    <div class="date-input-group" style="width: 190%;">
+                        <input type="date" id="sg-date-picker" class="date-input">
+                        <button type="button" id="end-of-review-btn" class="date-action-btn">
+                            <span>End of Appraisal Period</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+             
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="departmentSelect">
+                        <i class="fas fa-building"></i> Primary Goal Owner (Department)
+                    </label>
+                    <select id="departmentSelect" class="sg-form-select" style="color: black;">
+                        <option value="">Select departments</option>
+                    </select>
+                    <div class="tags-container" id="tags-container">
+                        <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
+                    </div>
+                </div>
+
+                <div class="sg-form-group">
+                    <label class="sg-form-label" for="departmentSelect">
+                        <i class="fas fa-building"></i> Secondary Goal Owner(s) (Department(s))
+                    </label>
+                    <select id="departmentSelect1" class="sg-form-select" style="color: black;">
+                        <option value="">Select departments</option>
+                    </select>
+                    <div class="tags-container" id="tags-container1">
+                        <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="modal-actions" style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; background: #f8f9fa; border-top: 1px solid #e2e8f0;">
+    <button id="openStrategicGoalsRetrieveModal" class="btn btn-primary" style="padding: 8px 16px; border-radius: 4px; background: #1abb9c; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; height: 40px;">
+        <i class="fas fa-download" style="font-size: 14px;"></i> Retrieve
+    </button>
+    <button class="btn btn-primary" onclick="saveStrategicGoals()" style="padding: 8px 16px; border-radius: 4px; background: #1abb9c; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; height: 40px;">
+        <i class="fas fa-save" style="font-size: 14px;"></i> Save & View Table
+    </button>
+</div>
+    </div>
+</div>
+
+
+<div id="retrieve-modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;justify-content:center;align-items:center;">
+  <div id="retrieve-modal-content" style="background:#fff;border-radius:8px;width:95%;max-width:1400px;max-height:90vh;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">   
+    <!-- Modal Header -->
+    <div style="padding:16px 24px;background:#f8f9fa;border-bottom:1px solid #e9ecef;display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="margin:0;font-size:18px;font-weight:600;color:#212529;">Retrieve Strategic Goals</h3>
+      <button onclick="closeRetrieveModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#6c757d;padding:0 8px;">×</button>
+    </div>   
+    <!-- Modal Body -->
+    <div style="padding:0;">
+      <form id="goalsForm">
+        <div style="overflow-x:auto;padding:16px;max-height:calc(90vh - 150px);">
+          <table style="width:100%;border-collapse:separate;border-spacing:0;font-size:13px;table-layout:fixed;min-width:2000px;">
+            <thead>
+              <tr>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:50px;">Select</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:200px;">Strategic Goal</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:70px;">Weight</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:120px;">Lead Department</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:120px;">Secondary Dept(s)</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:120px;">Short-Term Target</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:120px;">Intermediate Target</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:120px;">Long-Term Target</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Short-Term Deadline</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Intermediate-term Deadline</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Long-Term Deadline</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:center;vertical-align:middle;width:60px;">Highest</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:center;vertical-align:middle;width:60px;">High</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:center;vertical-align:middle;width:60px;">Medium</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:center;vertical-align:middle;width:60px;">Low</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:center;vertical-align:middle;width:60px;">Lowest</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Short-Term Req</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Medium-Term Req</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Long-Term Req</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Short-Term Actual</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Medium-Term Actual</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Long-Term Actual</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:80px;">Currency</th>
+                <th style="position:sticky;top:0;background:#f1f3f5;color:#495057;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:12px 8px;border-bottom:2px solid #dee2e6;border-right:1px solid #e9ecef;text-align:left;vertical-align:middle;width:100px;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="goalsTableBody" style="color:#212529;">
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Update Button -->
+        <div style="padding:16px;border-top:1px solid #e9ecef;text-align:center;">
+          <button id="updateGoalsBtn" style="background-color:#2b8a3e;color:white;border:none;padding:10px 20px;border-radius:6px;font-weight:500;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Update Goals
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// Initialize Select2 for all select elements
+$(document).ready(function() {
+    $('.beautiful-select2').select2({
+        theme: 'bootstrap4',
+        width: '100%'
+    });
+    
+    // Make goal cards draggable
+    const goalTypesContainer = document.getElementById('goalTypesContainer');
+    let draggedItem = null;
+
+    goalTypesContainer.addEventListener('dragstart', function(e) {
+        draggedItem = e.target;
+        setTimeout(() => {
+            e.target.style.opacity = '0.5';
+        }, 0);
+    });
+
+    goalTypesContainer.addEventListener('dragend', function(e) {
+        setTimeout(() => {
+            e.target.style.opacity = '1';
+            draggedItem = null;
+        }, 0);
+    });
+
+    goalTypesContainer.addEventListener('dragover', function(e) {
+        e.preventDefault();
+    });
+
+    goalTypesContainer.addEventListener('dragenter', function(e) {
+        e.preventDefault();
+    });
+
+    goalTypesContainer.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (e.target.classList.contains('goal-type-card')) {
+            const bounding = e.target.getBoundingClientRect();
+            const offset = bounding.y + bounding.height / 2;
+            if (e.clientY - offset > 0) {
+                e.target.parentNode.insertBefore(draggedItem, e.target.nextSibling);
+            } else {
+                e.target.parentNode.insertBefore(draggedItem, e.target);
+            }
+        } else if (e.target.parentNode.classList.contains('goal-types-container')) {
+            e.target.parentNode.appendChild(draggedItem);
+        }
+    });
+
+    // Reset button functionality
+    document.getElementById('reset-button').addEventListener('click', function() {
+        const container = document.getElementById('goalTypesContainer');
+        const items = Array.from(container.children);
+        items.sort((a, b) => {
+            const types = ['Internal Business Processes', 'Financial Perspective', 'Customer Perspective', 'Learning & Growth'];
+            return types.indexOf(a.dataset.type) - types.indexOf(b.dataset.type);
+        });
+        items.forEach(item => container.appendChild(item));
+    });
+});
+
+function sgCloseModal() {
+    document.getElementById('sg-modal-overlay').style.display = 'none';
+}
+
+function saveStrategicGoals() {
+    // Implementation for saving goals
+    alert('Strategic goals saved successfully!');
+}
+
+function removeTag(element) {
+    element.parentNode.remove();
+}
+
+
+
+
+$(document).ready(function() {
+    let reviewPeriods = [];
+
+    // Function to fetch review periods
+    function fetchReviewPeriods() {
+        console.log('Fetching review periods...');
+        $.ajax({
+            url: 'http://127.0.0.1:8002/review-periods/?company_code=',
+            method: 'GET',
+            success: function(data) {
+                console.log('Received review periods:', data);
+                reviewPeriods = data;
+                displayReviewPeriods();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching review periods:', error);
+            }
+        });
+    }
+
+    // Function to display review periods
+    function displayReviewPeriods() {
+        console.log('Displaying review periods...');
+        let reviewPeriodHtml = '<select id="temp-review-periods">';
+        reviewPeriods.forEach(function(period) {
+            reviewPeriodHtml += `<option value="${period.period_end_date}">${period.review} - ${period.period_start_date} to ${period.period_end_date}</option>`;
+        });
+        reviewPeriodHtml += '</select>';
+        // Remove any existing temporary select
+        $('#temp-review-periods').remove();
+        // Display this html underneath the selected dropdown
+        $(reviewPeriodHtml).insertAfter($('#long-term-target-type, #medium-term-target-type, #short-term-target-type').filter(':last'));
+        console.log('Temporary container inserted.');
+    }
+
+    // Detect when "Specify end of cycle" option is selected
+    $('#long-term-target-type, #medium-term-target-type, #short-term-target-type').on('change', function() {
+        console.log('Dropdown changed:', $(this).val());
+        if ($(this).val().toLowerCase().includes('specify end of cycle')) {
+            console.log('Specify end of cycle selected.');
+            if (reviewPeriods.length === 0) {
+                fetchReviewPeriods();
+            } else {
+                displayReviewPeriods();
+            }
+        }
+    });
+
+    // Select review period and update option
+    $(document).on('change', '#temp-review-periods', function() {
+        let selectedReviewPeriodEndDate = $(this).val();
+        // Update the option value and text
+        // You might need to adjust the selector based on your exact requirements
+        $('#t_period_end_date').val(selectedReviewPeriodEndDate).text(`Review Period end-date: ${selectedReviewPeriodEndDate}`);
+    });
+});
+
+
+// Fetch API data
+fetch('http://127.0.0.1:8002/uoms/')
+  .then(response => response.json())
+  .then(data => {
+    const uomSelectIds = [
+      'long-term-target-uom',
+      'long-term-budget-uom',
+      'medium-term-target-uom',
+      'medium-term-budget-uom',
+      'short-term-target-uom',
+      'short-term-budget-uom'
+    ];
+
+    // Populate select options
+    uomSelectIds.forEach(id => {
+      const selectElement = document.getElementById(id);
+      data.forEach(uom => {
+        const option = document.createElement('option');
+        option.value = uom.id;
+        option.text = `${uom.name} (${uom.symbol})`;
+        selectElement.appendChild(option);
+      });
+      // Initialize Select2
+      $(selectElement).select2();
+    });
+  })
+  .catch(error => console.error('Error fetching UOM data:', error));
+
+
+
+document.querySelectorAll('.goal-type-card').forEach(card => {
+    card.addEventListener('dragstart', function() {
+        draggedItem = this;
+    });
+});
+
+document.querySelectorAll('.priority-textbox').forEach(textbox => {
+    textbox.addEventListener('dragover', function(e) {
+        e.preventDefault();
+    });
+
+    textbox.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (draggedItem && (this.value === 'Highest Priority' || this.value === 'High Priority' || this.value === 'Medium Priority' || this.value === 'Lowest Priority' || this.value === '')) {
+            let duplicate = false;
+            document.querySelectorAll('.priority-textbox').forEach(otherTextbox => {
+                if (otherTextbox !== this && otherTextbox.value === draggedItem.querySelector('i').nextSibling.nodeValue.trim()) {
+                    duplicate = true;
+                }
+            });
+            if (!duplicate) {
+                this.value = draggedItem.querySelector('i').nextSibling.nodeValue.trim();
+                this.readOnly = false;
+                this.style.background = 'white';
+                this.style.color = 'black';
+            } else {
+                alert('Priority already selected');
+            }
+            draggedItem = null;
+        } else {
+            alert('Priority already been selected');
+        }
+        saveToLocalStorage();
+    });
+});
+
+function saveToLocalStorage() {
+    let priorities = [];
+    document.querySelectorAll('.priority-textbox').forEach(textbox => {
+        priorities.push(textbox.value);
+    });
+    localStorage.setItem('priorities', JSON.stringify(priorities));
+}
+
+const modalOverlay = document.getElementById('sg-modal-overlay');
+const openModalBtn = document.getElementById('openStrategicGoalsModal');
+
+openModalBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+function sgCloseModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.addEventListener('keydown', trapFocus);
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', trapFocus);
+}
+
+
+function loadFromLocalStorage() {
+    let priorities = JSON.parse(localStorage.getItem('priorities'));
+    if (priorities) {
+        document.querySelectorAll('.priority-textbox').forEach((textbox, index) => {
+            if (priorities[index] !== 'Highest Priority' && priorities[index] !== 'High Priority' && priorities[index] !== 'Medium Priority' && priorities[index] !== 'Lowest Priority' && priorities[index] !== '') {
+                textbox.value = priorities[index];
+                textbox.readOnly = false;
+                textbox.style.background = 'white';
+                textbox.style.color = 'black';
+            } else if (priorities[index] === '') {
+                textbox.value = '';
+                textbox.readOnly = false;
+                textbox.style.background = '';
+                textbox.style.color = '';
+            } else {
+                // do nothing
+            }
+        });
+    }
+}
+
+loadFromLocalStorage();
+
+
+document.getElementById('reset-button').addEventListener('click', () => {
+  // Clear priority textboxes
+  document.querySelectorAll('.priority-textbox').forEach(textbox => {
+    textbox.value = '';
+    textbox.readOnly = true;
+    textbox.style.background = '';
+    textbox.style.color = '';
+  });
+  const originalValues = [
+    { value: 'Highest Priority' },
+    { value: 'High Priority' },
+    { value: 'Medium Priority' },
+    { value: 'Lowest Priority' }
+  ];
+  document.querySelectorAll('.priority-textbox').forEach((textbox, index) => {
+    textbox.value = originalValues[index].value;
+  });
+
+  // Clear local storage
+  localStorage.removeItem('priorities');
+});
+
+
+// Set values for form fields
+document.getElementById('employee-password').value = localStorage.getItem('employeePassword');
+document.getElementById('username').value = localStorage.getItem('username');
+document.getElementById('username-display').value = localStorage.getItem('username');
+document.getElementById('company_code').value = localStorage.getItem('companyCode');
+document.getElementById('branch_code').value = localStorage.getItem('branchCode');
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const el = document.getElementById('element-id');
+    if (el) {
+      el.addEventListener('click', () => {
+        // logic
+      });
+    }
+  });
+
+
+// Ensure openModal function exists
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+}
+
+    // Placeholder functions for actions
+    function refreshSettings() {
+        alert('Settings refreshed successfully!');
+    }
+
+    function retrieveSettings() {
+        alert('Settings retrieved successfully!');
+    }
+
+    function updateSettings() {
+        alert('Settings updated successfully!');
+    }
+
+    // Open modal button event
+    document.getElementById('openModalBtn')?.addEventListener('click', openModal);
+     
+        
+// Drag and drop functionality for goal types
+let draggedItem = null;
+
+goalTypesContainer.querySelectorAll('.goal-type-card').forEach(card => {
+    card.addEventListener('dragstart', function() {
+        draggedItem = this;
+        setTimeout(() => this.classList.add('dragging'), 0);
+    });
+    
+    card.addEventListener('dragend', function() {
+        this.classList.remove('dragging');
+        draggedItem = null;
+        
+        // Update priority indicators
+        const cards = goalTypesContainer.querySelectorAll('.goal-type-card');
+        cards.forEach((card, index) => {
+            const label = card.querySelector('.priority-label');
+            if (label) {
+                card.removeChild(label);
+            }
+        });
+        
+        // Add priority indicators to first and last cards
+        const firstCard = cards[0];
+        const lastCard = cards[cards.length - 1];
+        
+        const topLabel = document.createElement('div');
+        topLabel.className = 'priority-label';
+        topLabel.innerHTML = '<i class="fas fa-arrow-up"></i> Highest Priority';
+        firstCard.appendChild(topLabel);
+        
+        const bottomLabel = document.createElement('div');
+        bottomLabel.className = 'priority-label';
+        bottomLabel.innerHTML = '<i class="fas fa-arrow-down"></i> Lowest Priority';
+        lastCard.appendChild(bottomLabel);
+    });
+});
+
+goalTypesContainer.addEventListener('dragover', e => {
+    e.preventDefault();
+    const afterElement = getDragAfterElement(goalTypesContainer, e.clientY);
+    const currentItem = document.querySelector('.dragging');
+    
+    if (!afterElement) {
+        goalTypesContainer.appendChild(currentItem);
+    } else {
+        goalTypesContainer.insertBefore(currentItem, afterElement);
+    }
+});
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.goal-type-card:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+// Simulate goal selection based on goal type
+goalTypesContainer.addEventListener('click', (e) => {
+    const card = e.target.closest('.goal-type-card');
+    if (!card) return;
+    
+    // Remove active class from all cards
+    document.querySelectorAll('.goal-type-card').forEach(c => {
+        c.style.borderLeft = 'none';
+    });
+    
+    // Add active state to clicked card
+    card.style.borderLeft = '4px solid #3498db';
+    
+    // Update goal select options based on goal type
+    const goalSelect = document.getElementById('sg-goal-select');
+    goalSelect.innerHTML = '<option value="">Select</option><option value="other">Other (Enter Custom Goal)</option>'; // Reset with 'Other' option
+    
+    const type = card.getAttribute('data-type');
+    
+    // Fetch goals from API
+    fetch('/get-config-values/')
+        .then(response => response.json())
+        .then(data => {
+            const goals = data.data || [];
+            // Filter goals by the selected goal type
+            const filteredGoals = [...new Set(
+                goals
+                    .filter(item => item.goal_type === type && item.strategic_goal)
+                    .map(item => item.strategic_goal)
+            )];
+            
+            // Add filtered goals to the dropdown
+            filteredGoals.forEach(goal => {
+                const option = document.createElement('option');
+                option.value = goal.toLowerCase().replace(/ /g, '_'); // Normalize value
+                option.textContent = goal;
+                goalSelect.appendChild(option);
+            });
+            
+            // Re-attach the 'Other' option handler
+            goalSelect.addEventListener('change', function () {
+                const customInputDiv = document.getElementById('custom-goal-input');
+                if (goalSelect.value === 'other') {
+                    if (!customInputDiv) {
+                        const inputDiv = document.createElement('div');
+                        inputDiv.id = 'custom-goal-input';
+                        const inputField = document.createElement('input');
+                        inputField.type = 'text';
+                        inputField.placeholder = 'Enter your custom goal...';
+                        inputDiv.appendChild(inputField);
+                        goalSelect.parentNode.appendChild(inputDiv);
+                    }
+                } else {
+                    if (customInputDiv) {
+                        customInputDiv.remove(); // Remove the input field if not selected
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching strategic goals:', error);
+            // Fallback to default goals if fetch fails
+            let fallbackGoals = [
+                'Improve employee retention by 20%',
+                'Implement sustainability initiatives',
+                'Enhance cybersecurity measures',
+                'Streamline internal communication'
+            ];
+            fallbackGoals.forEach(goal => {
+                const option = document.createElement('option');
+                option.value = goal.toLowerCase().replace(/ /g, '_');
+                option.textContent = goal;
+                goalSelect.appendChild(option);
+            });
+        });
+});
+        
+        // Set date to end of current year
+        document.getElementById('end-of-review-btn').addEventListener('click', () => {
+            const today = new Date();
+            const endOfYear = new Date(today.getFullYear(), 11, 31);
+            const formattedDate = endOfYear.toISOString().split('T')[0];
+            document.getElementById('sg-date-picker').value = formattedDate;
+        });
+        
+        // Department selection
+        document.getElementById('departmentSelect').addEventListener('change', function() {
+            if (this.value) {
+                addDepartmentTag(this.value);
+                this.value = '';
+            }
+        });
+        
+        function addDepartmentTag(department) {
+            const container = document.getElementById('tags-container');
+            
+            // Check if tag already exists
+            const existingTags = [...container.querySelectorAll('.tag')];
+            const exists = existingTags.some(tag => 
+                tag.textContent.toLowerCase().includes(department.toLowerCase())
+            );
+            
+            if (!exists) {
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.innerHTML = `${capitalizeFirstLetter(department)} <span class="tag-remove" onclick="removeTag(this)">×</span>`;
+                container.appendChild(tag);
+            }
+        }
+        
+        function removeTag(element) {
+            element.parentElement.remove();
+        }
+        
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Button functions
+        function saveStrategicGoals() {
+            alert('Strategic goals saved successfully!');
+            sgCloseModal();
+        }
+        
+        function refreshSettings() {
+            alert('Settings refreshed to last saved version');
+        }
+        
+        function updateSettings() {
+            alert('Settings updated with current changes');
+        }
+        
+        // Set today as default in date picker
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0];
+        document.getElementById('sg-date-picker').value = formattedToday;
+        document.getElementById('sg-date-picker').min = formattedToday;
+        
+        // Initialize priority indicators
+        const cards = goalTypesContainer.querySelectorAll('.goal-type-card');
+        cards[0].innerHTML += '<div class="priority-label"><i class="fas fa-arrow-up"></i> Highest Priority</div>';
+        cards[cards.length - 1].innerHTML += '<div class="priority-label"><i class="fas fa-arrow-down"></i> Lowest Priority</div>';
+
+        const selectedRows = new Set();  // Store selected goal IDs
+      
+        function closeRetrieveModal() {
+          document.getElementById("retrieve-modal-overlay").style.display = "none";
+        }
+      
+        function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+              const trimmed = cookie.trim();
+              if (trimmed.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(trimmed.substring(name.length + 1));
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        }
+      
+        function formatDateForInput(str) {
+          const date = new Date(str);
+          return date.toISOString().split("T")[0];
+        }
+      
+        function formatWeightAsPercentage(weight) {
+          return weight ? `${(weight * 100).toFixed(2)}%` : '0%';
+        }
+      
+        function populateEditableTable(goals) {
+          const tableBody = document.getElementById("goalsTableBody");
+          tableBody.innerHTML = '';
+          selectedRows.clear();
+      
+          if (goals.length > 0) {
+            document.getElementById("username").value = goals[0].username || '';
+            const regionBranchInput = document.getElementById("region_branch");
+            regionBranchInput.value = goals[0].region_branch || '';
+            regionBranchInput.style.display = 'inline-block';
+      
+            const regionBranchLabel = document.querySelector("label[for='region_branch']");
+            if (regionBranchLabel) {
+              regionBranchLabel.style.display = 'inline-block';
+            }
+          }
+      
+          goals.forEach((goal, index) => {
+            const row = document.createElement('tr');
+            row.classList.add("hover:bg-gray-100", "transition");
+            row.dataset.index = index;
+            row.dataset.goalId = goal.id;
+      
+            row.innerHTML = `
+              <td class="px-2 py-2 border text-center" style="width: 40px;">
+                <input type="checkbox" class="row-selector" data-id="${goal.id}" />
+              </td>
+              <td class="px-4 py-2 border" style="width: 250px; font-size: 11px;">
+                <input type="text" name="goal_type_${index}" value="${goal.goal_type}" class="w-full border px-2 py-1 rounded" />
+              </td>
+              <td class="px-4 py-2 border" style="width: 350px; font-size: 11px;">
+                <input type="text" name="strategic_goal_${index}" value="${goal.strategic_goal}" class="w-full border px-2 py-1 rounded" />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="text" name="weight_${index}" value="${formatWeightAsPercentage(goal.weight)}" class="w-auto border px-2 py-1 rounded" readonly />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="date" name="due_date_${index}" value="${goal.due_date ? formatDateForInput(goal.due_date) : ''}" class="w-full border px-2 py-1 rounded" />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="text" name="department_${index}" value="${goal.department}" class="w-full border px-2 py-1 rounded" />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="text" name="employee_name_${index}" value="${goal.username || ''}" class="w-full border px-2 py-1 rounded" readonly />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="text" name="date_created_${index}" value="${goal.created_date || ''}" class="w-full border px-2 py-1 rounded" readonly />
+              </td>
+              <td class="px-4 py-2 border" style="font-size: 11px;">
+                <input type="text" name="branch_${index}" value="${goal.region_branch || ''}" class="w-full border px-2 py-1 rounded" readonly />
+              </td>
+            `;
+      
+            const checkbox = row.querySelector('.row-selector');
+            checkbox.addEventListener('change', function () {
+              const goalId = this.dataset.id;
+              if (this.checked) {
+                selectedRows.add(goalId);
+                row.classList.add('bg-gray-300', 'opacity-70');
+                row.querySelectorAll('input:not(.row-selector)').forEach(input => input.disabled = true);
+              } else {
+                selectedRows.delete(goalId);
+                row.classList.remove('bg-gray-300', 'opacity-70');
+                row.querySelectorAll('input:not(.row-selector)').forEach(input => input.disabled = false);
+              }
+              console.log('Selected goal IDs:', [...selectedRows]);
+            });
+      
+            tableBody.appendChild(row);
+          });
+        }
+      
+        document.addEventListener('DOMContentLoaded', function () {
+          const openBtn = document.getElementById("openStrategicGoalsRetrieveModal");
+          const closeBtn = document.getElementById("closeModalBtn");
+          const saveBtn = document.getElementById("saveGoalsBtn");
+          const deleteBtn = document.getElementById("deleteSelectedBtn");
+          const modalOverlay = document.getElementById("retrieve-modal-overlay");
+      
+          function openRetrieveModal() {
+            modalOverlay.style.display = "flex";
+          }
+      
+          openBtn.addEventListener("click", function () {
+            const code = document.getElementById("company_code").value.trim();
+            if (!code) {
+              alert("Enter Company Code");
+              return;
+            }
+      
+            fetch(`/retrieve_strategic_goals/?company_code=${encodeURIComponent(code)}`)
+              .then(res => res.json())
+              .then(data => {
+                if (data.status === 'success') {
+                  populateEditableTable(data.goals);
+                  openRetrieveModal();
+                } else {
+                  alert(data.message || "Failed to retrieve goals");
+                }
+              })
+              .catch(err => {
+                console.error(err);
+                alert("Error fetching goals");
+              });
+          });
+      
+          closeBtn?.addEventListener("click", closeRetrieveModal);
+      
+          saveBtn.addEventListener("click", function () {
+            const form = document.getElementById("goalsForm");
+            const formData = new FormData(form);
+      
+            fetch("/update_strategic_goals/", {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+              },
+              body: formData
+            })
+              .then(res => res.json())
+              .then(data => {
+                alert(data.message || "Saved successfully");
+                closeRetrieveModal();
+              })
+              .catch(err => {
+                console.error(err);
+                alert("Failed to save");
+              });
+          });
+      
+          deleteBtn.addEventListener("click", function () {
+            const companyCode = document.getElementById("company_code").value.trim();
+            const idsToDelete = [...selectedRows];
+      
+            if (!companyCode) {
+              alert("Company code is required.");
+              return;
+            }
+      
+            if (idsToDelete.length === 0) {
+              alert("Select at least one row to delete.");
+              return;
+            }
+      
+            if (!confirm("Are you sure you want to delete the selected goals?")) return;
+      
+            fetch("/delete_strategic_goals/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+              },
+              body: JSON.stringify({
+                company_code: companyCode,
+                ids: idsToDelete
+              })
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.status === 'success') {
+                  alert("Deleted successfully");
+                  selectedRows.clear();
+                  openBtn.click(); // Refresh table
+                } else {
+                  alert(data.message || "Failed to delete");
+                }
+              })
+              .catch(err => {
+                console.error(err);
+                alert("Error deleting goals");
+              });
+          });
+      
+          window.addEventListener("click", function (event) {
+            if (event.target === modalOverlay) {
+              closeRetrieveModal();
+            }
+          });
+        });
+
+    
+// Function to fetch all review periods for a company code
+async function fetchLatestReviewPeriod(companyCode) {
+    if (!companyCode) return null;
+    try {
+        const response = await fetch(`/review-periods/?company_code=${encodeURIComponent(companyCode)}`);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Could not fetch review periods.');
+        }
+        const reviewPeriods = await response.json();
+        if (!reviewPeriods || reviewPeriods.length === 0) return null;
+        return reviewPeriods; // Returns array of { review, period_start_date, period_end_date }
+    } catch (error) {
+        console.error('Error fetching review periods:', error);
+        return null;
+    }
+}
+
+// Event listener for End of Appraisal Period button
+document.getElementById('end-of-review-btn').addEventListener('click', async function () {
+    const companyCode = document.getElementById('company_code').value.trim();
+    const datePicker = document.getElementById('new-date-picker') || document.getElementById('sg-date-picker');
+
+    if (!companyCode) {
+        alert('Please enter a company code.');
+        return;
+    }
+
+    const reviewPeriods = await fetchLatestReviewPeriod(companyCode);
+
+    if (reviewPeriods && reviewPeriods.length > 0) {
+        const latestPeriod = reviewPeriods.reduce((latest, current) => {
+            return current.review > latest.review ? current : latest;
+        });
+
+        datePicker.value = latestPeriod.period_end_date;
+        console.log('All Review Periods:', reviewPeriods);
+    } else {
+        alert('No review periods found for this company code.');
+        datePicker.value = '';
+    }
+});
+
+
+// Function to populate date picker and optionally display review periods
+async function populateDatePicker() {
+    const companyCode = document.getElementById('company_code').value.trim();
+    const dateInput = document.getElementById('sg-date-picker');
+    if (companyCode) {
+        const reviewPeriods = await fetchLatestReviewPeriod(companyCode);
+        if (reviewPeriods && reviewPeriods.length > 0) {
+            // Select the period with the highest review value
+            const latestPeriod = reviewPeriods.reduce((latest, current) => {
+                return current.review > latest.review ? current : latest;
+            });
+            dateInput.value = latestPeriod.period_end_date;
+            // Optionally store or display all periods
+            console.log('All Review Periods:', reviewPeriods);
+        } else {
+            dateInput.value = ''; // Clear if no valid data is found
+        }
+    } else {
+        dateInput.value = ''; // Clear if no company code
+    }
+}
+
+// Event listener for End of Appraisal Period button
+document.getElementById('end-of-review-btn').addEventListener('click', async function () {
+    const companyCode = document.getElementById('company_code').value.trim();
+    const dateInput = document.getElementById('sg-date-picker');
+    if (!companyCode) {
+        alert('Please enter a company code.');
+        return;
+    }
+    const reviewPeriods = await fetchLatestReviewPeriod(companyCode);
+    if (reviewPeriods && reviewPeriods.length > 0) {
+        // Select the period with the highest review value
+        const latestPeriod = reviewPeriods.reduce((latest, current) => {
+            return current.review > latest.review ? current : latest;
+        });
+        dateInput.value = latestPeriod.period_end_date;
+        // Optionally store or display all periods
+        console.log('All Review Periods:', reviewPeriods);
+    } else {
+        alert('No review periods found for this company code.');
+    }
+});
+
+
+// Fetch and populate strategic goals
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/get-config-values/')
+        .then(response => response.json())
+        .then(data => {
+            const goals = data.data || [];
+            const uniqueGoals = [...new Set(goals.map(item => item.strategic_goal).filter(Boolean))];
+
+            const goalSelect = document.getElementById('sg-goal-select');
+            goalSelect.innerHTML = '<option value="">Select</option><option value="other">Other (Enter Custom Goal)</option>'; // Reset with 'Other' option
+
+            uniqueGoals.forEach(goal => {
+                const option = document.createElement('option');
+                option.value = goal;
+                option.textContent = goal;
+                goalSelect.appendChild(option);
+            });
+
+            // Add an input box for custom text when "Other" is selected
+            goalSelect.addEventListener('change', function () {
+                const customInputDiv = document.getElementById('custom-goal-input');
+                if (goalSelect.value === 'other') {
+                    if (!customInputDiv) {
+                        const inputDiv = document.createElement('div');
+                        inputDiv.id = 'custom-goal-input';
+                        const inputField = document.createElement('input');
+                        inputField.type = 'text';
+                        inputField.placeholder = 'Enter your custom goal...';
+                        inputDiv.appendChild(inputField);
+                        goalSelect.parentNode.appendChild(inputDiv);
+                    }
+                } else {
+                    if (customInputDiv) {
+                        customInputDiv.remove(); // Remove the input field if not selected
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching strategic goals:', error);
+        });
+});
+
+// Theme Toggle Functionality
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon();
+}
+
+
+function handleShowPasswordToggle(e) {
+    const passwordInput = document.getElementById('employee-password');
+    passwordInput.type = e.target.checked ? 'text' : 'password';
+}
+
+
+// Function to fetch departments from API
+async function fetchDepartments(companyCode) {
+    try {
+        const url = new URL("{% url 'fetch_company_departments' %}", window.location.origin);
+        url.searchParams.append('company_code', companyCode);
+
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.departments;
+    } catch (error) {
+        console.error('Error fetching departments:', error);
+        return [];
+    }
+}
+
+
+
+
+
+function toggleTag(department) {
+    const tagsContainer = document.getElementById("tags-container");
+    const tagExists = document.getElementById(department);
+    if (tagExists) {
+        tagsContainer.removeChild(tagExists);
+    } else {
+        const tag = document.createElement("span");
+        tag.classList.add("selected-tag");
+        tag.id = department;
+        tag.textContent = department;
+        tagsContainer.appendChild(tag);
+    }
+}
+
+function filterDepartments() {
+    const input = document.getElementById('search-input');
+    const filter = input.value.toUpperCase();
+    const optionItems = document.getElementsByClassName('option-item');
+    for (let i = 0; i < optionItems.length; i++) {
+        const option = optionItems[i];
+        const label = option.querySelector('label');
+        const text = label.textContent || label.innerText;
+        if (text.toUpperCase().indexOf(filter) > -1) {
+            option.style.display = '';
+        } else {
+            option.style.display = 'none';
+        }
+    }
+}
+
+window.addEventListener('click', function(event) {
+    const container = document.getElementById('dropdown-container');
+    const selectBox = document.getElementById('select-box');
+    if (!container.contains(event.target) && event.target !== selectBox) {
+        document.getElementById('options-container').style.display = 'none';
+    }
+});
+
+function loadSettings() {
+    const settingType = document.getElementById('settingType')?.value;
+    const container = document.getElementById('settingsContainer');
+    if (!container || !settingType) return;
+
+    const settings = data[settingType] || [];
+    if (settings.length === 0) {
+        container.innerHTML = '<div class="no-results">No settings found for selected criteria</div>';
+        return;
+    }
+
+    const grouped = settings.reduce((acc, item) => {
+        acc[item.factor_type] = acc[item.factor_type] || [];
+        acc[item.factor_type].push(item);
+        return acc;
+    }, {});
+
+    let html = '';
+    for (const [factorType, items] of Object.entries(grouped)) {
+        html += `
+            <div class="factor-group">
+                <div class="factor-header" onclick="toggleFactor(this)">
+                    <h3>${factorType}</h3>
+                    <i class="fas fa-chevron-right icon"></i>
+                </div>
+                <div class="factor-content">
+                    ${items.map(item => `
+                        <div class="factor-item">
+                            <span>${item.description}</span>
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
+
+
+function toggleFactor(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.icon');
+    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    icon.classList.toggle('rotate-90');
+}
+
+document.addEventListener('DOMContentLoaded', loadSettings);
+
+// Function to fetch departments from API
+async function fetchDepartments(companyCode) {
+    try {
+        const url = new URL("{% url 'fetch_company_departments' %}", window.location.origin);
+        url.searchParams.append('company_code', companyCode);
+
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.departments;
+    } catch (error) {
+        console.error('Error fetching departments:', error);
+        return [];
+    }
+}
+
+// Function to populate select elements with departments
+async function populateSelect() {
+    const companyCodeInput = document.getElementById('company_code');
+    const companyCode = companyCodeInput.value.trim();
+    const selectElements = [
+        document.getElementById('departmentSelect'),
+        document.getElementById('departmentSelect1')
+    ];
+
+    // Filter out null or undefined select elements
+    const validSelectElements = selectElements.filter(el => el !== null);
+
+    if (companyCode) {
+        const departments = await fetchDepartments(companyCode);
+        validSelectElements.forEach(selectElement => {
+            selectElement.innerHTML = '<option value="">Select departments</option>';
+            departments.forEach(department => {
+                const option = document.createElement('option');
+                option.value = department;
+                option.textContent = department;
+                selectElement.appendChild(option);
+            });
+        });
+    } else {
+        validSelectElements.forEach(selectElement => {
+            selectElement.innerHTML = '<option value="">Select departments</option>';
+        });
+    }
+}
+
+// State management for selected departments
+let selectedValuesArray = []; // Shared array for both dropdowns
+const selectedValuesTextBox = document.getElementById('selectedValues');
+
+// Add event listeners to both departmentSelect and departmentSelect1
+['departmentSelect', 'departmentSelect1'].forEach(selectId => {
+    const selectElement = document.getElementById(selectId);
+    if (selectElement) {
+        selectElement.addEventListener('change', function() {
+            const selectedOptions = Array.from(this.selectedOptions);
+            selectedOptions.forEach(option => {
+                if (option.value && !selectedValuesArray.includes(option.value)) {
+                    selectedValuesArray.push(option.value);
+                    addDepartmentTag(option.value, selectId === 'departmentSelect' ? 'tags-container' : 'tags-container1');
+                }
+            });
+            selectedValuesTextBox.value = selectedValuesArray.join(', ');
+            this.value = ''; // Reset dropdown after selection
+        });
+    }
+});
+
+// Function to add department tag
+function addDepartmentTag(department, containerId) {
+    const container = document.getElementById(containerId);
+    
+    // Check if tag already exists
+    const existingTags = [...container.querySelectorAll('.tag')];
+    const exists = existingTags.some(tag => 
+        tag.textContent.toLowerCase().includes(department.toLowerCase())
+    );
+    
+    if (!exists) {
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.dataset.department = department; // Store department for easier removal
+        tag.innerHTML = `${capitalizeFirstLetter(department)} <span class="tag-remove" onclick="removeTag(this, '${containerId}')">×</span>`;
+        container.appendChild(tag);
+    }
+}
+
+// Function to remove department tag and update state
+function removeTag(element, containerId) {
+    const tag = element.parentElement;
+    const department = tag.dataset.department; // Get department from data attribute
+    tag.remove(); // Remove the tag from the DOM
+
+    // Update selectedValuesArray
+    selectedValuesArray = selectedValuesArray.filter(dep => dep !== department);
+    selectedValuesTextBox.value = selectedValuesArray.join(', ');
+
+    // Optionally, re-enable the option in the corresponding dropdown
+    const selectId = containerId === 'tags-container' ? 'departmentSelect' : 'departmentSelect1';
+    const selectElement = document.getElementById(selectId);
+    if (selectElement) {
+        const option = Array.from(selectElement.options).find(opt => opt.value === department);
+        if (option) {
+            option.disabled = false; // Re-enable the option if it was disabled
+        }
+    }
+}
+
+// Utility function to capitalize first letter
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Trigger population on company_code change or page load
+document.addEventListener('DOMContentLoaded', () => {
+    populateSelect();
+    document.getElementById('company_code').addEventListener('input', populateSelect);
+});
+
+
+
+async function fetchQuestionData() {
+    try {
+        const response = await fetch("{% url 'evaluate_management' %}");
+        const data = await response.json();
+
+        const competenciesSelect = document.getElementById('competencies');
+
+        // Check if the element exists before using it
+        if (!competenciesSelect) {
+            console.warn("Element with ID 'competencies' not found.");
+            return;
+        }
+
+        const uniqueFactorTypes = [...new Set(data.map(item => item.factor_type))];
+
+        uniqueFactorTypes.forEach(factorType => {
+            const option = document.createElement('option');
+            option.value = factorType;
+            option.textContent = factorType;
+            competenciesSelect.appendChild(option);
+        });
+
+        competenciesSelect.addEventListener('change', () => {
+            const selectedCompetency = competenciesSelect.value;
+            populateQuestionsDropdown(selectedCompetency, data);
+        });
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+
+function populateQuestionsDropdown(selectedCompetency, data) {
+    const questionsDropdown = document.getElementById('questions');
+    questionsDropdown.innerHTML = '';
+
+    const matchingDescriptions = data.filter(item => item.factor_type === selectedCompetency);
+    const uniqueDescriptions = [...new Set(matchingDescriptions.map(item => item.description))];
+
+    uniqueDescriptions.forEach(description => {
+        const option = document.createElement('option');
+        option.value = description;
+        option.textContent = description;
+        questionsDropdown.appendChild(option);
+    });
+}
+
+
+function createMultipleQuestions() {
+    const companyCode = document.getElementById('company_code').value;
+    const branchCode = document.getElementById('branch_code').value;
+    const factorType = document.getElementById('competencies').value;
+    const feedbackType = document.getElementById('feedbackType').value;
+    const dueDate = document.getElementById('new-date-picker').value;
+    const changeStatus = document.getElementById('change_status')?.value || null;  // Make sure the field exists
+
+    const questionsSelect = document.getElementById('questions');
+    const questions = Array.from(questionsSelect.options).map(option => ({
+        descriptions: option.text,
+        feedback_type: feedbackType,
+        due_date: dueDate,
+        change_status: changeStatus
+    })).filter(question => question.descriptions !== '');
+
+    const newQuestionInput = document.getElementById('newQuestionInput').value;
+    if (newQuestionInput) {
+        questions.push({
+            descriptions: newQuestionInput,
+            feedback_type: feedbackType,
+            due_date: dueDate,
+            change_status: changeStatus
+        });
+    }
+
+    const payload = {
+        company_code: companyCode,  // This will still be sent to the server, but can be obfuscated in the message
+        branch_code: branchCode,
+        factor_type: factorType,
+        questions: questions
+    };
+
+    fetch('/submit-evaluation-questions/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Function to remove everything before the last "__" delimiter
+            const removeBeforeLastDelimiter = (str) => {
+                const lastDelimiterIndex = str.lastIndexOf("__");
+                return lastDelimiterIndex !== -1 ? str.substring(lastDelimiterIndex + 2) : str;
+            };
+
+            // Mask company code by not including it in the alert message
+            const maskedSavedCodes = data.saved_codes.map(code => removeBeforeLastDelimiter(code));
+            const maskedSkippedDuplicates = data.skipped_duplicates?.map(code => removeBeforeLastDelimiter(code)) || [];
+
+            // Construct a formatted message with the strategic goal on top and questions underneath
+            let message = `Strategic Goal: ${factorType}\n\n`;
+
+            // Add numbered questions under the strategic goal
+            if (maskedSavedCodes.length > 0) {
+                message += 'Questions Saved:\n';
+                maskedSavedCodes.forEach((code, index) => {
+                    message += `${index + 1}. ${code}\n`;  // Number the questions
+                });
+            }
+
+            // Add skipped duplicates if any
+            if (maskedSkippedDuplicates.length > 0) {
+                message += `\nSkipped duplicates:\n`;
+                maskedSkippedDuplicates.forEach((code, index) => {
+                    message += `${index + 1}. ${code}\n`;  // Number the skipped duplicates
+                });
+            }
+
+            alert(message);  // Show the formatted message
+        } else {
+            alert('Error saving data: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('Error saving data: ' + error);
+    });
+}
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function saveStrategicGoals() {
+    const goalType = document.getElementById('sg-type-select').value;
+    const strategicGoal = document.getElementById('sg-goal-select').value;
+    const weight = document.getElementById('sg-weight-select').value;
+    const dueDate = document.getElementById('sg-date-picker').value;
+
+    const departments = document.getElementById('selectedValues').value
+        .split(',')
+        .map(dep => dep.trim())
+        .filter(dep => dep.length > 0); // remove empty strings if any
+
+    const username = document.getElementById('username').value;
+    const regionBranch = document.getElementById('region_branch')?.value || ''; // Optional, include if exists
+
+    const companyCode = document.getElementById('company_code')?.value.trim();
+    const branchCodeRaw = document.getElementById('branch_code')?.value.trim();
+    const branchCode = branchCodeRaw === '' ? null : branchCodeRaw; // Optional, send null if empty
+
+    const employeeCode = document.getElementById('employee-password')?.value.trim();  // Maps to employee_code
+
+    // Validate required fields before submission
+    if (!companyCode || !employeeCode || !goalType || !strategicGoal || !username || departments.length === 0) {
+        alert("Please fill in all required fields: goal, employee, company, username, departments.");
+        return;
+    }
+
+    const payload = {
+        goal_type: goalType,
+        strategic_goal: strategicGoal,
+        weight: weight ? weight : null,
+        due_date: dueDate ? dueDate : null,
+        departments: departments,
+        username: username,
+        company_code: companyCode,
+        employee_code: employeeCode
+    };
+
+    // Add optional fields only if they exist (non-null/non-empty)
+    if (regionBranch) {
+        payload.region_branch = regionBranch;
+    }
+    if (branchCode) {
+        payload.branch_code = branchCode;
+    }
+
+    console.log("Payload being sent:", JSON.stringify(payload, null, 2));
+
+    fetch('/save-strategic-goals/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Saved successfully!');
+        } else {
+            return response.json().then(data => {
+                console.error('Server responded with:', data);
+                alert('Error saving data: ' + (data.message || 'Unknown error'));
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error occurred:', error);
+        alert('An error occurred while saving data.');
+    });
+}
+
+</script>
+</body>
+</html>

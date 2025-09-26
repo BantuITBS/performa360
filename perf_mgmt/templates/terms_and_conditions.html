@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Performance Management Canvas Terms of Service">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Terms of Service - Performance Management Canvas</title>
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #148f77;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.8;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: var(--text-color);
+            counter-reset: section;
+        }
+
+        h1 { 
+            font-size: 2.4rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 2.5rem 0 1rem;
+            counter-increment: section;
+            position: relative;
+        }
+
+        h2::before {
+            content: counter(section) ". ";
+            color: var(--secondary-color);
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .legal-badge {
+            display: inline-block;
+            background: #e8f6f3;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        [aria-expanded] {
+            color: var(--secondary-color);
+            cursor: pointer;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Performance Management Canvas Terms of Service</h1>
+        <p><strong>Effective:</strong> <span id="date"></span> | <strong>Version:</strong> 2.1</p>
+        <div class="legal-badge">GDPR Compliant</div>
+        <div class="legal-badge">CCPA Ready</div>
+        <div class="legal-badge">POPIA Aligned</div>
+    </header>
+
+    <nav class="toc">
+        <h3>Table of Contents</h3>
+        <ol>
+            <li><a href="#acceptance">Acceptance of Terms</a></li>
+            <li><a href="#eligibility">Eligibility & Account Management</a></li>
+            <li><a href="#conduct">User Conduct & Restrictions</a></li>
+            <li><a href="#content">Content Rights & Licensing</a></li>
+            <li><a href="#financial">Financial Terms</a></li>
+            <li><a href="#termination">Termination Protocols</a></li>
+            <li><a href="#liability">Liability Framework</a></li>
+            <li><a href="#disputes">Dispute Resolution</a></li>
+        </ol>
+    </nav>
+
+    <section id="acceptance">
+        <h2>Agreement Acceptance</h2>
+        <p>By accessing Performance Management Canvas (the "Service"), you agree to:</p>
+        <ul>
+            <li>These binding Terms of Service ("ToS")</li>
+            <li>Our <a href="/privacy">Privacy Policy</a></li>
+            <li>Applicable <a href="/dpa">Data Processing Addendum</a> (DPA)</li>
+        </ul>
+        <p>For business users: These Terms constitute a legally binding agreement between your organization and iTBS (Pty) Ltd.</p>
+    </section>
+
+    <section id="eligibility">
+        <h2>Service Eligibility</h2>
+        <div class="highlight">Minimum Age Requirements:</div>
+        <ul>
+            <li>16 years (GDPR jurisdictions)</li>
+            <li>13 years with parental consent (COPPA compliance)</li>
+            <li>18 years (other regions)</li>
+        </ul>
+        
+        <div class="highlight">Account Security Obligations:</div>
+        <p>You must:</p>
+        <ul>
+            <li>Use MFA where available</li>
+            <li>Report unauthorized access within 24 hours</li>
+            <li>Maintain accurate organizational hierarchy data</li>
+        </ul>
+    </section>
+
+    <section id="conduct">
+        <h2>Permitted Usage</h2>
+        <p>You may only use the Service for lawful business performance management purposes.</p>
+        
+        <div class="highlight">Prohibited Activities Include:</div>
+        <ul>
+            <li>Reverse engineering or scraping API endpoints</li>
+            <li>Bulk exporting of employee data without consent</li>
+            <li>Training AI/ML models using Service data</li>
+            <li>Circumventing access controls or rate limits</li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <h2>Intellectual Property Rights</h2>
+        <div class="highlight">User Content:</div>
+        <ul>
+            <li>You retain ownership of submitted data</li>
+            <li>Grant us a <strong>non-exclusive, transferable sublicensable license</strong> for service operation</li>
+            <li>Data retention governed by our <a href="/retention-policy">Retention Schedule</a></li>
+        </ul>
+
+        <div class="highlight">Service IP:</div>
+        <p>All platform elements including UI/UX patterns, assessment methodologies, and analytics engines are protected under:</p>
+        <ul>
+            <li>Copyright Laws</li>
+            <li>Patent Pending: ZA2023/04567</li>
+            <li>Trademark: #TMA123,456</li>
+        </ul>
+    </section>
+
+    <section id="financial">
+        <h2>Financial Terms</h2>
+        <div class="highlight">Subscription Management:</div>
+        <ul>
+            <li>Auto-renewal with 30-day notice for price changes</li>
+            <li>7-day grace period for failed payments</li>
+            <li>Pro-rated refunds for annual plans</li>
+        </ul>
+
+        <div class="highlight">Tax Compliance:</div>
+        <p>You are responsible for:</p>
+        <ul>
+            <li>VAT/GST where applicable</li>
+            <li>Withholding tax obligations</li>
+            <li>Cross-border transaction reporting</li>
+        </ul>
+    </section>
+
+    <section id="termination">
+        <h2>Service Termination</h2>
+        <div class="highlight">User-Initiated:</div>
+        <ul>
+            <li>30-day data export window post-termination</li>
+            <li>Final audit report generation available</li>
+        </ul>
+
+        <div class="highlight">Company-Initiated:</div>
+        <ul>
+            <li>Material breach of ToS</li>
+            <li>Regulatory requirements</li>
+            <li>Extended service downtime (>72hrs)</li>
+        </ul>
+    </section>
+
+    <section id="liability">
+        <h2>Liability Framework</h2>
+        <div class="highlight">Cap on Damages:</div>
+        <p>Total liability limited to fees paid during 12 months preceding claim.</p>
+        
+        <div class="highlight">Exclusions:</div>
+        <ul>
+            <li>Data breach costs exceeding $1M USD</li>
+            <li>Third-party integration failures</li>
+            <li>Force majeure events</li>
+        </ul>
+    </section>
+
+    <section id="disputes">
+        <h2>Dispute Resolution</h2>
+        <div class="highlight">Mandatory Steps:</div>
+        <ol>
+            <li>Mediation via AAA Commercial Rules</li>
+            <li>Binding arbitration in Cape Town, SA</li>
+            <li>Opt-out available within 30 days of agreement</li>
+        </ol>
+
+        <div class="highlight">Class Action Waiver:</div>
+        <p>All claims must be brought individually, not as class/collective actions.</p>
+    </section>
+
+    <footer>
+        <p>© 2023 iTBS (Pty) Ltd | Reg: 2023/123456/07<br>
+        <a href="mailto:legal@itbs.com">legal@itbs.com</a> | +27 21 123 4567</p>
+    </footer>
+
+    <script>
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-ZA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+
+<nav aria-label="Legal navigation">
+    <a href="{% url 'privacy_policy' %}" style="position:fixed;bottom:20px;right:20px;background:#1a5276;color:white;padding:10px;border-radius:5px;">
+        <i class="fas fa-user-shield"></i> Privacy Policy
+    </a>
+</nav>
+</body>
+</html>

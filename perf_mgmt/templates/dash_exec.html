@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Styles and Scripts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<style>
+:root {
+  --sidebar-width: 20rem;
+  --header-height: 10.5rem;
+}
+
+.select2-container .select2-selection--single {
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 2.5;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 38px;
+}
+
+.input-small {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent !important;
+  border-radius: 0.375rem;
+  width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.input-small:focus {
+  outline: none;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  color: #f8fafc;
+}
+
+.field-container {
+  margin-bottom: 1.25rem;
+}
+
+.field-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #475569;
+  display: block;
+  margin-bottom: 0.375rem;
+  letter-spacing: 0.025em;
+}
+
+.field-container select {
+  width: 100%;
+  height: 42px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background-color: #f8fafc;
+}
+
+
+.select2-container {
+  min-width: 200px !important;
+  width: 100% !important;
+}
+
+/* Custom scrollbar for sidebar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card styling */
+.card {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+#my-form {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+
+
+
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background-color: transparent !important;
+  backdrop-filter: blur(0);
+  box-shadow: none;
+  height: 50px;
+  padding-left: 0rem;
+  padding-right: 0.1rem;
+  border-radius: 0.5rem;
+}
+.field-container-1 {
+display: none !important;
+}
+
+.field-container-2 {
+ background: transparent;
+}
+
+.select2-selection__rendered {
+  white-space: normal !important;
+}
+</style>
+
+
+<body class="bg-gray-50 antialiased">
+    <!-- Main Navigation Header -->
+<nav style="top: -5px; padding-top: 0px; padding-bottom: 0px;" class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 shadow-xl fixed w-full z-30">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Top Command Row - Enhanced with subtle glow and better spacing -->
+    <div class="flex items-center justify-between py-2">
+      <div class="flex items-center space-x-6">
+        <h1 id="report-title" class="text-white text-2xl font-bold tracking-tight drop-shadow-md">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
+            Executive Report
+          </span>
+          <span class="text-blue-200 text-sm font-normal ml-3 animate-pulse">Loading data...</span>
+        </h1>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="bg-blue-600/40 hover:bg-blue-600/60 text-blue-100 px-4 py-2 rounded-lg transition-all duration-300 flex items-center shadow-sm hover:shadow-md group">
+          <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span class="font-medium">Benchmark Analysis</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Form with elegant glass morphism effect -->
+    <form id="my-form" class="flex flex-wrap items-center gap-4 pb-2 mt-0">
+      <!-- Hidden input -->
+      <div class="hidden-field">
+        <input type="text" id="username-input" class="sr-only"/>
+      </div>
+
+      <!-- Visible input with floating label effect -->
+      <div class="field-container flex-1 min-w-[12rem] relative group">
+        <input
+          class="w-full px-4 py-2 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white placeholder-transparent focus:outline-none focus:border-blue-400 rounded-t-lg transition-all duration-200 peer"
+          type="text"
+          id="username-input-clone"
+          name="name"
+          placeholder=" "
+        />
+        <label class="absolute left-4 top-2 text-blue-200/80 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-blue-300/60 peer-placeholder-shown:top-2.5 peer-focus:text-xs peer-focus:text-blue-200 peer-focus:top-2 pointer-events-none">
+
+        </label>
+      </div>
+
+      <!-- Region Branch input with same floating label effect -->
+<div class="field-container flex-1 min-w-[12rem] relative group">
+  <input
+    class="w-full px-4 py-2 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white placeholder-transparent focus:outline-none focus:border-blue-400 rounded-t-lg transition-all duration-200 peer"
+    type="text"
+    id="region_branch"
+    name="region_branch"
+  />
+  <label class="absolute left-4 top-2 text-blue-200/80 text-xs transition-all duration-200 peer-placeholder-shown:text-sm peer-placeholder-shown:text-blue-300/60 peer-placeholder-shown:top-2.5 peer-focus:text-xs peer-focus:text-blue-200 peer-focus:top-2 pointer-events-none">
+  </label>
+</div>
+
+      <!-- Hidden fields maintained but not visible -->
+      <div class="hidden">
+        <div class="field-container flex-1 min-w-[12rem]">
+          <input type="password" id="employee-password" name="employee_password"/>
+        </div>
+        <div class="field-container flex-1 min-w-[12rem]">
+          <input type="text" id="company_code" name="company_code"/>
+        </div>
+        <div class="field-container flex-1 min-w-[12rem]">
+          <input type="text" id="branch_code" name="branch_code"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Subtle animated gradient border at bottom -->
+  <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent animate-[pulse_3s_ease-in-out_infinite]"></div>
+</nav>
+
+
+<nav class="fixed left-0 bg-gradient-to-b from-slate-900/95 to-blue-900/95 backdrop-blur-md shadow-2xl border-r border-blue-400/20 px-6 py-6 z-20 overflow-y-auto transition-all duration-300 ease-in-out"
+     style="top: 100px; height: calc(100vh - 100px); width: calc(var(--sidebar-width) * 0.9 - 15px);">
+    <!-- Sidebar Header with Glass Effect -->
+    <!-- View Selector -->
+    <div class="field-container mb-4">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 whitespace-normal">View Mode</label>
+        <select id="metric-filter" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400 appearance-none">
+            <option>Leadership View</option>
+            <option>Operational Alignment</option>
+            <option>Skill Development</option>
+            <option>Employee Experience</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-300/60 mt-3">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Department Filter -->
+    <div class="field-container mb-4">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 whitespace-normal">Department</label>
+        <select id="department" name="department" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400 appearance-none">
+            <option value=""> </option>
+            <option>All Departments</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-300/60 mt-3">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Position Filter -->
+    <div class="field-container mb-4">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 whitespace-normal">Position</label>
+        <select id="position" name="position" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400 appearance-none">
+            <option value=""> </option>
+            <option>All Positions</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-300/60 mt-3">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Employee Filter -->
+    <div class="field-container mb-4">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 whitespace-normal">Employee</label>
+        <select name="employee_name" id="employee_name" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400 appearance-none">
+            <option value=""> </option>
+            <option>All Employees</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-300/60 mt-3">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Review Cycle -->
+    <div class="field-container mb-4">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 whitespace-normal">Review Cycle</label>
+        <select name="review_cycle" id="review_cycle" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400 appearance-none">
+            <option value=""> </option>
+            <option>All Review Cycles</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-300/60 mt-3">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Date Range -->
+    <div class="field-container">
+        <label class="block text-xs font-medium text-blue-200/80 mb-2 uppercase tracking-wider whitespace-normal">Date Range</label>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="relative group">
+                <input type="date" name="start_date" id="start_date" 
+                       class="w-full px-4 py-2.5 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400" style="font-size: 10px;">
+                <span class="absolute left-4 top-2.5 text-xs text-blue-200/60 group-focus-within:-translate-y-3 transition-all">From</span>
+            </div>
+            <div class="relative group">
+                <input type="date" name="end_date" id="end_date" 
+                       class="w-full px-4 py-2.5 bg-white/5 backdrop-blur-sm border-b-2 border-blue-400/30 text-white rounded-t-lg focus:outline-none focus:border-blue-400" style="font-size: 10px;">
+                <span class="absolute left-4 top-2.5 text-xs text-blue-200/60 group-focus-within:-translate-y-3 transition-all">To</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-auto pt-5 border-t border-blue-400/20">
+        <button type="submit" class="bg-gradient-to-br from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-4 py-3 rounded-xl w-full transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl active:scale-[0.98] transform hover:-translate-y-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <span class="font-medium tracking-wide">Apply Filters</span>
+        </button>
+        
+        <button type="reset" class="mt-3 text-xs text-blue-300/80 hover:text-blue-200 transition-colors duration-200 flex items-center justify-center space-x-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Reset all filters</span>
+        </button>
+    </div>
+</nav>
+
+<script>
+
+$('#your-select2-element').select2({
+  tags: true,
+  templateSelection: function(data) {
+    return $('<span style="white-space: normal;">' + data.text + '</span>');
+  }
+});
+
+const originalInput = document.getElementById('username-input');
+const clonedInput = document.getElementById('username-input-clone');
+
+originalInput.addEventListener('input', () => {
+  clonedInput.value = originalInput.value;
+});
+// Get the company code input field
+const companyCodeInput = document.getElementById('company_code');
+
+// Function to fetch review periods
+async function fetchReviewPeriods(companyCode) {
+    try {
+        const response = await fetch(`/review-periods/?company_code=${companyCode}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const reviewPeriods = await response.json();
+        return reviewPeriods;
+    } catch (error) {
+        console.error('Failed to fetch review periods:', error);
+        return [];
+    }
+}
+
+// Function to populate dropdown with review cycles
+function populateDropdown(reviewPeriods) {
+    const reviewCycleSelect = document.getElementById('review_cycle');
+    // Remove existing options except the first one ("All Review Cycles")
+    while (reviewCycleSelect.options.length > 1) {
+        reviewCycleSelect.remove(1);
+    }
+    const reviewCycles = [...new Set(reviewPeriods.map(period => period.review))];
+    reviewCycles.forEach(cycle => {
+        const option = document.createElement('option');
+        option.value = cycle;
+        option.textContent = cycle;
+        reviewCycleSelect.appendChild(option);
+    });
+}
+
+// Event listener for username input
+const usernameInput = document.getElementById('username-input');
+let timeoutId = null;
+usernameInput.addEventListener('input', () => {
+    clearTimeout(timeoutId);
+    const username = usernameInput.value.trim();
+    const companyCode = companyCodeInput.value.trim();
+    if (username && companyCode) {
+        timeoutId = setTimeout(async () => {
+            const reviewPeriods = await fetchReviewPeriods(companyCode);
+            if (reviewPeriods.length > 0) {
+                populateDropdown(reviewPeriods);
+            } else {
+                console.log('No review periods found.');
+            }
+        }, 500); // Debounce delay
+    } else {
+        const reviewCycleSelect = document.getElementById('review_cycle');
+        while (reviewCycleSelect.options.length > 1) {
+            reviewCycleSelect.remove(1);
+        }
+    }
+});
+</script>
+<script>
+
+    
+// Function to fetch review periods
+async function fetchReviewPeriods(companyCode) {
+  try {
+    const response = await fetch(`/review-periods/?company_code=${companyCode}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const reviewPeriods = await response.json();
+    return reviewPeriods;
+  } catch (error) {
+    console.error('Failed to fetch review periods:', error);
+    return [];
+  }
+}
+
+// Function to populate dropdown with review cycles
+function populateReviewCycleDropdown(reviewPeriods) {
+  const reviewCycleSelect = document.getElementById('review_cycle');
+  reviewCycleSelect.innerHTML = ''; // Clear existing options
+  const reviewCycles = [...new Set(reviewPeriods.map(period => period.review))];
+  reviewCycles.forEach(cycle => {
+    const option = document.createElement('option');
+    option.value = cycle;
+    option.textContent = cycle;
+    reviewCycleSelect.appendChild(option);
+  });
+}
+
+async function fetchAndPopulateEmployeeFields(employeeCode) {
+  if (!employeeCode) return;
+
+  try {
+    const response = await fetch(`/get_employee_fields/?employee_code=${encodeURIComponent(employeeCode)}`);
+    if (!response.ok) throw new Error("Failed to fetch employee fields");
+
+    const data = await response.json();
+
+    document.getElementById("company_code").value = data.company_code || '';
+    document.getElementById("branch_code").value = data.branch_code || '';
+    document.getElementById("region_branch").value = data.region_branch || '';
+
+    const companyCodeInput = document.getElementById('company_code');
+    if (companyCodeInput) {
+      companyCodeInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    const companyCode = document.getElementById('company_code').value.trim();
+    if (companyCode) {
+      const reviewPeriods = await fetchReviewPeriods(companyCode);
+      populateReviewCycleDropdown(reviewPeriods);
+    }
+  } catch (error) {
+    console.error("Error fetching employee fields:", error);
+  }
+}
+
+async function fetchEmployeeData(employeeCode) {
+  if (!employeeCode) return {};
+
+  const apiUrl = `http://127.0.0.1:8002/get_subordinates/?employee_code=${encodeURIComponent(employeeCode)}`;
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Failed to fetch employee data");
+
+    const data = await response.json();
+    return data.subordinates.reduce((acc, emp) => {
+      acc[emp.employee_name] = {
+        position: emp.position,
+        department: emp.department,
+      };
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error("Error fetching employee data:", error);
+    return {};
+  }
+}
+
+function updateReportTitle(companyCode) {
+  const reportTitle = document.getElementById('report-title');
+  if (!companyCode || !reportTitle) return;
+
+  fetch(`/get_user_profile/?company_code=${encodeURIComponent(companyCode)}`)
+    .then(res => res.json())
+    .then(data => {
+      reportTitle.textContent = data.exists
+        ? `${data.company} Executive Report`
+        : `${companyCode} Executive Report`;
+    })
+    .catch(err => {
+      console.error('Error fetching company:', err);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const employeeInput = document.getElementById("employee-password");
+  const companyCodeInput = document.getElementById("company_code");
+  const usernameInput = document.getElementById("username-input");
+
+  const employeeSelect = $('#employee_name');
+  const departmentSelect = $('#department');
+  const positionSelect = $('#position');
+
+  // Clear and repopulate dropdowns
+  function populateDropdowns(data) {
+    employeeSelect.empty();
+    departmentSelect.empty();
+    positionSelect.empty();
+
+    const departments = new Set();
+    const positions = new Set();
+
+    for (const [name, emp] of Object.entries(data)) {
+      employeeSelect.append(new Option(name, name));
+      departments.add(emp.department);
+      positions.add(emp.position);
+    }
+
+    departments.forEach(dep => departmentSelect.append(new Option(dep, dep)));
+    positions.forEach(pos => positionSelect.append(new Option(pos, pos)));
+
+    employeeSelect.select2();
+    departmentSelect.select2();
+    positionSelect.select2();
+
+    employeeSelect.off("change").on("change", () => {
+      const selected = employeeSelect.val();
+      if (selected && data[selected]) {
+        departmentSelect.val(data[selected].department).trigger('change');
+        positionSelect.val(data[selected].position).trigger('change');
+      } else {
+        departmentSelect.val('').trigger('change');
+        positionSelect.val('').trigger('change');
+      }
+    });
+  }
+
+  // Watch employee-password input and trigger fetch
+  async function handleEmployeeInputChange() {
+    const employeeCode = employeeInput.value.trim();
+    if (employeeCode) {
+      await fetchAndPopulateEmployeeFields(employeeCode);
+      const employeeData = await fetchEmployeeData(employeeCode);
+      populateDropdowns(employeeData);
+    }
+  }
+
+  if (employeeInput) {
+    employeeInput.addEventListener("blur", handleEmployeeInputChange);
+    employeeInput.addEventListener("change", handleEmployeeInputChange);
+  }
+
+  // Report title
+  if (companyCodeInput) {
+    updateReportTitle(companyCodeInput.value.trim());
+    companyCodeInput.addEventListener('change', () => {
+      updateReportTitle(companyCodeInput.value.trim());
+    });
+  }
+
+  // Load initial state if username-input has value
+  const initCode = usernameInput?.value.trim();
+  if (initCode) {
+    await fetchAndPopulateEmployeeFields(initCode);
+    const initData = await fetchEmployeeData(initCode);
+    populateDropdowns(initData);
+  }
+
+  // React to username-input changes
+  if (usernameInput) {
+    usernameInput.addEventListener("input", async () => {
+      const newCode = usernameInput.value.trim();
+      if (newCode) {
+        await fetchAndPopulateEmployeeFields(newCode);
+        const newData = await fetchEmployeeData(newCode);
+        populateDropdowns(newData);
+      } else {
+        const reviewCycleSelect = document.getElementById('review_cycle');
+        reviewCycleSelect.innerHTML = ''; // Clear existing options
+      }
+    });
+  }
+});
+</script>
+
+
+
+    <!-- Main Content Area -->
+<main class="pl-[var(--sidebar-width)] min-h-screen" style="padding-top: calc(var(--header-height) - 60px);padding-left: calc(var(--sidebar-width) - 45px);">
+        <div class="px-6 py-6 max-w-7xl mx-auto">
+            <!-- Leadership Health Matrix -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                <div class="bg-gradient-to-br from-blue-900 to-blue-800 p-5 rounded-xl shadow-lg text-white card">
+                    <p class="text-xs font-medium text-blue-100/90 uppercase tracking-wider mb-1">Leadership Effectiveness</p>
+                    <p class="text-3xl font-bold mt-1 mb-3">{{ leadership_metrics.score|floatformat:"1" }}/5</p>
+                    <div class="flex items-center">
+                        <div class="w-full bg-blue-900/40 rounded-full h-2">
+                            <div class="bg-blue-300 rounded-full h-2" style="width: {{ leadership_metrics.improvement }}%"></div>
+                        </div>
+                        <span class="ml-2 text-xs font-medium text-blue-100/90">{{ leadership_metrics.improvement }}% YoY</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-900 to-purple-800 p-5 rounded-xl shadow-lg text-white card">
+                    <p class="text-xs font-medium text-purple-100/90 uppercase tracking-wider mb-1">Goal Alignment</p>
+                    <p class="text-3xl font-bold mt-1 mb-3">{{ kpi_metrics.achievement_rate }}%</p>
+                    <div class="mt-2 flex space-x-2">
+                        <div class="flex-1 bg-white/10 rounded-lg p-2 text-center backdrop-blur-sm">
+                            <p class="text-xs text-white/80">On Track</p>
+                            <p class="text-lg font-semibold">{{ kpi_metrics.on_track }}%</p>
+                        </div>
+                        <div class="flex-1 bg-white/10 rounded-lg p-2 text-center backdrop-blur-sm">
+                            <p class="text-xs text-white/80">Gaps</p>
+                            <p class="text-lg font-semibold text-amber-300">{{ kpi_metrics.gaps }}%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-teal-900 to-teal-800 p-5 rounded-xl shadow-lg text-white card">
+                    <p class="text-xs font-medium text-teal-100/90 uppercase tracking-wider mb-1">Skill Gap Index</p>
+                    <p class="text-3xl font-bold mt-1 mb-3">{{ skill_metrics.gap_index }}</p>
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 {% if skill_metrics.trend >= 0 %}text-teal-300{% else %}text-rose-300{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if skill_metrics.trend >= 0 %}M5 15l7-7l7 7{% else %}M19 9l-7 7l-7-7{% endif %}" />
+                        </svg>
+                        <span class="text-xs font-medium text-teal-100/90">{{ skill_metrics.trend }}% Change</span>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-rose-900 to-rose-800 p-5 rounded-xl shadow-lg text-white card">
+                    <p class="text-xs font-medium text-rose-100/90 uppercase tracking-wider mb-1">Experience Pulse</p>
+                    <p class="text-3xl font-bold mt-1 mb-3">{{ experience_metrics.score|floatformat:"1" }}/10</p>
+                    <div class="flex items-center">
+                        <div class="flex-1 pr-2">
+                            <div class="w-full bg-rose-900/40 rounded-full h-2">
+                                <div class="bg-rose-300 rounded-full h-2" style="width: {{ experience_metrics.improvement }}%"></div>
+                            </div>
+                        </div>
+                        <span class="text-xs font-medium text-rose-100/90">{{ experience_metrics.improvement }}% Improvement</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Insight Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Leadership Analytics -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card">
+                    <div class="flex justify-between items-center mb-5">
+                        <h2 class="text-lg font-bold text-slate-800">Leadership 360 Insights</h2>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm font-medium rounded-md transition-smooth">Competencies</button>
+                            <button class="text-slate-600 hover:text-blue-600 px-3 py-1 text-sm font-medium rounded-md transition-smooth">Feedback Analysis</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div id="leadershipRadar" class="h-80"></div>
+                        <div class="space-y-5">
+                            <div>
+                                <h3 class="font-semibold text-slate-700 text-sm mb-2">Self/Assessor Alignment</h3>
+                                <div id="appraisalComparison" class="h-40"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-700 text-sm mb-2">Top Development Needs</h3>
+                                <div class="space-y-2">
+                                    {% for need in development_needs %}
+                                        <div class="flex items-center justify-between bg-slate-50/80 p-2.5 rounded-lg border border-gray-100">
+                                            <span class="text-xs text-slate-700">{{ need.skill }}</span>
+                                            <span class="text-xs font-bold text-blue-600">{{ need.gap }}% Gap</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Alignment Hub -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 card">
+                    <h2 class="text-lg font-bold text-slate-800 mb-5">Strategic Goal Cascade</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div id="kpiHeatmap" class="h-80"></div>
+                        <div class="space-y-5">
+                            <div>
+                                <h3 class="font-semibold text-slate-700 text-sm mb-2">Alignment Progress</h3>
+                                <div id="alignmentSankey" class="h-40"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-indigo-50/80 p-3 rounded-lg border border-indigo-100">
+                                    <p class="text-xl font-bold text-indigo-600">{{ kpi_metrics.achievement_rate }}%</p>
+                                    <p class="text-xs text-indigo-800 mt-1">Cascaded Goals</p>
+                                </div>
+                                <div class="bg-emerald-50/80 p-3 rounded-lg border border-emerald-100">
+                                    <p class="text-xl font-bold text-emerald-600">{{ kpi_metrics.on_track }}%</p>
+                                    <p class="text-xs text-emerald-800 mt-1">Validated KPIs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Talent Development Accelerator -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 lg:col-span-2 card">
+                    <div class="flex justify-between items-center mb-5">
+                        <h2 class="text-lg font-bold text-slate-800">Talent Development Engine</h2>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm font-medium rounded-md transition-smooth">Skill Progression</button>
+                            <button class="text-slate-600 hover:text-blue-600 px-3 py-1 text-sm font-medium rounded-md transition-smooth">Experience Trends</button>
+                            <button class="text-slate-600 hover:text-blue-600 px-3 py-1 text-sm font-medium rounded-md transition-smooth">Retention Risk</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div id="skillProgression" class="h-80"></div>
+                        <div class="space-y-5">
+                            <div>
+                                <h3 class="font-semibold text-slate-700 text-sm mb-2">Experience Drivers</h3>
+                                <div id="sentimentHeatmap" class="h-40"></div>
+                            </div>
+                            <div class="bg-slate-50/80 p-3 rounded-lg border border-gray-100">
+                                <p class="text-xs text-slate-600">Avg. Development ROI</p>
+                                <p class="text-xl font-bold text-slate-800 mt-1">{{ development_metrics.roi|floatformat:"1" }}x</p>
+                            </div>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <h3 class="font-semibold text-slate-700 text-sm mb-2">Readiness Index</h3>
+                                <div id="readinessGauge" class="h-40"></div>
+                            </div>
+                            <div class="bg-slate-50/80 p-3 rounded-lg border border-gray-100">
+                                <p class="text-xs text-slate-600">Critical Roles Covered</p>
+                                <p class="text-xl font-bold text-slate-800 mt-1">{{ development_metrics.critical_roles }}%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+document.getElementById('show-password').addEventListener('change', function () {
+    const passwordField = document.getElementById('employee-password');
+    passwordField.type = this.checked ? 'text' : 'password';
+});
+
+        // Get the input fields
+        const employeeNameInput = document.getElementById('username-input');
+        const managerNameInput = document.getElementById('manager-name-input');
+
+        // Add an event listener to the employee name input field
+        employeeNameInput.addEventListener('input', () => {
+            managerNameInput.value = employeeNameInput.value;
+        });
+
+        // Leadership Competency Radar
+        const leadershipData = {
+            type: 'scatterpolar',
+            r: {{ leadership_metrics.competencies|safe }},
+            theta: ['Decision Making', 'Communication', 'Strategy', 'Motivation', 'Development'],
+            fill: 'toself',
+            line: {color: '#3b82f6'}
+        };
+        Plotly.newPlot('leadershipRadar', [leadershipData], {
+            polar: {radialaxis: {visible: true, range: [0, 5]}},
+            margin: {t: 30}
+        });
+
+        // KPI Alignment Heatmap
+        const kpiHeatmapData = {
+            z: {{ kpi_metrics.progress_matrix|safe }},
+            x: {{ departments|safe }},
+            y: ['Q1', 'Q2', 'Q3', 'Q4'],
+            type: 'heatmap',
+            colorscale: 'Viridis'
+        };
+        Plotly.newPlot('kpiHeatmap', [kpiHeatmapData]);
+
+        // Skill Progression Chart
+        const skillData = {
+            x: {{ skill_metrics.periods|safe }},
+            y: {{ skill_metrics.progression|safe }},
+            type: 'bar',
+            marker: {color: '#10b981'}
+        };
+        Plotly.newPlot('skillProgression', [skillData]);
+
+        // Readiness Gauge
+        const readinessGauge = {
+            value: {{ development_metrics.readiness }},
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+                axis: {range: [null, 100]},
+                steps: [
+                    {range: [0, 33], color: "#ef4444"},
+                    {range: [33, 66], color: "#f59e0b"},
+                    {range: [66, 100], color: "#10b981"}
+                ],
+                threshold: {
+                    line: {color: "red", width: 4},
+                    thickness: 0.75,
+                    value: 80
+                }
+            }
+        };
+        Plotly.newPlot('readinessGauge', [readinessGauge]);
+
+        // Appraisal Comparison Chart
+        const appraisalComparisonData = {
+            type: 'bar',
+            x: {{ appraisal_comparison_data.labels|safe }},
+            y: {{ appraisal_comparison_data.self_scores|safe }},
+            name: 'Self Scores',
+            marker: {color: '#3b82f6'}
+        };
+        const appraisalComparisonData2 = {
+            type: 'bar',
+            x: {{ appraisal_comparison_data.labels|safe }},
+            y: {{ appraisal_comparison_data.assessor_scores|safe }},
+            name: 'Assessor Scores',
+            marker: {color: '#10b981'}
+        };
+        Plotly.newPlot('appraisalComparison', [appraisalComparisonData, appraisalComparisonData2], {
+            barmode: 'group',
+            margin: {t: 30}
+        });
+
+        // Alignment Sankey Diagram
+        const alignmentSankeyData = {
+            type: "sankey",
+            orientation: "h",
+            node: {
+                pad: 15,
+                thickness: 30,
+                line: {
+                    color: "black",
+                    width: 0.5
+                },
+                label: {{ alignment_sankey_data.labels|safe }},
+                color: ["blue", "green", "purple", "orange"]
+            },
+            link: {
+                source: {{ alignment_sankey_data.source|safe }},
+                target: {{ alignment_sankey_data.target|safe }},
+                value: {{ alignment_sankey_data.value|safe }},
+                color: ["rgba(59, 130, 246, 0.2)", "rgba(16, 185, 129, 0.2)", "rgba(139, 92, 246, 0.2)"]
+            }
+        };
+        Plotly.newPlot('alignmentSankey', [alignmentSankeyData]);
+
+        // Sentiment Heatmap
+        const sentimentHeatmapData = {
+            z: {{ sentiment_heatmap_data.z|safe }},
+            x: {{ sentiment_heatmap_data.x|safe }},
+            y: {{ sentiment_heatmap_data.y|safe }},
+            type: 'heatmap',
+            colorscale: 'Viridis'
+        };
+        Plotly.newPlot('sentimentHeatmap', [sentimentHeatmapData]);
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 for employee name dropdown
+            $('#employee_name').select2({
+                placeholder: "Select an Employee",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Initialize Select2 for department filter in nav bar
+            $('#department-filter').select2({
+                placeholder: "Select a Department",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Initialize Select2 for metric filter
+            $('#metric-filter').select2({
+                placeholder: "Select View Mode",
+                minimumResultsForSearch: Infinity,
+                width: '100%'
+            });
+
+            // Initialize Select2 for review cycle
+            $('#review_cycle').select2({
+                placeholder: "Select Review Cycle",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Handle form submission to preserve Select2 values
+            $('#employee-form').on('submit', function() {
+                $('#employee_name').val($('#employee_name').val());
+                $('#department-filter').val($('#department-filter').val());
+                $('#review_cycle').val($('#review_cycle').val());
+            });
+        });
+    </script>
+</body>
+</html>

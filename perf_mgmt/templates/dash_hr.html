@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern HR Analytics Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-800 shadow-xl fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-white text-2xl font-bold">HR Analytics Suite</h1>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-200 hover:text-white px-3 py-2 rounded-md">Real-time Analytics</a>
+                    <a href="#" class="text-gray-200 hover:text-white px-3 py-2 rounded-md">Employee Insights</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20 px-4 sm:px-6 lg:px-8 pb-8">
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Leadership 360 Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 col-span-2 row-span-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Leadership 360 Insights</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div id="leadershipRadar" class="h-64"></div>
+                    <div id="feedbackWordCloud" class="h-64"></div>
+                </div>
+                <div class="mt-6 grid grid-cols-4 gap-4 text-center">
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-blue-600">Avg Leadership</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ leadership_metrics.avg_leadership_score }}</p>
+                    </div>
+                    <!-- Add other metrics similarly -->
+                </div>
+            </div>
+
+            <!-- KPI Cascade Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">KPI Cascade Map</h2>
+                <div id="sankeyDiagram" class="h-64"></div>
+                <div class="mt-4 flex justify-between text-sm">
+                    <span class="text-green-600">▲ 12% Alignment</span>
+                    <span class="text-gray-500">Last updated: 24h ago</span>
+                </div>
+            </div>
+
+            <!-- Skills Matrix Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 row-span-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Skills Analytics</h2>
+                <div id="skillRadar" class="h-72"></div>
+                <div class="mt-4 space-y-3">
+                    {% for skill in top_skills %}
+                    <div class="flex justify-between items-center bg-gray-50 p-2 rounded">
+                        <span class="text-sm">{{ skill.skill__name }}</span>
+                        <span class="text-blue-600 font-bold">{{ skill.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Appraisal Comparison Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Appraisal Comparison</h2>
+                <div id="dualAxisChart" class="h-64"></div>
+            </div>
+
+            <!-- Experience Pulse Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 col-span-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Experience Pulse</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div id="sentimentPie" class="h-48"></div>
+                    <div id="engagementTrend" class="h-48"></div>
+                    <div class="space-y-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <p class="text-2xl font-bold text-gray-800">{{ experience_metrics.avg_satisfaction }}</p>
+                            <p class="text-sm text-green-600">Avg Satisfaction</p>
+                        </div>
+                        <!-- Add other metrics -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workforce Analytics Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 col-span-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Workforce Analytics</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div id="genderDonut" class="h-48"></div>
+                    <div id="tenureWaterfall" class="h-48"></div>
+                    <div id="departmentTree" class="h-48"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Leadership Radar Chart
+        const leadershipData = {
+            type: 'scatterpolar',
+            r: [
+                {{ leadership_metrics.avg_decision_making }},
+                {{ leadership_metrics.avg_communication }},
+                {{ leadership_metrics.avg_team_motivation }},
+                {{ leadership_metrics.avg_leadership_score }}
+            ],
+            theta: ['Decision Making', 'Communication', 'Team Motivation', 'Leadership'],
+            fill: 'toself',
+            name: 'Leadership Metrics'
+        };
+        
+        Plotly.newPlot('leadershipRadar', [leadershipData], {
+            polar: {radialaxis: {visible: true, range: [0, 10]}},
+            showlegend: false
+        });
+
+        // Sankey Diagram
+        const sankeyData = {
+            type: "sankey",
+            node: {
+                pad: 15,
+                thickness: 20,
+                line: {color: "black", width: 0.5},
+                label: ["Leadership", "Department A", "Department B", "Objectives"]
+            },
+            link: {
+                source: [0, 0, 1, 2],
+                target: [1, 2, 3, 3],
+                value: [8, 4, 2, 2]
+            }
+        };
+        
+        Plotly.newPlot('sankeyDiagram', [sankeyData]);
+
+        // Add other visualizations similarly using Plotly.js
+        // Use the data passed from Django context to populate the charts
+    </script>
+</body>
+</html>

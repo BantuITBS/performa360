@@ -1,0 +1,5119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Performance Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light theme variables */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --accent-primary: #1ABB9C;
+            --accent-secondary: #2A3F54;
+            --border: #000000;
+            --shadow: 0 2px 4px rgba(0,0,0,0.2);
+            --tile-bg: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+            --modal-bg: #ffffff;
+            --input-bg: #ffffff;
+            --radius: 8px;
+            --transition: all 0.3s ease;
+            --modal-header-bg: #1ABB9C;
+            --modal-cell-bg: #ffffff;
+            --kpi-row-bg: #ffffff;
+            --sg-row-bg: #ffffff;
+            --sg-row-text: #000000;
+            --nav-bg: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+            --header-bg: #2A3F54;
+            --header-text: #ffffff;
+            --input-focus: #e0f7fa;
+            --chat-bg: #ece5dd;
+            --chat-bubble-bg: #25D366;
+            --chat-bubble-text: #ffffff;
+            --chat-input-bg: #ffffff;
+            --chat-send-btn-bg: #25D366;
+            --chat-send-btn-text: #ffffff;
+            --emoji-picker-bg: #ffffff;
+            --emoji-option-bg: #f0f0f0;
+            --attachment-btn-bg: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #1ABB9C;
+            --accent-secondary: #2A3F54;
+            --border: #444444;
+            --shadow: 0 2px 4px rgba(0,0,0,0.4);
+            --tile-bg: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+            --modal-bg: #1e1e1e;
+            --input-bg: #2e2e2e;
+            --modal-header-bg: #1ABB9C;
+            --modal-cell-bg: #2e2e2e;
+            --kpi-row-bg: #2e2e2e;
+            --sg-row-bg: #2e2e2e;
+            --sg-row-text: #e0e0e0;
+            --nav-bg: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+            --header-bg: #2A3F54;
+            --header-text: #e0e0e0;
+            --input-focus: #263238;
+            --chat-bg: #0b141a;
+            --chat-bubble-bg: #005c4b;
+            --chat-bubble-text: #e0e0e0;
+            --chat-input-bg: #2e2e2e;
+            --chat-send-btn-bg: #005c4b;
+            --chat-send-btn-text: #e0e0e0;
+            --emoji-picker-bg: #2e2e2e;
+            --emoji-option-bg: #3a3a3a;
+            --attachment-btn-bg: #444444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            margin: 0;
+            font-family: 'Merriweather', serif;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .performa-nav {
+            background: var(--nav-bg);
+            height: 80px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .main-title {
+            font-size: 1.7rem;
+            margin: 0;
+            margin-left: 35px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, var(--accent-primary) 30%, #FFFFFF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-input {
+            padding: 8px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 4px;
+            width: 180px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .nav-input:focus {
+            background: var(--input-focus);
+            border-color: var(--accent-primary);
+            outline: none;
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .nav-dropdown {
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            width: 180px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .nav-dropdown:focus {
+            background: var(--input-focus);
+            border-color: var(--accent-primary);
+            outline: none;
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .home-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--accent-secondary);
+            text-decoration: none;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .home-link:hover {
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .home-link i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .home-link span {
+            font-size: 0.65rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .custom-image {
+            position: absolute;
+            top: -40px;
+            left: 5px;
+            width: 55px;
+            height: 46px;
+            background-image: url('/static/admin/img/pmh_3.png');
+            margin-top: 55px;
+            background-size: cover;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            border: 2px solid #ffffff;
+        }
+
+        .form-row {
+            font-size: 10px;
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin: 20px 24px;
+        }
+
+        .field-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-label {
+            font-size: 10px;
+            margin-bottom: 2px;
+            color: var(--text-primary);
+        }
+
+        .input-small {
+            width: 100px;
+            padding: 3px;
+            font-size: 10px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .checkbox-label {
+            font-size: 10px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            margin-top: 2px;
+        }
+
+        .checkbox-label input {
+            margin-right: 3px;
+        }
+
+        .tiles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 24px;
+        }
+
+        .tile {
+            background: var(--tile-bg);
+            color: var(--text-primary);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .author {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .strategic-goals-header {
+            background: var(--bg-secondary);
+            padding: 10px;
+            margin: 0 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .strategic-goals-container {
+            margin: 5px 24px 20px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .sg-tile {
+            background: var(--sg-row-bg);
+            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            width: 260px;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: var(--sg-row-text);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .sg-tile:hover {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sg-tile.selected {
+            border-color: var(--accent-primary);
+            box-shadow: 0 2px 8px rgba(26, 187, 156, 0.3);
+        }
+
+        .sg-tile.selected .due-date-normal {
+            background: #f44336;
+        }
+
+        .sg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sg-icon {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .sg-weight {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .sg-content {
+            line-height: 1.3;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .sg-due-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding-top: 6px;
+            border-top: 1px solid var(--border);
+        }
+
+        .due-date-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .due-date-urgent {
+            background: #f44336;
+        }
+
+        .due-date-warning {
+            background: #ff9800;
+        }
+
+        .due-date-normal {
+            background: #4caf50;
+        }
+
+        .kpi-container {
+            margin: 0 24px 20px 24px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .kpi-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 6px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+        }
+
+        .kpi-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 6px;
+            background: var(--kpi-row-bg);
+            padding: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            gap: 10px;
+        }
+
+        .kpi-row:hover {
+            background: #e0f7fa;
+        }
+
+        .kpi-weight-tile {
+            width: 35px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 6px;
+            border-right: 1px solid var(--accent-primary);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .kpi-desc-tile {
+            flex-grow: 1;
+            padding: 6px;
+            font-size: 13px;
+        }
+
+        .kpi-due-date-tile {
+            padding: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-left: 1px solid var(--border);
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: fixed;
+            background: var(--modal-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            width: 90%;
+            color: var(--text-primary);
+        }
+
+        #deliverable-modal .modal-content {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+        }
+
+        #document-evidence-modal .modal-content {
+            top: calc(75% + 10px);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1002;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            background: var(--modal-header-bg);
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin: -20px -20px 20px -20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .modal-body {
+            font-size: 12px;
+            line-height: 1.6;
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--modal-cell-bg);
+        }
+
+        .modal-header-row,
+        .modal-deliverable-row,
+        .modal-comment-row {
+            display: table-row;
+        }
+
+        .modal-header-cell,
+        .modal-deliverable-cell,
+        .modal-comment-cell {
+            display: table-cell;
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+
+        .modal-header-cell {
+            font-weight: bold;
+            background: var(--header-bg);
+            color: var(--header-text);
+        }
+
+        .modal-deliverable-cell,
+        .modal-comment-cell {
+            background: var(--modal-cell-bg);
+            color: var(--text-primary);
+        }
+
+        .modal-deliverable-select {
+            width: 80%;
+            padding: 2px;
+            font-size: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .chat-container {
+            background: var(--chat-bg);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-bubble {
+            background: var(--chat-bubble-bg);
+            color: var(--chat-bubble-text);
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 70%;
+            align-self: flex-end;
+            font-size: 12px;
+            line-height: 1.4;
+            position: relative;
+            margin-bottom: 4px;
+        }
+
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: -6px;
+            border: 6px solid transparent;
+            border-bottom-color: var(--chat-bubble-bg);
+            border-right-color: var(--chat-bubble-bg);
+        }
+
+        .chat-timestamp {
+            font-size: 10px;
+            color: var(--text-secondary);
+            align-self: flex-end;
+            margin-right: 8px;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: var(--chat-input-bg);
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 8px 8px;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-family: 'Merriweather', serif;
+            transition: var(--transition);
+        }
+
+        .chat-input:focus {
+            background: var(--input-focus);
+            border-color: var(--accent-primary);
+            outline: none;
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .chat-send-btn {
+            background: var(--chat-send-btn-bg);
+            color: var(--chat-send-btn-text);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-send-btn:hover {
+            background: var(--accent-primary);
+        }
+
+        .chat-send-btn i {
+            font-size: 16px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal-footer .save-btn {
+            padding: 5px 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: goldenrod;
+            color: black;
+        }
+
+        .modal-footer .save-btn:hover {
+            background: white;
+        }
+
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.4);
+            font-size: 12px;
+        }
+
+        .custom-modal-content {
+            background: var(--modal-bg);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid var(--border);
+            width: 90%;
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        .custom-close-btn {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .custom-close-btn:hover,
+        .custom-close-btn:focus {
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+            color: var(--text-primary);
+        }
+
+        th {
+            background: var(--header-bg);
+            color: var(--header-text);
+            font-weight: bold;
+        }
+
+        /* Chat Modal Styles */
+        .chat-modal-wrapper {
+            width: 50vw;
+            height: 80vh;
+            max-width: 800px;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            transform: none;
+            left: auto;
+            top: auto;
+            background: var(--modal-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-header {
+            background: var(--modal-header-bg);
+            border-radius: 12px 12px 0 0;
+            padding: 12px 16px;
+            color: #ffffff;
+        }
+
+        .chat-header .user-name-header {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .chat-header .user-status-header {
+            font-size: 12px;
+            color: #e0e0e0;
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 16px;
+            background: var(--chat-bg);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 8px 12px;
+            margin: 4px 8px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message-out {
+            background: var(--chat-bubble-bg);
+            color: var(--chat-bubble-text);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .message-out::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: -6px;
+            border: 6px solid transparent;
+            border-bottom-color: var(--chat-bubble-bg);
+            border-right-color: var(--chat-bubble-bg);
+        }
+
+        .message-in {
+            background: #ffffff;
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message-in::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -6px;
+            border: 6px solid transparent;
+            border-bottom-color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .message-input-container {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--chat-input-bg);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .chat-input-field:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .send-button {
+            background: var(--chat-send-btn-bg);
+            color: var(--chat-send-btn-text);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .send-button:hover {
+            background: var(--accent-primary);
+        }
+
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: var(--modal-header-bg);
+            color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* Emoji Picker Styles */
+        .emoji-picker {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 10px;
+            background: var(--emoji-picker-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+        }
+
+        .emoji-option {
+            display: inline-block;
+            font-size: 20px;
+            padding: 4px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .emoji-option:hover {
+            background: var(--emoji-option-bg);
+        }
+
+        .emoji-toggle {
+            background: var(--attachment-btn-bg);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .emoji-toggle:hover {
+            background: var(--accent-primary);
+            color: var(--chat-bubble-text);
+        }
+
+        /* Attachment Styles */
+        .attachment-btn {
+            background: var(--attachment-btn-bg);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .attachment-btn:hover {
+            background: var(--accent-primary);
+            color: var(--chat-bubble-text);
+        }
+
+        .attachment-input {
+            display: none;
+        }
+
+        .email-attachment-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .email-attachment-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .chat-modal-wrapper {
+                width: 90vw;
+                height: 70vh;
+                right: 5vw;
+                bottom: 10vh;
+                min-width: unset;
+            }
+
+            .chat-input-field {
+                padding: 8px 12px;
+            }
+
+            .emoji-picker {
+                bottom: 50px;
+                left: 5px;
+                max-width: 90%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 992px) {
+            .strategic-goals-header {
+                font-size: 16px;
+                margin: 0 16px;
+            }
+            .strategic-goals-container {
+                margin: 5px 16px 16px 16px;
+            }
+            .sg-tile {
+                width: 100%;
+                max-width: 280px;
+            }
+            .kpi-container {
+                margin: 0 16px 16px 16px;
+                padding: 10px;
+            }
+            .form-row {
+                margin: 20px 16px;
+            }
+            .tiles-container {
+                margin: 20px 16px;
+            }
+            #document-evidence-modal .modal-content {
+                top: calc(80% + 10px);
+                max-width: 90%;
+            }
+            .main-title {
+                font-size: 1.5rem;
+                margin-left: 25px;
+            }
+            .nav-input, .nav-dropdown {
+                width: 150px;
+            }
+            .chat-container {
+                max-height: 150px;
+            }
+        }
+
+
+        .message-detail {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+.message-detail strong {
+    color: var(--text-primary);
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* ... other styles ... */
+}
+.message-in {
+    align-self: flex-start;
+    /* ... other styles ... */
+}
+.message-out {
+    align-self: flex-end;
+    /* ... other styles ... */
+}
+.chat-modal-wrapper {
+    width: 50vw;
+    height: 80vh;
+    max-width: 800px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    background: var(--modal-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+.messages-container {
+    flex: 1;
+    max-height: calc(80vh - 120px);
+    padding: 16px;
+    background: var(--chat-bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+
+#deliverable-modal,
+#document-evidence-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+}
+
+#deliverable-modal .modal-content,
+#document-evidence-modal .modal-content {
+    background-color: #fff;
+    margin: calc(5% - 37.8px) auto 5% auto; /* Shift up 1cm (37.8px) from original 5% */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 69%; /* 60% * 1.15 as per previous requirement */
+    max-width: 1200px;
+    box-sizing: border-box;
+    position: relative; /* Ensure save button positioning is relative to modal */
+}
+
+.modal-header-row {
+    display: flex;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    width: 99%;
+    box-sizing: border-box;
+}
+
+.modal-header-cell {
+    flex: 1;
+    text-align: left;
+    padding: 8px;
+    min-width: 100px;
+    box-sizing: border-box;
+}
+
+.modal-deliverable-row {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    width: 99%;
+    box-sizing: border-box;
+}
+
+.modal-deliverable-cell {
+    flex: 1;
+    padding: 8px;
+    text-align: left;
+    min-width: 100px;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+}
+
+.modal-deliverable-select {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.modal-comment-row {
+    width: 99%;
+    box-sizing: border-box;
+}
+
+.modal-comment-cell {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chat-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Save button styling */
+.modal-save-button {
+    display: block;
+    margin: 20px auto 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+.modal-save-button:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    #deliverable-modal .modal-content,
+    #document-evidence-modal .modal-content {
+        width: 90%;
+        margin: calc(10% - 37.8px) auto 10% auto; /* Adjust for mobile, still shift up 1cm */
+    }
+
+    .modal-header-cell,
+    .modal-deliverable-cell {
+        min-width: 80px;
+        font-size: 14px;
+    }
+
+    .modal-save-button {
+        width: 80%;
+        font-size: 14px;
+    }
+}
+
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: fixed;
+    background: var(--modal-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    max-width: 800px;
+    width: 90%;
+    color: var(--text-primary);
+}
+
+#chat-modal .modal-content {
+    width: 50vw;
+    height: 80vh;
+    max-width: 800px;
+    min-width: 400px;
+    right: 30px;
+    bottom: 30px;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+}
+
+#email-modal .modal-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+}
+
+.modal-header {
+    background: var(--header-bg);
+    padding: 12px 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: -20px -20px 20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    color: var(--header-text);
+    font-weight: bold;
+}
+
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--header-text);
+}
+
+.chat-modal-wrapper {
+    background: var(--modal-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background: var(--header-bg);
+    border-radius: 12px 12px 0 0;
+    padding: 12px 16px;
+    color: var(--header-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-name-header {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-status-header {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.messages-container {
+    flex: 1;
+    max-height: calc(80vh - 120px);
+    padding: 16px;
+    background: var(--chat-bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-secondary) var(--chat-bg);
+}
+
+.messages-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: var(--chat-bg);
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+    border-radius: 4px;
+}
+
+.message-bubble {
+    max-width: 70%;
+    padding: 8px 12px;
+    margin: 4px 8px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.message-in {
+    background: var(--message-in);
+    color: var(--text-primary);
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.message-out {
+    background: var(--message-out);
+    color: var(--text-primary);
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.message-sender {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+}
+
+.message-content {
+    font-size: 14px;
+}
+
+.message-time {
+    font-size: 11px;
+    color: var(--message-time);
+    text-align: right;
+    margin-top: 4px;
+}
+
+.message-detail {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+.message-detail strong {
+    color: var(--text-primary);
+}
+
+.message-input-container {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--chat-input-bg);
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.chat-input-field {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+    border: 1px solid #e9edef;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.chat-input-field:focus {
+    border-color: var(--header-bg);
+    box-shadow: 0 0 4px rgba(0, 134, 209, 0.3);
+}
+
+.send-button {
+    background: var(--chat-send-btn-bg);
+    color: var(--chat-send-btn-text);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.send-button:hover {
+    background: #0074b5;
+    transform: scale(1.05);
+}
+
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: var(--header-bg);
+    color: var(--header-text);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.chat-button:hover {
+    background: #0074b5;
+}
+
+.emoji-button, .attachment-button, .email-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.emoji-button:hover, .attachment-button:hover, .email-button:hover {
+    color: var(--header-bg);
+    transform: scale(1.1);
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: 60px;
+    left: 16px;
+    background: var(--modal-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    display: none;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 200px;
+    box-shadow: var(--shadow);
+    z-index: 1001;
+}
+
+.emoji-option {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.emoji-option:hover {
+    background: var(--input-focus);
+}
+
+.email-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.email-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.email-field:focus {
+    border-color: var(--header-bg);
+    box-shadow: 0 0 4px rgba(0, 134, 209, 0.3);
+    outline: none;
+}
+
+.email-body {
+    height: 150px;
+    resize: vertical;
+}
+
+.email-attachment {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.email-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.email-footer button {
+    padding: 8px 16px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.email-footer .send-email-btn {
+    background: var(--chat-send-btn-bg);
+    color: var(--chat-send-btn-text);
+}
+
+.email-footer .send-email-btn:hover {
+    background: #0074b5;
+}
+
+.email-footer .cancel-email-btn {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.email-footer .cancel-email-btn:hover {
+    background: #d0d0d0;
+}
+
+.message-attachment {
+    margin-top: 8px;
+    display: block;
+}
+
+.message-attachment img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.message-attachment a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.message-attachment a i {
+    font-size: 14px;
+}
+
+.message-attachment a:hover {
+    text-decoration: underline;
+}
+
+.chat-container {
+    margin-top: 10px;
+    padding: 10px;
+    background: var(--chat-bg);
+    border-radius: 8px;
+}
+
+.chat-messages {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.chat-send-btn {
+    background: var(--chat-send-btn-bg);
+    color: var(--chat-send-btn-text);
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.chat-send-btn:hover {
+    background: #0074b5;
+}
+
+.message-metadata {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.message-meta {
+    margin-bottom: 2px;
+}
+
+.message-timestamp {
+    font-size: 11px;
+    color: var(--message-time);
+    text-align: right;
+}
+
+@media (max-width: 992px) {
+    .chat-modal-wrapper {
+        width: 90vw;
+        height: 70vh;
+        right: 5vw;
+        bottom: 10vh;
+        min-width: unset;
+    }
+    #email-modal .modal-content {
+        max-width: 90%;
+    }
+}
+
+
+
+:root {
+    /* Light theme variables */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f8f8;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --accent-primary: #1ABB9C;
+    --accent-secondary: #2A3F54;
+    --border: #d1d1d1;
+    --shadow: 0 2px 4px rgba(0,0,0,0.2);
+    --tile-bg: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%);
+    --modal-bg: #ffffff;
+    --input-bg: #ffffff;
+    --input-focus: #e0f7fa;
+    --radius: 8px;
+    --transition: all 0.3s ease;
+    --header-bg: #1ABB9C; /* Greenish header for both modes */
+    --header-text: #ffffff;
+    --chat-bg: #e5ddd5; /* WhatsApp-like chat background */
+    --message-in: #ffffff;
+    --message-out: #d9ffdd;
+    --message-time: #667781;
+    --chat-input-bg: #f0f2f5;
+    --chat-send-btn-bg: #0086d1;
+    --chat-send-btn-text: #ffffff;
+    --emoji-picker-bg: #ffffff;
+    --emoji-option-bg: #f0f0f0;
+    --attachment-btn-bg: #e0e0e0;
+    --select-bg: #f8f8f8;
+    --select-hover: #e0f7fa;
+    --select-option-bg: #ffffff;
+    --select-option-text: #000000;
+}
+
+[data-theme="dark"] {
+    /* Dark theme overrides */
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --border: #444444;
+    --shadow: 0 2px 4px rgba(0,0,0,0.4);
+    --modal-bg: #1e1e1e;
+    --input-bg: #2e2e2e;
+    --input-focus: #263238;
+    --chat-bg: #0b141a;
+    --message-in: #2e2e2e;
+    --message-out: #005c4b;
+    --message-time: #b0b0b0;
+    --chat-input-bg: #2e2e2e;
+    --chat-send-btn-bg: #005c4b;
+    --chat-send-btn-text: #e0e0e0;
+    --emoji-picker-bg: #2e2e2e;
+    --emoji-option-bg: #3a3a3a;
+    --attachment-btn-bg: #444444;
+    --select-bg: #2e2e2e;
+    --select-hover: #37474f;
+    --select-option-bg: #2e2e2e;
+    --select-option-text: #e0e0e0;
+}
+
+body {
+    background: var(--bg-primary);
+    margin: 0;
+    font-family: 'Merriweather', serif;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+/* Navigation */
+.performa-nav {
+    background: var(--tile-bg);
+    height: 80px;
+    box-shadow: var(--shadow);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main-title {
+    font-size: 1.7rem;
+    margin: 0 0 0 35px;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--accent-primary) 30%, #ffffff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-input, .nav-dropdown {
+    padding: 8px 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: 4px;
+    width: 180px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.nav-input:focus, .nav-dropdown:focus {
+    background: var(--input-focus);
+    border-color: var(--accent-primary);
+    outline: none;
+    box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+}
+
+.home-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--accent-secondary);
+    text-decoration: none;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.home-link:hover {
+    color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.home-link i { font-size: 1.4rem; margin-bottom: 2px; }
+.home-link span { font-size: 0.65rem; }
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.custom-image {
+    position: absolute;
+    top: -40px;
+    left: 5px;
+    width: 55px;
+    height: 46px;
+    background-image: url('/static/admin/img/pmh_3.png');
+    margin-top: 55px;
+    background-size: cover;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    border: 2px solid #ffffff;
+}
+
+/* Form and Tiles */
+.form-row {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin: 20px 24px;
+    font-size: 10px;
+}
+
+.field-container { display: flex; flex-direction: column; }
+.field-label { font-size: 10px; margin-bottom: 2px; color: var(--text-primary); }
+.input-small {
+    width: 100px;
+    padding: 3px;
+    font-size: 10px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.checkbox-label {
+    font-size: 10px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.checkbox-label input { margin-right: 3px; }
+
+.tiles-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 24px;
+}
+
+/* Filter Form Styling */
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    font-family: 'Merriweather', serif;
+}
+
+.select-container {
+    width: 100%;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-family: 'Merriweather', serif;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: var(--transition);
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+                      linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+    background-position: calc(100% - 15px) calc(1em + 2px), calc(100% - 10px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+}
+
+.filter-select option {
+    font-size: 11px;
+    background: var(--select-option-bg, #ffffff);
+    color: var(--select-option-text, #000000);
+}
+
+[data-theme="dark"] .filter-select option {
+    background: var(--select-option-bg, #2e2e2e);
+    color: var(--select-option-text, #e0e0e0);
+}
+
+.date-container {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.filter-date {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-family: 'Merriweather', serif;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.filter-date:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+}
+
+
+
+        .chat-modal-wrapper {
+            width: 50vw;
+            height: 80vh;
+            max-width: 800px;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-header {
+            background: var(--header-bg);
+            border-radius: 12px 12px 0 0;
+            padding: 12px 16px;
+            color: var(--header-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-name-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--header-text);
+            cursor: pointer;
+        }
+
+        .messages-container {
+            flex: 1;
+            max-height: calc(80vh - 120px);
+            padding: 16px;
+            background: var(--chat-bg);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-secondary) var(--chat-bg);
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: var(--chat-bg);
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: var(--text-secondary);
+            border-radius: 4px;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 8px 12px;
+            margin: 4px 8px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-out {
+            background: var(--message-out);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            margin-right: auto;
+        }
+
+        .message-in {
+            background: var(--message-in);
+            color: var(--text-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            margin-left: auto;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .message-content {
+            font-size: 14px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--message-time);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .reply-reference {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px 8px;
+            border-left: 3px solid var(--accent-primary);
+            font-size: 12px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+        }
+
+        .reply-btn {
+            background: none;
+            border: none;
+            color: var(--accent-primary);
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .reply-btn:hover {
+            color: #2A3F54;
+        }
+
+        .inline-reply-box {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .inline-reply-input {
+            width: 100%;
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .inline-reply-input:focus {
+            border-color: var(--header-bg);
+            outline: none;
+        }
+
+        .inline-reply-send {
+            padding: 4px 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            background: var(--chat-send-btn-bg);
+            color: var(--chat-send-btn-text);
+            cursor: pointer;
+        }
+
+        .inline-reply-send:hover {
+            background: #0074b5;
+        }
+
+        .message-input-container {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--chat-input-bg);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .chat-input-field:focus {
+            border-color: var(--header-bg);
+            box-shadow: 0 0 4px rgba(0, 134, 209, 0.3);
+        }
+
+        .send-button {
+            background: var(--chat-send-btn-bg);
+            color: var(--chat-send-btn-text);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .send-button:hover {
+            background: #0074b5;
+            transform: scale(1.05);
+        }
+
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: var(--header-bg);
+            color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chat-button:hover {
+            background: #0074b5;
+        }
+
+        @media (max-width: 992px) {
+            .chat-modal-wrapper {
+                width: 90vw;
+                height: 70vh;
+                right: 5vw;
+                bottom: 10vh;
+                min-width: unset;
+            }
+        }
+
+    .auth-form {
+        background: #1a365d;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        align-items: end;
+    }
+
+    .field-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .field-label {
+        font-size: 0.9em;
+        color: #e0e0e0;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .form-input {
+        padding: 10px 12px;
+        border: 2px solid #4a5568;
+        border-radius: 6px;
+        font-size: 0.95em;
+        background: #ffffff;
+        color: #2d3748;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #48bb78;
+        box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3);
+    }
+
+    .checkbox-label {
+        font-size: 0.85em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        color: #e0e0e0;
+    }
+
+    #unique_chat {
+        grid-column: span 2;
+    }
+
+    @media (max-width: 768px) {
+        .auth-form {
+            width: calc(100% - 40px);
+            padding: 15px;
+        }
+        
+        .form-grid {
+            gap: 12px;
+        }
+        
+        #unique_chat {
+            grid-column: span 1;
+        }
+    }
+
+
+    .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between buttons */
+}
+
+.navigate-evidence-btn {
+    font-size: 10px;
+    padding: 5px 10px;
+    background: #0288d1;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.navigate-evidence-btn:hover {
+    background: #0277bd;
+}
+
+.modal-close-btn {
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #757575;
+}
+
+[data-theme="dark"] .modal-header {
+    background: #37474f;
+    border-bottom: 1px solid #263238;
+}
+
+[data-theme="dark"] .navigate-evidence-btn {
+    background: #039be5;
+}
+
+[data-theme="dark"] .navigate-evidence-btn:hover {
+    background: #0288d1;
+}
+
+[data-theme="dark"] .modal-close-btn {
+    color: #ffffff;
+}
+
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.select-container {
+    position: relative;
+    margin-left: -360px;  /* Create space for expanded elements */
+    overflow: visible;
+    width: 200%;
+    transition: margin 0.3s ease;
+}
+
+
+
+
+/* Date input fields */
+.filter-date {
+    width: 150%; /* Increased width */
+    padding: 10px 14px !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.chat-messages {
+    padding: 8px;
+    background-color: black; /* Changed to a lighter background */
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.chat-bubble {
+    font-size: 10px;
+    background: black; /* Changed to a lighter background */
+    padding: 8px;
+    border-radius: 8px;
+    color: #333; /* Changed to a darker text color */
+}
+
+.metadata-container {
+    margin-bottom: 4px;
+}
+
+.message-meta {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.message-content {
+    margin-bottom: 4px;
+}
+
+.message-time {
+    font-size: 8px;
+    color: #666; /* Changed to a darker text color */
+    text-align: left;
+}
+
+#modal-body-content {
+    overflow-y: auto;
+    max-height: 60vh;
+    padding: 16px;
+}
+
+.modal-deliverable-row {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-deliverable-cell {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+}
+
+.chat-container {
+    padding: 14px;
+    background-color: darkslategrey;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.chat-messages {
+    overflow-y: auto;
+    max-height: 150px;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+#deliverable-modal .modal-content {
+    width: 95%; /* Increase the width by 5% from the default 50% */
+    max-width: 80%; /* Optional: Add a max-width to prevent the modal from getting too wide */
+}
+
+
+.modal-deliverable-row {
+    width: 98.5% !important;
+    flex-wrap: rap;
+}
+
+
+.filter-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.select-container, .date-container {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.filter-select, .filter-date {
+    width: 95%;
+}
+
+.select-container {
+    width: 4cm;
+    margin: 0 10px;
+}
+
+
+.filter-date {
+    height: calc(30px * 0.3); /* assuming original height is 30px */
+}
+
+
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    cursor: nw-resize;
+}
+
+
+
+
+:root {
+    --bg-out: #e3f2fd; /* Faint blue for sent messages */
+    --bg-in: #f5f5f5; /* Faint gray for received messages */
+    --text-color: #000000;
+    --meta-sg: #dcedc8;
+    --meta-kpi: #fff9c4;
+    --meta-deliverable: #b3e5fc;
+    --nested-bg: #e6f0fa;
+    --nested-out: #c8e6c9;
+    --nested-in: #f5f5f5;
+    --reply-bg: var(--bg-in);
+    --reply-btn-bg: #0288d1;
+    --reply-btn-hover: #0277bd;
+    --action-btn-bg: #0288d1;
+    --action-btn-hover: #0277bd;
+    --thread-bg-1: #f0f7ff; /* Light blue */
+    --thread-bg-2: #f5fff5; /* Light green */
+    --thread-bg-3: #fff7f0; /* Light orange */
+    --thread-bg-4: #f7f0ff; /* Light purple */
+    --thread-bg-5: #fff0f5; /* Light pink */
+}
+[data-theme="dark"] {
+    --bg-out: #37474f;
+    --bg-in: #263238;
+    --text-color: #ffffff;
+    --meta-sg: #4caf50;
+    --meta-kpi: #fbc02d;
+    --meta-deliverable: #0288d1;
+    --nested-bg: #455a64;
+    --nested-out: #388e3c;
+    --nested-in: #263238;
+    --reply-bg: #37474f;
+    --reply-btn-bg: #0288d1;
+    --reply-btn-hover: #039be5;
+    --action-btn-bg: #0288d1;
+    --action-btn-hover: #039be5;
+    --thread-bg-1: #2c3e50;
+    --thread-bg-2: #1a3c34;
+    --thread-bg-3: #3c2f2f;
+    --thread-bg-4: #2e2e4a;
+    --thread-bg-5: #3c1f3c;
+}
+.message-thread {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+.message-thread.thread-bg-1 { background: var(--thread-bg-1); }
+.message-thread.thread-bg-2 { background: var(--thread-bg-2); }
+.message-thread.thread-bg-3 { background: var(--thread-bg-3); }
+.message-thread.thread-bg-4 { background: var(--thread-bg-4); }
+.message-thread.thread-bg-5 { background: var(--thread-bg-5); }
+.message-bubble {
+    color: var(--text-color);
+    word-wrap: break-word;
+    max-width: 70%;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 10px;
+}
+.message-out {
+    background: var(--bg-out);
+    margin-left: auto;
+    margin-right: 10px;
+}
+.message-in {
+    background: var(--bg-in);
+    margin-right: auto;
+    margin-left: 10px;
+}
+.message-sender {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: var(--text-color);
+    font-size: 10px;
+}
+.message-content {
+    margin: 4px 0;
+    font-size: 10px;
+}
+.message-time {
+    font-size: 8px;
+    color: #757575;
+    text-align: inherit; /* Match bubble alignment */
+}
+.reply-reference {
+    margin-bottom: 4px;
+    border-left: 2px solid var(--meta-sg);
+    padding-left: 8px;
+}
+.nested-reply {
+    background: var(--nested-bg);
+    padding: 4px 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    font-size: 8px;
+    color: var(--text-color);
+}
+.nested-out {
+    background: var(--nested-out);
+}
+.nested-in {
+    background: var(--nested-in);
+}
+.metadata-container {
+    margin-bottom: 4px;
+}
+.message-meta {
+    padding: 4px;
+    margin: 2px 0;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--text-color);
+}
+.strategic-goal {
+    background: var(--meta-sg);
+}
+.kpi {
+    background: var(--meta-kpi);
+}
+.deliverable {
+    background: var(--meta-deliverable);
+}
+.thread-reply-box {
+    /* No direct styles */
+}
+.reply-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+}
+.thread-reply-input {
+    flex: 1;
+    font-size: 10px;
+    padding: 4px;
+    border: 1px solid var(--text-color);
+    border-radius: 4px;
+    background: var(--reply-bg);
+    color: var(--text-color);
+}
+.thread-reply-send {
+    font-size: 10px;
+    padding: 4px 8px;
+    margin-left: 4px;
+    cursor: pointer;
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+}
+.chat-bubble {
+    font-size: 10px;
+    background: var(--bg-out);
+    margin-left: 10px;
+    padding: 8px;
+    border-radius: 8px;
+}
+.message-meta.strategic-goal {
+    background: var(--meta-sg);
+    padding: 4px;
+    border-radius: 4px;
+}
+.message-meta.kpi {
+    background: var(--meta-kpi);
+    padding: 4px;
+    border-radius: 4px;
+}
+.message-meta.deliverable {
+    background: var(--meta-deliverable);
+    padding: 4px;
+    border-radius: 4px;
+}
+</style>  
+</head>
+<body>
+    <nav class="performa-nav">
+        
+        <div class="nav-container">
+            <h1 class="main-title" style="margin-left: -10px;">
+                <span class="gradient-text">Assessor Appraisal</span>
+            </h1>
+            <div class="nav-controls">
+                <div class="user-selection">
+                    <select id="username-input-dropdown" class="nav-dropdown" style="background-color: transparent; color: black;">
+                        <option value="" disabled selected>Select Subordinate</option>
+                    </select>
+                </div>
+                <div class="manager-input">
+                    <input type="text" id="new-textbox" class="nav-input" style="display: none;" value="{{ username }}" placeholder="Manager's Code">
+                </div>
+                <div class="user-info">
+                    <span class="user-status text-gradient small">Welcome</span>
+                    <strong id="signed-in-user" class="username-display">{{ username }}</strong>
+                </div>
+                <div class="nav-buttons">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="http://127.0.0.1:8002/employee-appraisal/?username=#" class="home-link" title="Go Home">
+                        <i class="fa fa-home" style="font-size: 12px;margin-top: 20px;"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="user-input-wrapper" style="visibility: hidden;">
+                <input type="text" id="username-input" class="nav-input" placeholder="Username">
+            </div>
+        </div>
+    </nav>
+
+
+<form id="my-form" class="auth-form" style="display: none;">
+    <div class="form-grid">
+        <div class="field-container">
+            <label class="field-label" for="username">EMPLOYEE NAME:</label>
+            <input class="form-input" type="text" id="username" name="username" placeholder="JOHN DOE">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="employee-password">PASSWORD:</label>
+            <input class="form-input" type="password" id="employee-password" name="employee_password" placeholder="•••••••">
+            <label class="checkbox-label">
+                <input type="checkbox" id="show-password"> SHOW
+            </label>
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="company_code">COMPANY CODE:</label>
+            <input class="form-input" type="text" id="company_code" name="company_code" placeholder="COMPANY CODE">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="branch_code">BRANCH CODE:</label>
+            <input class="form-input" type="text" id="branch_code" name="branch_code" placeholder="BRANCH CODE">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="region_branch">REGION BRANCH:</label>
+            <input class="form-input" type="text" id="region_branch" name="region_branch" placeholder="REGION BRANCH">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="subordinate_code">SUBORDINATE CODE:</label>
+            <input class="form-input" type="text" id="subordinate_code" name="subordinate_code" placeholder="SUBORDINATE CODE">
+        </div>
+
+        <div class="field-container">
+            <label class="field-label" for="unique_chat">UNIQUE CHAT:</label>
+            <input class="form-input" type="text" id="unique_chat" name="unique_chat" placeholder="UNIQUE CHAT VALUE">
+        </div>
+    </div>
+</form>
+
+    <div class="tiles-container">
+        <div class="tile">
+            <p class="quote">"Fairness in performance appraisals is not just a legal obligation; it's a moral commitment to recognizing and rewarding employees based on their true contributions."</p>
+            <p class="author">Jennifer Herrity</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"Dispirited, unmotivated, unappreciated workers cannot compete in a highly competitive world."</p>
+            <p class="author">Francis Hesselbein</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"You got to be rigorous in your appraisal system. The biggest cowards are managers who don't let people know where they stand."</p>
+            <p class="author">Jack Welch</p>
+        </div>
+        <div class="tile">
+            <p class="quote">"The way your employees feel is the way your customers will feel. And if your employees don't feel valued, neither will your customers."</p>
+            <p class="author">Sybil F. Stershic</p>
+        </div>
+    </div>
+
+<div id="deliverable-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="modal-title">Deliverables</span>
+            <div class="modal-header-buttons">
+                <button class="modal-close-btn" onclick="closeModal()">×</button>
+            </div>
+        </div>
+        <div class="modal-body" id="modal-body-content"></div>
+    </div>
+</div>
+
+    <div id="document-evidence-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Document Evidence</span>
+                <button class="modal-close-btn" onclick="closeDocumentEvidenceModal()">×</button>
+            </div>
+            <div class="modal-body" id="document-evidence-content"></div>
+            <div class="modal-footer">
+                <button class="save-btn" onclick="showCustomModal()">Save</button>
+            </div>
+        </div>
+    </div>
+
+<div id="customModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <span class="custom-close-btn" onclick="closeCustomModal()">×</span>
+        <h2>Self Appraisal</h2>
+        <div class="resize-handle"></div>
+        <div style="overflow-x: auto; overflow-y: auto;">
+            <table id="assessmentTable">
+                <thead>
+                    <tr>
+                        <th>Employee Code</th>
+                        <th>Surbodinate Employee Code</th>
+                        <th>Strategic Goal</th>
+                        <th>Strategic Goal Number</th>
+                        <th>Strategic Goal Weight</th>
+                        <th>KPI</th>
+                        <th>KPI Number</th>
+                        <th>KPI Weight</th>
+                        <th>Deliverable</th>
+                        <th>Deliverable Number</th>
+                        <th>Deliverable Weight</th>
+                        <th>Self Score</th>
+                        <th>Document Evidence</th>
+                        <th>Document Evidence Number</th>
+                        <th>Document Evidence Self Confirmation</th>
+                        <th>Short Term Actual</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="commit-assessments-btn" onclick="commitAssessments()">Commit Assessment</button>
+    </div>
+</div>
+    <div class="strategic-goals-header">
+        Click a Goal to View related Key Performance Indicator(s)
+    </div>
+    <div class="strategic-goals-container" id="strategic-goals-list"></div>
+
+    <div id="kpi-container" class="kpi-container"></div>
+
+    <div style="position: absolute; top: 10px; right: 10px; color: var(--accent-primary);">
+
+    </div>
+
+    <!-- Chat Button -->
+    <button class="chat-button" onclick="showChatModal()">
+        <i class="fas fa-comment"></i>
+    </button>
+
+<div id="chat-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content chat-modal-wrapper" style="border-radius: 12px; overflow: hidden; width: 80%; max-width: 1200px;">
+        <div class="modal-header chat-header" style="padding: 16px; background: linear-gradient(135deg, #2A3F54 0%, #1ABB9C 100%); position: relative;">
+            <div class="header-content" style="display: flex; gap: 20px; align-items: center; width: 100%;">
+                <div class="user-info-header" style="flex: 1;">
+                    <div class="user-details-header" style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-comment-dots" style="font-size: 24px; color: #fff; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 8px;"></i>
+                        <div>
+                            <h2 class="user-name-header" style="margin: 0; font: 600 1.25rem 'Segoe UI', sans-serif; color: #fff; letter-spacing: 0.5px;">
+                                performa360Chat
+                            </h2>
+                            <span id="chat-partner" class="user-status-header" style="font: 500 0.9rem 'Segoe UI'; color: rgba(255,255,255,0.9); display: block; margin-top: 4px;">
+                                Connection Status: Available
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close-btn" onclick="hideChatModal()" style="position: absolute; top: 3px; right: 10px; background: rgba(255,255,255,0.1); border: none; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                <i class="fas fa-times" style="font-size: 12px;margin-top: 0px;"></i>
+            </button>
+        </div>
+
+        <!-- Dark Chat Space -->
+        <div class="messages-container" style="height: calc(100vh - 240px); padding: 20px; background: #1a1f2b;">
+            <div id="chat-messages" class="messages-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Make the table draggable
+const tableContainer = document.querySelector('#customModal .custom-modal-content div');
+let isTableDown = false;
+let tableOffset = [0, 0];
+
+tableContainer.addEventListener('mousedown', (e) => {
+    if (e.button === 0 && !e.target.classList.contains('resize-handle')) {
+        isTableDown = true;
+        tableOffset = [tableContainer.scrollLeft - e.clientX, tableContainer.scrollTop - e.clientY];
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isTableDown = false;
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (isTableDown) {
+        tableContainer.scrollLeft = tableOffset[0] + e.clientX;
+        tableContainer.scrollTop = tableOffset[1] + e.clientY;
+    }
+});
+
+// Make the custom modal resizable
+const resizableModal = document.getElementById('customModal');
+const resizeHandleCustom = document.querySelector('#customModal .resize-handle');
+
+let startXCustom, startYCustom, startWidthCustom, startHeightCustom;
+
+if (resizeHandleCustom) {
+    resizeHandleCustom.addEventListener('mousedown', (e) => {
+        startXCustom = e.clientX;
+        startYCustom = e.clientY;
+        startWidthCustom = parseInt(document.defaultView.getComputedStyle(resizableModal).width, 10);
+        startHeightCustom = parseInt(document.defaultView.getComputedStyle(resizableModal).height, 10);
+        document.documentElement.addEventListener('mousemove', doDragCustom, false);
+        document.documentElement.addEventListener('mouseup', stopDragCustom, false);
+    });
+}
+
+function doDragCustom(e) {
+    resizableModal.style.width = (startWidthCustom + e.clientX - startXCustom) + 'px';
+    resizableModal.style.height = (startHeightCustom + e.clientY - startYCustom) + 'px';
+}
+
+function stopDragCustom(e) {
+    document.documentElement.removeEventListener('mousemove', doDragCustom, false);
+    document.documentElement.removeEventListener('mouseup', stopDragCustom, false);
+}
+
+// Make the document evidence modal draggable and resizable
+const modal = document.getElementById('document-evidence-modal');
+const modalContent = modal.querySelector('.modal-content');
+
+let isDown = false;
+let isResizing = false;
+let offset = [0, 0];
+let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+modalContent.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('resize-handle')) {
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = modalContent.offsetWidth;
+        startHeight = modalContent.offsetHeight;
+        startLeft = modalContent.offsetLeft;
+        startTop = modalContent.offsetTop;
+    } else {
+        if (e.button === 0) {
+            isDown = true;
+            offset = [modalContent.offsetLeft - e.clientX, modalContent.offsetTop - e.clientY];
+        }
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isDown = false;
+    isResizing = false;
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (isDown) {
+        modalContent.style.left = `${e.clientX + offset[0]}px`;
+        modalContent.style.top = `${e.clientY + offset[1]}px`;
+    } else if (isResizing) {
+        const newWidth = startWidth - (e.clientX - startX);
+        const newHeight = startHeight - (e.clientY - startY);
+        modalContent.style.width = `${newWidth}px`;
+        modalContent.style.height = `${newHeight}px`;
+        modalContent.style.left = `${startLeft + (e.clientX - startX)}px`;
+        modalContent.style.top = `${startTop + (e.clientY - startY)}px`;
+    }
+});
+
+const style = document.createElement('style');
+style.innerHTML = `
+    .resize-handle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background-color: #ccc;
+        cursor: se-resize;
+    }
+    #customModal .resize-handle {
+        cursor: nw-resize;
+    }
+    .modal-content {
+        position: absolute;
+    }
+`;
+document.head.appendChild(style);
+
+  function navigateToDocumentEvidence() {
+    // Hide the deliverable modal
+    document.getElementById("deliverable-modal").style.display = "none";
+
+    // Show the document evidence modal
+    document.getElementById("document-evidence-modal").style.display = "block";
+  }
+
+  function closeDocumentEvidenceModal() {
+    document.getElementById("document-evidence-modal").style.display = "none";
+  }
+
+  function closeModal() {
+    document.getElementById("deliverable-modal").style.display = "none";
+  }
+
+
+
+// AbortSignal Timeout Polyfill
+// Implements a polyfill for AbortSignal.timeout to abort fetch requests after a specified timeout.
+// Creates an AbortController that aborts after a given millisecond delay, returning its signal.
+if (!AbortSignal.timeout) {
+    AbortSignal.timeout = function(ms) {
+        const controller = new AbortController();
+        setTimeout(() => controller.abort(), ms);
+        return controller.signal;
+    };
+}
+
+// Chat State Initialization
+// Defines global variables to manage chat state, such as current user, chat partner, and reply tracking.
+// Initializes variables like currentChatPartner, currentUserCode, and replyToMessageId for chat functionality.
+let currentChatPartner = null;
+let currentUser = null;
+let currentUserCode = null;
+let currentChatPartnerCode = null;
+let replyToMessageId = null; // Track message being replied to
+
+// Local Storage for Comments
+// Creates an object to simulate persistent storage for comments tied to deliverables.
+// Uses commentHistory to store comments locally, keyed by deliverable ID for appraisal discussions.
+const commentHistory = {};
+
+// Show Chat Modal
+// Displays the chat modal and populates it with user and subordinate data, including dropdown filters.
+// Fetches assessment data to populate strategic goal, KPI, and deliverable dropdowns, and sets up event listeners.
+function showChatModal() {
+    const modal = document.getElementById('chat-modal');
+    const chatPartner = document.getElementById('chat-partner');
+    const messagesContainer = document.getElementById('chat-messages');
+    const headerContainer = document.querySelector('.chat-header');
+
+    currentUserCode = document.getElementById('employee-password').value.trim();
+    currentChatPartner = document.getElementById('username-input-dropdown').value.trim();
+    currentChatPartnerCode = document.getElementById('subordinate_code').value.trim();
+    currentUser = document.getElementById('signed-in-user').textContent.trim();
+
+    modal.style.display = 'block';
+
+    if (!currentUserCode || !currentChatPartner || !currentChatPartnerCode) {
+        chatPartner.textContent = 'Please select a subordinate';
+        messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 10px;">Select a subordinate to start chatting.</p>';
+        return;
+    }
+
+    chatPartner.textContent = currentChatPartner;
+    messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 10px;">Loading messages...</p>';
+
+const filterForm = document.createElement('div');
+filterForm.className = 'filter-form';
+filterForm.id = 'chat-filter-container';
+filterForm.innerHTML = `
+    <div class="filter-row">
+        <div class="select-container">
+            <select class="filter-select" id="sg-select">
+                <option value="" disabled selected>Select Strategic Goal</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <select class="filter-select" id="kpi-select">
+                <option value="" disabled selected>Select KPI</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <select class="filter-select" id="deliverable-select">
+                <option value="" disabled selected>Select Deliverable</option>
+            </select>
+        </div>
+        <div class="date-container">
+            <input type="date" class="filter-date" id="start-date" placeholder="yyyy/mm/dd">
+            <input type="date" class="filter-date" id="end-date" placeholder="yyyy/mm/dd">
+        </div>
+    </div>
+`;
+// CSS
+
+    const existingFilter = document.getElementById('chat-filter-container');
+    if (existingFilter) existingFilter.remove();
+    headerContainer.appendChild(filterForm);
+
+    async function populateDropdowns() {
+        try {
+            const response = await fetch(`http://localhost:8002/api/assessment/?employee_code=${encodeURIComponent(currentChatPartnerCode)}`, {
+                method: 'GET',
+                credentials: 'include',
+                signal: AbortSignal.timeout(5000)
+            });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            if (data.status === 'success') {
+                const assessmentData = processAssessmentData(data.data);
+                const sgOptions = assessmentData.map(sg => sg.strategic_goal);
+                populateSelectOptions('sg-select', sgOptions);
+                const kpiOptions = assessmentData.flatMap(sg => sg.kpis.map(kpi => ({
+                    value: kpi.kpi,
+                    dataset: { sg: sg.strategic_goal }
+                })));
+                populateSelectOptions('kpi-select', kpiOptions.map(opt => opt.value), kpiOptions);
+                const deliverableOptions = assessmentData.flatMap(sg => sg.kpis.flatMap(kpi => kpi.deliverables.map(del => ({
+                    value: del.deliverable,
+                    dataset: { sg: sg.strategic_goal, kpi: kpi.kpi, deliverableNumber: del.deliverable_number || 'N/A' }
+                }))));
+                populateSelectOptions('deliverable-select', deliverableOptions.map(opt => opt.value), deliverableOptions);
+            }
+        } catch (error) {
+            console.error('Error fetching assessment data for dropdowns:', error);
+            messagesContainer.innerHTML = `<p style="color: #f44336; font-size: 10px;">Failed to load dropdowns: ${escapeHtml(error.message)}</p>`;
+        }
+    }
+
+    const sgSelect = document.getElementById('sg-select');
+    const kpiSelect = document.getElementById('kpi-select');
+    const deliverableSelect = document.getElementById('deliverable-select');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+
+    sgSelect.addEventListener('change', () => {
+        localStorage.setItem(`strategic_goal_${currentChatPartnerCode}`, sgSelect.value);
+        Array.from(kpiSelect.options).forEach(opt => {
+            if (opt.value && opt.dataset.sg !== sgSelect.value && sgSelect.value) {
+                opt.style.display = 'none';
+            } else {
+                opt.style.display = 'block';
+            }
+        });
+        Array.from(deliverableSelect.options).forEach(opt => {
+            if (opt.value && opt.dataset.sg !== sgSelect.value && sgSelect.value) {
+                opt.style.display = 'none';
+            } else {
+                opt.style.display = 'block';
+            }
+        });
+        loadChatHistory();
+    });
+
+    kpiSelect.addEventListener('change', () => {
+        localStorage.setItem(`kpi_${currentChatPartnerCode}`, kpiSelect.value);
+        Array.from(deliverableSelect.options).forEach(opt => {
+            if (opt.value && opt.dataset.kpi !== kpiSelect.value && kpiSelect.value) {
+                opt.style.display = 'none';
+            } else {
+                opt.style.display = 'block';
+            }
+        });
+        loadChatHistory();
+    });
+
+    deliverableSelect.addEventListener('change', () => {
+        localStorage.setItem(`deliverable_${currentChatPartnerCode}`, deliverableSelect.value);
+        const selectedOption = deliverableSelect.options[deliverableSelect.selectedIndex];
+        localStorage.setItem(`deliverable_number_${currentChatPartnerCode}`, selectedOption ? selectedOption.dataset.deliverableNumber || 'N/A' : 'N/A');
+        loadChatHistory();
+    });
+
+    startDateInput.addEventListener('change', () => {
+        localStorage.setItem(`date_from_${currentChatPartnerCode}`, startDateInput.value);
+        loadChatHistory();
+    });
+
+    endDateInput.addEventListener('change', () => {
+        localStorage.setItem(`date_to_${currentChatPartnerCode}`, endDateInput.value);
+        loadChatHistory();
+    });
+
+    populateDropdowns().then(() => loadChatHistory());
+}
+
+// Populate Select Options
+// Populates dropdown menus with options for strategic goals, KPIs, and deliverables.
+// Dynamically creates <option> elements with values and dataset attributes, preserving selected states.
+function populateSelectOptions(selectId, options, optionData = []) {
+    const select = document.getElementById(selectId);
+    select.innerHTML = `<option value="" disabled selected>Select ${selectId.split('-')[0].replace('sg', 'Strategic Goal').replace('kpi', 'KPI').replace('deliverable', 'Deliverable')}</option>`;
+    options.forEach((option, index) => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = option;
+        if (optionData[index] && optionData[index].dataset) {
+            Object.entries(optionData[index].dataset).forEach(([key, value]) => {
+                opt.dataset[key] = value;
+            });
+        }
+        select.appendChild(opt);
+    });
+}
+
+// Load Chat History
+// Fetches and displays chat messages based on selected filters (strategic goal, KPI, deliverable, dates).
+// Filters messages by dropdown selections and date range, rendering them with createMessageElement.
+// loadChatHistory
+async function loadChatHistory() {
+    const messagesContainer = document.getElementById('chat-messages');
+    const sgSelect = document.getElementById('sg-select');
+    const kpiSelect = document.getElementById('kpi-select');
+    const deliverableSelect = document.getElementById('deliverable-select');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+
+    if (!currentUserCode || !currentChatPartnerCode) {
+        messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 12px;">No appraisor available.</p>';
+        return;
+    }
+
+    const uniqueChat = [currentUserCode.trim(), currentChatPartnerCode.trim()].sort().join('_');
+    messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 12px;">Loading messages...</p>';
+
+    try {
+        const apiUrl = `/get_appraisal_chat_messages/?unique_chat=${encodeURIComponent(uniqueChat)}`;
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to load messages: HTTP ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        messagesContainer.innerHTML = '';
+
+        if (!data.messages || Object.keys(data.messages).length === 0) {
+            messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 12px;">No messages yet.</p>';
+            return;
+        }
+
+        const selectedSg = sgSelect?.value || '';
+        const selectedKpi = kpiSelect?.value || '';
+        const selectedDeliverable = deliverableSelect?.value || '';
+        const dateFrom = startDateInput?.value || '';
+        const dateTo = endDateInput?.value || '';
+
+        const filteredMessages = {};
+        Object.keys(data.messages).forEach(replyToId => {
+            const messageGroup = data.messages[replyToId];
+            const filteredGroup = messageGroup.filter(msg => {
+                const msgDate = new Date(msg.timestamp);
+                const fromDate = dateFrom ? new Date(dateFrom) : null;
+                const toDate = dateTo ? new Date(dateTo + 'T23:59:59.999') : null;
+
+                return (!selectedSg || msg.strategic_goal === selectedSg) &&
+                       (!selectedKpi || msg.kpi === selectedKpi) &&
+                       (!selectedDeliverable || msg.deliverable === selectedDeliverable) &&
+                       (!fromDate || msgDate >= fromDate) &&
+                       (!toDate || msgDate <= toDate);
+            });
+
+            if (filteredGroup.length > 0) {
+                filteredMessages[replyToId] = filteredGroup;
+            }
+        });
+
+        if (Object.keys(filteredMessages).length === 0) {
+            messagesContainer.innerHTML = '<p style="color: var(--text-secondary); font-size: 12px;">No messages for this selection.</p>';
+            return;
+        }
+
+        const threadBgClasses = ['thread-bg-1', 'thread-bg-2', 'thread-bg-3', 'thread-bg-4', 'thread-bg-5'];
+
+        Object.entries(filteredMessages).forEach(([replyToId, group], index) => {
+            const threadContainer = document.createElement('div');
+            threadContainer.className = `message-thread ${threadBgClasses[index % threadBgClasses.length]}`;
+            threadContainer.dataset.replyToId = replyToId;
+
+            group.forEach(msg => {
+                const messageElement = createMessageElement(msg);
+                threadContainer.appendChild(messageElement);
+            });
+
+            const replyBox = document.createElement('div');
+            replyBox.className = 'thread-reply-box';
+            replyBox.innerHTML = `
+                <div class="reply-input-container" style="display: flex; align-items: center; margin-top: 4px;">
+                    <input type="file" id="attachment-input-${replyToId}" class="attachment-input" accept="image/*,application/pdf" style="display: none;">
+                    <input type="text" class="thread-reply-input" placeholder="Reply in thread..." style="flex: 1; font-size: 10px; padding: 4px; border: 1px solid var(--text-color); border-radius: 4px; background: var(--reply-bg); color: var(--text-color);">
+                    <button class="thread-reply-send" data-reply-to="${replyToId}" style="font-size: 10px; padding: 4px 8px; margin-left: 4px; cursor: pointer; background: transparent; color: #ffffff; border: none; border-radius: 4px;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            `;
+            replyBox.querySelector('.thread-reply-send').addEventListener('click', async (e) => {
+                const input = replyBox.querySelector('.thread-reply-input');
+                const text = input.value.trim();
+                if (text) {
+                    await sendThreadReply(replyToId, text);
+                    input.value = '';
+                    loadChatHistory();
+                }
+            });
+
+            threadContainer.appendChild(replyBox);
+            messagesContainer.appendChild(threadContainer);
+        });
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    } catch (error) {
+        console.error('Load chat history error:', error);
+        messagesContainer.innerHTML = `<p style="color: #f44336; font-size: 12px;">Failed to load messages: ${escapeHtml(error.message)}</p>`;
+    }
+}
+
+
+
+
+
+// Send Thread Reply
+async function sendThreadReply(replyToId, message) {
+    const messageElement = document.querySelector(`[data-reply-to-id="${replyToId}"]`);
+    const strategicGoal = messageElement.querySelector('.strategic-goal')?.textContent.split(': ')[1] || 'N/A';
+    const kpi = messageElement.querySelector('.kpi')?.textContent.split(': ')[1] || 'N/A';
+    const deliverable = messageElement.querySelector('.deliverable')?.textContent.split(': ')[1] || 'N/A';
+    const deliverableNumber = messageElement.querySelector('.deliverable-number')?.textContent.split(': ')[1] || 'N/A';
+
+    const payload = {
+        deliverable_id: `${strategicGoal}__${kpi}__${deliverable}`,
+        message: message,
+        sender_code: currentUserCode,
+        recipient_code: currentChatPartnerCode,
+        unique_chat: [currentUserCode, currentChatPartnerCode].sort().join('_'),
+        strategic_goal: strategicGoal,
+        kpi: kpi,
+        deliverable: deliverable,
+        deliverable_number: deliverableNumber,
+        sender_name: currentUser || 'N/A',
+        recipient_name: currentChatPartner || 'N/A',
+    };
+
+    try {
+        const response = await fetch('/save-deliverable-comment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Failed to save comment: HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.status === 'Comment saved') {
+            console.log('Comment saved successfully');
+        } else {
+            throw new Error(data.error || 'Failed to save comment');
+        }
+    } catch (error) {
+        console.error('Send reply error:', error);
+    }
+}
+// Send Message
+// Sends a text message to the server with associated metadata (strategic goal, KPI, deliverable).
+// Validates that strategic goal, KPI, and deliverable are selected before sending for non-reply messages.
+async function sendMessage(messageText) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const message = messageText.trim();
+
+    console.log('sendMessage called with:', { message, currentUserCode, currentChatPartnerCode, currentUser, currentChatPartner, replyToMessageId });
+
+    if (!messagesContainer) {
+        console.error('Messages container not found');
+        return;
+    }
+
+    if (!message) {
+        console.warn('Empty message');
+        messagesContainer.innerHTML += '<p style="color: #ff9800; font-size: 10px;">Please enter a message.</p>';
+        return;
+    }
+
+    if (!replyToMessageId) {
+        console.warn('Missing replyToMessageId');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">This function is only for reply messages. Please use the reply section.</p>';
+        return;
+    }
+
+    // Fetch parent message and its metadata from DOM
+    const messageElement = document.getElementById(`message-${replyToMessageId}`);
+    if (!messageElement) {
+        console.warn('Message element not found for replyToMessageId:', replyToMessageId);
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">Cannot find message to reply to.</p>';
+        return;
+    }
+
+    // Assume unique_chat is stored in data-unique-chat or infer from message data
+    const uniqueChat = messageElement.dataset.uniqueChat || '';
+    if (!uniqueChat) {
+        console.warn('Missing unique_chat for parent message');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">Cannot determine unique chat for parent message.</p>';
+        return;
+    }
+
+    const strategicGoalElement = messageElement.querySelector('.strategic-goal');
+    const kpiElement = messageElement.querySelector('.kpi');
+    const deliverableElement = messageElement.querySelector('.deliverable');
+
+    const strategicGoal = strategicGoalElement ? strategicGoalElement.textContent.replace(/^Strategic Goal:\s*/, '') : 'N/A';
+    const kpi = kpiElement ? kpiElement.textContent.replace(/^KPI:\s*/, '') : 'N/A';
+    const deliverable = deliverableElement ? deliverableElement.textContent.replace(/^Deliverable:\s*/, '') : 'N/A';
+    const deliverableNumber = 'N/A'; // Not in UI, default to N/A
+
+    console.log('Fetched from DOM:', { uniqueChat, strategicGoal, kpi, deliverable, deliverableNumber });
+
+    const csrfToken = getCsrfToken();
+    console.log('CSRF token:', csrfToken);
+    if (!csrfToken) {
+        console.warn('Missing CSRF token');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">CSRF token missing. Please refresh the page.</p>';
+        return;
+    }
+
+    try {
+        const payload = {
+            message: message,
+            unique_chat: uniqueChat,
+            sender_code: currentUserCode,
+            recipient_code: currentChatPartnerCode,
+            sender_name: currentUser || 'Unknown Sender',
+            recipient_name: currentChatPartner || 'Unknown Recipient',
+            reply_to_id: replyToMessageId,
+            strategic_goal: strategicGoal,
+            kpi: kpi,
+            deliverable: deliverable,
+            deliverable_number: deliverableNumber,
+            deliverable_id: null
+        };
+
+        console.log('Sending payload to /send-appraisal-messages/:', payload);
+
+        const response = await fetch('/send-appraisal-messages/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        });
+
+        console.log('Response:', { status: response.status, ok: response.ok });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = errorData.error || `HTTP ${response.status}`;
+            console.error('Request failed:', errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (data.status === 'Message sent') {
+            console.log('Message sent successfully');
+            messagesContainer.innerHTML += '<p style="color: #4caf50; font-size: 10px;">Reply sent successfully!</p>';
+            resetReplyState();
+            await loadChatHistory();
+        } else {
+            throw new Error(data.error || 'Failed to send reply');
+        }
+    } catch (error) {
+        console.error('Send error:', error);
+        let errorMessage = error.message;
+        if (error.name === 'AbortError') {
+            errorMessage = 'Request timed out. Please check your network.';
+        }
+        messagesContainer.innerHTML += `<p style="color: #f44336; font-size: 10px;">Error sending reply: ${escapeHtml(errorMessage)}. Please try again.</p>`;
+    }
+}
+// Send Comment
+// Sends a comment for a deliverable to the server, associating it with metadata.
+// Validates that strategic goal, KPI, and deliverable are provided, and styles the comment bubble.
+async function sendComment(deliverableId, inputElement, strategicGoal, kpi, deliverable, deliverableNumber) {
+    const commentText = inputElement.value.trim();
+    const chatMessages = inputElement.closest('.chat-container').querySelector('.chat-messages');
+
+    // Remove any existing error messages
+    const existingError = chatMessages.querySelector('.error-message');
+    if (existingError) existingError.remove();
+
+    if (!commentText) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#ff9800';
+        errorDiv.style.fontSize = '10px';
+        errorDiv.textContent = 'Please enter a comment.';
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
+    }
+
+    if (!deliverableId) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#ff9800';
+        errorDiv.style.fontSize = '10px';
+        errorDiv.textContent = 'Invalid deliverable ID.';
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
+    }
+
+    // Ensure subordinate is selected
+    currentUserCode = currentUserCode || document.getElementById('employee-password').value.trim() || localStorage.getItem('employee_code');
+    currentChatPartnerCode = currentChatPartnerCode || document.getElementById('subordinate_code').value.trim() || localStorage.getItem('subordinate_code');
+    currentChatPartner = currentChatPartner || document.getElementById('username-input-dropdown').value.trim() || localStorage.getItem('subordinate_name');
+    currentUser = currentUser || document.getElementById('signed-in-user').textContent.trim() || localStorage.getItem('current_user');
+
+    if (!currentUserCode || !currentChatPartnerCode) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#ff9800';
+        errorDiv.style.fontSize = '10px';
+        errorDiv.textContent = 'Please select a subordinate before commenting.';
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
+    }
+
+    // Construct unique_chat
+    const uniqueChat = [currentUserCode, currentChatPartnerCode].sort().join('_');
+
+    // Construct payload with all required fields
+    const payload = {
+        deliverable_id: deliverableId,
+        message: commentText, // Backend expects 'message', not 'comment'
+        sender_code: currentUserCode,
+        recipient_code: currentChatPartnerCode,
+        unique_chat: uniqueChat,
+        strategic_goal: strategicGoal || 'N/A',
+        kpi: kpi || 'N/A',
+        deliverable: deliverable || 'N/A',
+        deliverable_number: deliverableNumber || 'N/A',
+        sender_name: currentUser || 'N/A',
+        recipient_name: currentChatPartner || 'N/A',
+        reply_to_id: null // No reply functionality for comments
+    };
+
+    // Log the payload for debugging
+    console.log('Sending comment payload:', payload);
+
+    try {
+        const response = await fetch('/save-deliverable-comment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken(),
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Failed to save comment: HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.status === 'Comment saved') {
+            if (!commentHistory[deliverableId]) {
+                commentHistory[deliverableId] = [];
+            }
+            commentHistory[deliverableId].push({
+                text: commentText,
+                timestamp: new Date().toISOString()
+            });
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-bubble';
+            messageDiv.style.fontSize = '10px';
+            messageDiv.style.background = '#e3f2fd'; // Sender style
+            messageDiv.style.marginLeft = '10px';
+            messageDiv.style.padding = '8px';
+            messageDiv.style.borderRadius = '8px';
+            messageDiv.innerHTML = `
+                <div class="metadata-container">
+                    <div class="message-meta strategic-goal" style="background: #dcedc8; padding: 4px; border-radius: 4px;">
+                        <strong>Strategic Goal:</strong> ${escapeHtml(strategicGoal || 'N/A')}
+                    </div>
+                    <div class="message-meta kpi" style="background: #fff9c4; padding: 4px; border-radius: 4px;">
+                        <strong>KPI:</strong> ${escapeHtml(kpi || 'N/A')}
+                    </div>
+                    <div class="message-meta deliverable" style="background: #b3e5fc; padding: 4px; border-radius: 4px;">
+                        <strong>Deliverable:</strong> ${escapeHtml(deliverable || 'N/A')}
+                    </div>
+                </div>
+                <div class="message-content">${escapeHtml(commentText)}</div>
+                <div class="message-time" style="font-size: 8px; color: #757575; text-align: left;">
+                    ${formatTimestamp(new Date().toISOString())}
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+
+            inputElement.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } else {
+            throw new Error(data.error || 'Failed to save comment');
+        }
+    } catch (error) {
+        console.error('Send comment error:', error);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.color = '#f44336';
+        errorDiv.style.fontSize = '10px';
+        errorDiv.textContent = `Error saving comment: ${escapeHtml(error.message)}`;
+        chatMessages.appendChild(errorDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+// Display Deliverables
+// Renders a modal with a table of deliverables, including scores, weights, and comments.
+
+async function displayDeliverables(deliverables) {
+    // Retrieve subordinate and user data from input fields or localStorage
+    currentUserCode = document.getElementById('employee-password').value.trim() || localStorage.getItem('employee_code') || null;
+    currentChatPartnerCode = document.getElementById('subordinate_code').value.trim() || localStorage.getItem('subordinate_code') || null;
+    currentChatPartner = document.getElementById('username-input-dropdown').value.trim() || localStorage.getItem('subordinate_name') || null;
+    currentUser = document.getElementById('signed-in-user').textContent.trim() || localStorage.getItem('current_user') || null;
+
+    // Validate subordinate selection
+    if (!currentChatPartnerCode || !currentUserCode) {
+        alert('Please select a subordinate before viewing deliverables.');
+        return;
+    }
+
+    const modalContent = document.getElementById('modal-body-content');
+    modalContent.innerHTML = '';
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'modal-header-row';
+    ['Deliverable Number', 'Weight', 'Deliverable', 'Self Appraisal Score', 'Assessor Score', 'Due Date'].forEach(text => {
+        const headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = text;
+        headerRow.appendChild(headerCell);
+    });
+    modalContent.appendChild(headerRow);
+
+    if (deliverables.length === 0) {
+        const emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="6">No deliverables available.</div>';
+        modalContent.appendChild(emptyRow);
+    } else {
+        deliverables.forEach(deliverable => {
+            const deliverableRow = document.createElement('div');
+            deliverableRow.className = 'modal-deliverable-row';
+
+            const numberCell = document.createElement('div');
+            numberCell.className = 'modal-deliverable-cell';
+            numberCell.textContent = deliverable.deliverable_number || 'N/A';
+            deliverableRow.appendChild(numberCell);
+
+            const weightCell = document.createElement('div');
+            weightCell.className = 'modal-deliverable-cell';
+            weightCell.textContent = deliverable.deliverable_weight ? (deliverable.deliverable_weight * 100).toFixed(0) + '%' : 'N/A';
+            deliverableRow.appendChild(weightCell);
+
+            const descCell = document.createElement('div');
+            descCell.className = 'modal-deliverable-cell';
+            descCell.textContent = deliverable.deliverable || 'No description';
+            deliverableRow.appendChild(descCell);
+
+            const selfAppraisalCell = document.createElement('div');
+            selfAppraisalCell.className = 'modal-deliverable-cell';
+            const selfAppraisalScore = document.createElement('select');
+            selfAppraisalScore.className = 'modal-deliverable-select';
+            selfAppraisalScore.disabled = true;
+            selfAppraisalScore.innerHTML = '<option value="">Score</option>';
+            for (let i = 1; i <= 5; i++) {
+                selfAppraisalScore.innerHTML += `<option value="${i}" ${deliverable.deliverable_self_score === i ? 'selected' : ''}>${i}</option>`;
+            }
+            selfAppraisalCell.appendChild(selfAppraisalScore);
+            deliverableRow.appendChild(selfAppraisalCell);
+
+            const assessorCell = document.createElement('div');
+            assessorCell.className = 'modal-deliverable-cell';
+            const assessorScore = document.createElement('select');
+            assessorScore.className = 'modal-deliverable-select';
+            assessorScore.innerHTML = '<option value="">Score</option>';
+            for (let i = 1; i <= 5; i++) {
+                assessorScore.innerHTML += `<option value="${i}" ${deliverable.deliverable_assessor_score === i ? 'selected' : ''}>${i}</option>`;
+            }
+            assessorCell.appendChild(assessorScore);
+            deliverableRow.appendChild(assessorCell);
+
+            const dueDateCell = document.createElement('div');
+            dueDateCell.className = 'modal-deliverable-cell';
+            dueDateCell.textContent = deliverable.deliverable_due_date ? formatDate(deliverable.deliverable_due_date) : 'No due date';
+            deliverableRow.appendChild(dueDateCell);
+
+            deliverableRow.addEventListener('click', () => {
+                document.querySelectorAll('.modal-deliverable-row').forEach(r => r.classList.remove('clicked'));
+                deliverableRow.classList.add('clicked');
+                localStorage.setItem(`deliverable_${currentChatPartnerCode}`, deliverable.deliverable);
+                localStorage.setItem(`deliverable_number_${currentChatPartnerCode}`, deliverable.deliverable_number || 'N/A');
+                localStorage.setItem(`strategic_goal_${currentChatPartnerCode}`, deliverable.strategic_goal || 'N/A');
+                localStorage.setItem(`kpi_${currentChatPartnerCode}`, deliverable.kpi || 'N/A');
+                displayDocumentEvidence(deliverable.doc_evidence || []);
+                
+                // Display the document evidence modal
+                document.getElementById('document-evidence-modal').style.display = 'block';
+            });
+
+            modalContent.appendChild(deliverableRow);
+
+            const chatRow = document.createElement('div');
+            chatRow.className = 'modal-comment-row';
+            const chatCell = document.createElement('div');
+            chatCell.className = 'modal-comment-cell';
+            chatCell.colSpan = 6;
+
+            const chatContainer = document.createElement('div');
+            chatContainer.className = 'chat-container';
+            chatContainer.dataset.deliverableId = deliverable.deliverable_id;
+
+            const chatMessages = document.createElement('div');
+            chatMessages.className = 'chat-messages';
+
+            const comments = [];
+            if (deliverable.post_appraisal_assessor_comment) {
+                comments.push({
+                    text: deliverable.post_appraisal_assessor_comment,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            if (commentHistory[deliverable.deliverable_id]) {
+                comments.push(...commentHistory[deliverable.deliverable_id]);
+            }
+
+            comments.forEach(comment => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-bubble';
+                messageDiv.style.fontSize = '10px';
+                messageDiv.style.background = '#f5f5f5'; // Receiver style for existing comments
+                messageDiv.style.marginRight = '10px';
+                messageDiv.style.marginLeft = 'auto';
+                messageDiv.style.padding = '8px';
+                messageDiv.style.borderRadius = '8px';
+                messageDiv.innerHTML = `
+                    <div class="metadata-container">
+                        <div class="message-meta strategic-goal" style="background: #dcedc8; padding: 4px; border-radius: 4px;">
+                            <strong>Strategic Goal:</strong> ${escapeHtml(localStorage.getItem(`strategic_goal_${currentChatPartnerCode}`) || 'N/A')}
+                        </div>
+                        <div class="message-meta kpi" style="background: #fff9c4; padding: 4px; border-radius: 4px;">
+                            <strong>KPI:</strong> ${escapeHtml(localStorage.getItem(`kpi_${currentChatPartnerCode}`) || 'N/A')}
+                        </div>
+                        <div class="message-meta deliverable" style="background: #b3e5fc; padding: 4px; border-radius: 4px;">
+                            <strong>Deliverable:</strong> ${escapeHtml(localStorage.getItem(`deliverable_${currentChatPartnerCode}`) || 'N/A')}
+                        </div>
+                    </div>
+                    <div class="message-content">${escapeHtml(comment.text)}</div>
+                    <div class="message-time" style="font-size: 8px; color: #757575; text-align: right;">
+                        ${formatTimestamp(comment.timestamp)}
+                    </div>
+                `;
+                chatMessages.appendChild(messageDiv);
+            });
+
+            const chatInputContainer = document.createElement('div');
+            chatInputContainer.className = 'chat-input-container';
+
+            const chatInput = document.createElement('input');
+            chatInput.type = 'text';
+            chatInput.className = 'chat-input';
+            chatInput.style.fontSize = '10px';
+            chatInput.placeholder = 'Type a comment...';
+
+            const sendBtn = document.createElement('button');
+            sendBtn.className = 'chat-send-btn';
+            sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            sendBtn.onclick = () => sendComment(
+                deliverable.deliverable_id,
+                chatInput,
+                localStorage.getItem(`strategic_goal_${currentChatPartnerCode}`) || 'N/A',
+                localStorage.getItem(`kpi_${currentChatPartnerCode}`) || 'N/A',
+                localStorage.getItem(`deliverable_${currentChatPartnerCode}`) || 'N/A',
+                localStorage.getItem(`deliverable_number_${currentChatPartnerCode}`) || 'N/A'
+            );
+
+            chatInputContainer.appendChild(chatInput);
+            chatInputContainer.appendChild(sendBtn);
+
+            chatContainer.appendChild(chatMessages);
+            chatContainer.appendChild(chatInputContainer);
+            chatCell.appendChild(chatContainer);
+            chatRow.appendChild(chatCell);
+            modalContent.appendChild(chatRow);
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    }
+
+    document.getElementById('deliverable-modal').style.display = 'block';
+}
+
+
+
+// Hide Chat Modal
+// Closes the chat modal and resets its content and state.
+// Hides the modal, clears messages, and resets reply state and emoji picker visibility.
+function hideChatModal() {
+    const modal = document.getElementById('chat-modal');
+    const emojiPicker = document.getElementById('emoji-picker');
+    modal.style.display = 'none';
+    emojiPicker.style.display = 'none';
+    modal.querySelector('#chat-partner').textContent = '';
+    modal.querySelector('#chat-messages').innerHTML = '';
+    resetReplyState();
+}
+
+// Reset Reply State
+// Clears the reply state, resetting input placeholders and reply metadata.
+// Resets replyToMessageId and clears stored reply metadata to prepare for new messages.
+// Send Reply Message
+// Sends a reply message using the reply input's value and stored metadata.
+// Calls sendMessage with the reply text, keeping the main message input unchanged.
+async function sendReplyMessage(replyText) {
+    if (replyText.trim()) {
+        await sendMessage(replyText);
+    }
+}
+
+// Create Message Element
+// Creates a styled message bubble with sender name, metadata, content, timestamp, and reply input.
+// Supports attachments, replies, and metadata display, with a Font Awesome send icon for replies.
+
+function createMessageElement(msg) {
+    const isSent = msg.sender === currentUserCode;
+    const messageDiv = document.createElement('div');
+    messageDiv.style.display = 'flex';
+    messageDiv.style.justifyContent = isSent ? 'flex-end' : 'flex-start';
+    messageDiv.style.margin = '8px 0';
+    messageDiv.style.width = '100%';
+    messageDiv.id = `message-${msg.id}`;
+    messageDiv.dataset.uniqueChat = msg.unique_chat || [msg.sender, msg.receiver].sort().join('_');
+
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = `message-bubble ${isSent ? 'message-out' : 'message-in'}`;
+    bubbleDiv.dataset.messageId = msg.id;
+    bubbleDiv.style.fontSize = '10px';
+    bubbleDiv.style.maxWidth = '70%';
+    bubbleDiv.style.marginLeft = isSent ? 'auto' : '10px';
+    bubbleDiv.style.marginRight = isSent ? '10px' : 'auto';
+    bubbleDiv.style.padding = '8px';
+    bubbleDiv.style.borderRadius = '8px';
+
+    const senderName = msg.sender_name || (isSent ? currentUser : currentChatPartner);
+
+    let content = msg.chat_type === 'attachment' && msg.attachment_url
+        ? `<a href="${msg.attachment_url}" target="_blank">${escapeHtml(msg.message)}</a>`
+        : escapeHtml(msg.message);
+
+    const timestamp = msg.timestamp ? formatTimestamp(msg.timestamp) : 'N/A';
+
+    let replyContent = '';
+    if (msg.reply_to_id && msg.reply_to_message && msg.reply_to_sender_name) {
+        replyContent = `
+            <div class="reply-reference">
+                <div class="nested-reply ${msg.reply_to_sender === currentUserCode ? 'nested-out' : 'nested-in'}">
+                    <strong>Replying to ${escapeHtml(msg.reply_to_sender_name)}:</strong> ${escapeHtml(msg.reply_to_message.substring(0, 30))}${msg.reply_to_message.length > 30 ? '...' : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    let metadataContent = '';
+    const hasMetadata = msg.strategic_goal !== 'N/A' || msg.kpi !== 'N/A' || msg.deliverable !== 'N/A';
+    if (hasMetadata) {
+        metadataContent = `
+            <div class="metadata-container">
+                ${msg.strategic_goal !== 'N/A' ? `<div class="message-meta strategic-goal"><strong>Strategic Goal:</strong> ${escapeHtml(msg.strategic_goal)}</div>` : ''}
+                ${msg.kpi !== 'N/A' ? `<div class="message-meta kpi"><strong>KPI:</strong> ${escapeHtml(msg.kpi)}</div>` : ''}
+                ${msg.deliverable !== 'N/A' ? `<div class="message-meta deliverable"><strong>Deliverable:</strong> ${escapeHtml(msg.deliverable)}</div>` : ''}
+            </div>
+        `;
+    }
+
+    bubbleDiv.innerHTML = `
+        <style>
+            :root {
+                --bg-out: #e3f2fd;
+                --bg-in: #f5f5f5;
+                --text-color: #000000;
+                --meta-sg: #dcedc8;
+                --meta-kpi: #fff9c4;
+                --meta-deliverable: #b3e5fc;
+                --nested-bg: #e6f0fa;
+                --nested-out: #c8e6c9;
+                --nested-in: #f5f5f5;
+                --reply-bg: var(--bg-in);
+                --reply-btn-bg: #0288d1;
+                --reply-btn-hover: #0277bd;
+                --action-btn-bg: #0288d1;
+                --action-btn-hover: #0277bd;
+            }
+            [data-theme="dark"] {
+                --bg-out: #37474f;
+                --bg-in: #263238;
+                --text-color: #ffffff;
+                --meta-sg: #4caf50;
+                --meta-kpi: #fbc02d;
+                --meta-deliverable: #0288d1;
+                --nested-bg: #455a64;
+                --nested-out: #388e3c;
+                --nested-in: #263238;
+                --reply-bg: #37474f;
+                --reply-btn-bg: #0288d1;
+                --reply-btn-hover: #039be5;
+                --action-btn-bg: #0288d1;
+                --action-btn-hover: #039be5;
+            }
+            .message-bubble {
+                background: ${isSent ? 'var(--bg-out)' : 'var(--bg-in)'};
+                color: var(--text-color);
+                word-wrap: break-word;
+            }
+            .message-out {
+                background: var(--bg-out);
+            }
+            .message-in {
+                background: var(--bg-in);
+            }
+            .message-sender {
+                font-weight: bold;
+                margin-bottom: 4px;
+                color: var(--text-color);
+            }
+            .message-content {
+                margin: 4px 0;
+                font-size: 10px;
+            }
+            .message-time {
+                font-size: 8px;
+                color: #757575;
+                text-align: ${isSent ? 'right' : 'left'};
+            }
+            .reply-reference {
+                margin-bottom: 4px;
+                border-left: 2px solid var(--meta-sg);
+                padding-left: 8px;
+            }
+            .nested-reply {
+                background: var(--nested-bg);
+                padding: 4px 8px;
+                margin: 2px 0;
+                border-radius: 4px;
+                font-size: 8px;
+                color: var(--text-color);
+            }
+            .nested-out {
+                background: var(--nested-out);
+            }
+            .nested-in {
+                background: var(--nested-in);
+            }
+            .metadata-container {
+                margin-bottom: 4px;
+            }
+            .message-meta {
+                padding: 4px;
+                margin: 2px 0;
+                border-radius: 4px;
+                font-size: 10px;
+                color: var(--text-color);
+            }
+            .strategic-goal {
+                background: var(--meta-sg);
+            }
+            .kpi {
+                background: var(--meta-kpi);
+            }
+            .deliverable {
+                background: var(--meta-deliverable);
+            }
+
+</style>
+<div class="message-sender">${escapeHtml(msg.sender_name || (isSent ? currentUser : currentChatPartner))}</div>
+${metadataContent}
+<div class="message-content">${content}</div>
+<div class="message-time">${timestamp}</div>
+<div class="reply-input-container" style="display: none;">
+    <label for="attachment-input-${msg.id}" class="attachment-btn">
+        <i class="fas fa-paperclip"></i>
+    </label>
+    <input type="file" id="attachment-input-${msg.id}" class="attachment-input" accept="image/*,application/pdf">
+    <input type="text" class="reply-input" placeholder="Reply to this message...">
+    <button class="reply-send-btn"><i class="fas fa-paper-plane"></i></button>
+</div>
+
+`;
+
+const attachmentInput = bubbleDiv.querySelector(`#attachment-input-${msg.id}`);
+const replyInput = bubbleDiv.querySelector('.reply-input');
+const replySendBtn = bubbleDiv.querySelector('.reply-send-btn');
+const uniqueChatElement = document.getElementById('unique_chat');
+const uniqueChat = uniqueChatElement ? uniqueChatElement.value : null;
+
+if (!uniqueChat) {
+    console.error('Unique chat value is not set');
+    return;
+}
+
+const updateDropdowns = () => {
+    localStorage.setItem('selected_strategic_goal', msg.strategic_goal || 'N/A');
+    localStorage.setItem('selected_kpi', msg.kpi || 'N/A');
+    localStorage.setItem('selected_deliverable', msg.deliverable || 'N/A');
+    localStorage.setItem('selected_deliverable_number', msg.deliverable_number || 'N/A');
+
+    const sgSelect = document.getElementById('sg-select');
+    const kpiSelect = document.getElementById('kpi-select');
+    const deliverableSelect = document.getElementById('deliverable-select');
+
+    if (sgSelect && msg.strategic_goal !== 'N/A') {
+        sgSelect.value = msg.strategic_goal;
+        sgSelect.dispatchEvent(new Event('change'));
+    }
+    if (kpiSelect && msg.kpi !== 'N/A') {
+        kpiSelect.value = msg.kpi;
+        kpiSelect.dispatchEvent(new Event('change'));
+    }
+    if (deliverableSelect && msg.deliverable !== 'N/A') {
+        deliverableSelect.value = msg.deliverable;
+        deliverableSelect.dispatchEvent(new Event('change'));
+    }
+};
+
+attachmentInput.addEventListener('change', async () => {
+    resetReplyState();
+    replyToMessageId = msg.id;
+    await sendAttachment(attachmentInput);
+    updateDropdowns();
+});
+
+replyInput.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter' && replyInput.value.trim()) {
+        console.log('Sending reply from keypress:', replyInput.value.trim());
+        await sendMessage(replyInput.value.trim());
+        updateDropdowns();
+        replyInput.value = '';
+    }
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+replySendBtn.addEventListener('click', async () => {
+    // No code here
+});
+messageDiv.appendChild(bubbleDiv);
+return messageDiv;
+
+const repliesContainer = messageElement.querySelector('.replies-container');
+if (repliesContainer) {
+    repliesContainer.appendChild(replyElement);
+} else {
+    const newRepliesContainer = document.createElement('div');
+    newRepliesContainer.classList.add('replies-container');
+    newRepliesContainer.appendChild(replyElement);
+    messageElement.appendChild(newRepliesContainer);
+}
+}
+
+async function sendMessage(messageText) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const message = messageText.trim();
+
+    console.log('sendMessage called with:', { message, currentUserCode, currentChatPartnerCode, currentUser, currentChatPartner, replyToMessageId });
+
+    if (!messagesContainer) {
+        console.error('Messages container not found');
+        return;
+    }
+
+    if (!message) {
+        console.warn('Empty message');
+        messagesContainer.innerHTML += '<p style="color: #ff9800; font-size: 10px;">Please enter a message.</p>';
+        return;
+    }
+
+    if (!replyToMessageId) {
+        console.warn('Missing replyToMessageId');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">This function is only for reply messages. Please use the reply section.</p>';
+        return;
+    }
+
+    // Fetch parent message and metadata from DOM
+    const messageElement = document.getElementById(`message-${replyToMessageId}`);
+    if (!messageElement) {
+        console.warn('Message element not found for replyToMessageId:', replyToMessageId);
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">Cannot find message to reply to.</p>';
+        return;
+    }
+
+    const uniqueChat = messageElement.dataset.uniqueChat || '';
+    if (!uniqueChat) {
+        console.warn('Missing unique_chat for parent message');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">Cannot determine unique chat for parent message.</p>';
+        return;
+    }
+
+    const strategicGoalElement = messageElement.querySelector('.strategic-goal');
+    const kpiElement = messageElement.querySelector('.kpi');
+    const deliverableElement = messageElement.querySelector('.deliverable');
+
+    const strategicGoal = strategicGoalElement ? strategicGoalElement.textContent.replace(/^Strategic Goal:\s*/, '') : 'N/A';
+    const kpi = kpiElement ? kpiElement.textContent.replace(/^KPI:\s*/, '') : 'N/A';
+    const deliverable = deliverableElement ? deliverableElement.textContent.replace(/^Deliverable:\s*/, '') : 'N/A';
+    const deliverableNumber = 'N/A';
+
+    console.log('Fetched from DOM:', { uniqueChat, strategicGoal, kpi, deliverable, deliverableNumber });
+
+    const csrfToken = getCsrfToken();
+    console.log('CSRF token:', csrfToken);
+    if (!csrfToken) {
+        console.warn('Missing CSRF token');
+        messagesContainer.innerHTML += '<p style="color: #f44336; font-size: 10px;">CSRF token missing. Please refresh the page.</p>';
+        return;
+    }
+
+    try {
+        const payload = {
+            message: message,
+            unique_chat: uniqueChat,
+            sender_code: currentUserCode,
+            recipient_code: currentChatPartnerCode,
+            sender_name: currentUser || 'Unknown Sender',
+            recipient_name: currentChatPartner || 'Unknown Recipient',
+            reply_to_id: replyToMessageId,
+            strategic_goal: strategicGoal,
+            kpi: kpi,
+            deliverable: deliverable,
+            deliverable_number: deliverableNumber,
+            deliverable_id: null
+        };
+
+        console.log('Sending payload to /send-appraisal-messages/:', payload);
+
+        const response = await fetch('/send-appraisal-messages/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        });
+
+        console.log('Response:', { status: response.status, ok: response.ok });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = errorData.error || `HTTP ${response.status}`;
+            console.error('Request failed:', errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (data.status === 'Message sent') {
+            console.log('Message sent successfully');
+            messagesContainer.innerHTML += '<p style="color: #4caf50; font-size: 10px;">Reply sent successfully!</p>';
+            resetReplyState();
+            await loadChatHistory();
+        } else {
+            throw new Error(data.error || 'Failed to send reply');
+        }
+    } catch (error) {
+        console.error('Send error:', error);
+        let errorMessage = error.message;
+        if (error.name === 'AbortError') {
+            errorMessage = 'Request timed out. Please check your network.';
+        }
+        messagesContainer.innerHTML += `<p style="color: #f44336; font-size: 10px;">Error sending reply: ${escapeHtml(errorMessage)}. Please try again.</p>`;
+    }
+}
+// Toggle Emoji Picker
+// Shows or hides the emoji picker for adding emojis to messages.
+// Toggles the display of the emoji picker element when the user clicks the emoji button.
+function toggleEmojiPicker() {
+    const emojiPicker = document.getElementById('emoji-picker');
+    emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
+}
+
+// Add Emoji
+// Appends a selected emoji to the message input field.
+// Adds the emoji to the input, focuses it, and hides the emoji picker after selection.
+function addEmoji(emoji) {
+    const messageInput = document.getElementById('message-input');
+    messageInput.value += emoji;
+    messageInput.focus();
+    toggleEmojiPicker();
+}
+
+// Handle Email Attachment
+// Opens the user’s email client with pre-filled recipient, subject, and body for appraisal discussions.
+// Constructs a mailto: URL with encoded chat partner details and redirects the user to their email client.
+function handleEmailAttachment() {
+    const recipient = currentChatPartner ? encodeURIComponent(currentChatPartner) : '';
+    const subject = encodeURIComponent('Appraisal Discussion');
+    const body = encodeURIComponent('Please provide feedback on the deliverables.');
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+}
+
+// Get CSRF Token
+// Retrieves the CSRF token from cookies for secure POST requests.
+// Parses the csrftoken cookie or falls back to a template placeholder if not found.
+function getCsrfToken() {
+    const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+    return cookieValue || '{{ csrf_token }}';
+}
+
+// Escape HTML
+// Sanitizes text to prevent XSS by escaping HTML characters.
+// Converts special characters to their HTML entities using a temporary div element.
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Format Timestamp
+// Formats a timestamp into a readable South African date-time format.
+// Uses Intl.DateTimeFormat with en-ZA locale to display dates like 21/05/2025 17:48:00.
+function formatTimestamp(timestamp) {
+    try {
+        const date = new Date(timestamp);
+        if (isNaN(date.getTime())) return 'N/A';
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
+        return new Intl.DateTimeFormat('en-ZA', options).format(date).replace(',', '');
+    } catch (e) {
+        return 'N/A';
+    }
+}
+
+// Format Date
+// Formats a date string into a concise South African format (e.g., 21 May 2025).
+// Uses toLocaleDateString with en-ZA locale for short month and numeric day/year.
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-ZA', options);
+}
+
+// Toggle Theme
+// Switches between light and dark themes, updating the UI and local storage.
+// Toggles the data-theme attribute and updates the theme toggle icon, saving the preference.
+function toggleTheme() {
+    const body = document.body;
+    const currentTheme = body.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    const toggleBtn = document.querySelector('.theme-toggle i');
+    toggleBtn.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    localStorage.setItem('theme', newTheme);
+}
+
+// Fetch Company Code
+// Retrieves the company code based on employee code and username input.
+// Updates the company code field and triggers region/branch fetching if successful.
+function fetchCompanyCode() {
+    const employeeCode = document.getElementById('employee-password').value.trim();
+    const username = document.getElementById('username').value.trim();
+
+    if (!employeeCode) {
+        document.getElementById('company_code').value = '';
+        return;
+    }
+
+    fetch(`/get_company_code/?employee_code=${encodeURIComponent(employeeCode)}&username=${encodeURIComponent(username)}`, {
+        method: 'GET',
+        credentials: 'include',
+        signal: AbortSignal.timeout(5000)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('company_code').value = data.company_code || '';
+            if (data.company_code) fetchRegionBranch(data.company_code, employeeCode);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            document.getElementById('company_code').value = '';
+        });
+}
+
+// Fetch Region Branch
+// Fetches region and branch details based on company and employee codes.
+// Updates the branch code and region branch fields with data from the server.
+function fetchRegionBranch(companyCode, employeeCode) {
+    if (!companyCode || !employeeCode) {
+        document.getElementById('branch_code').value = '';
+        document.getElementById('region_branch').value = '';
+        return;
+    }
+
+    fetch(`/get-region-branch/?company_code=${encodeURIComponent(companyCode)}&employee_code=${encodeURIComponent(employeeCode)}`, {
+        method: 'GET',
+        credentials: 'include',
+        signal: AbortSignal.timeout(5000)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('branch_code').value = data.region_code || '';
+            document.getElementById('region_branch').value = data.region_branch || '';
+        })
+        .catch(error => {
+            console.error('Error fetching region data:', error);
+            document.getElementById('branch_code').value = '';
+            document.getElementById('region_branch').value = '';
+        });
+}
+
+// Fetch Assessment Data
+// Retrieves assessment data for an employee to populate strategic goals.
+// Calls processAssessmentData and displayStrategicGoals to render the data in the UI.
+function fetchAssessmentData(employeeCode) {
+    if (!employeeCode) return;
+
+    fetch(`http://localhost:8002/api/assessment/?employee_code=${encodeURIComponent(employeeCode)}`, {
+        method: 'GET',
+        credentials: 'include',
+        signal: AbortSignal.timeout(5000)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                const strategicGoals = processAssessmentData(data.data);
+                displayStrategicGoals(strategicGoals);
+            } else {
+                console.error('API error:', data);
+                document.getElementById('strategic-goals-list').innerHTML = '<p>No data available.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching assessment data:', error);
+            document.getElementById('strategic-goals-list').innerHTML = '<p>Error loading data.</p>';
+        });
+}
+
+// Process Assessment Data
+// Organizes raw assessment data into a structured format with strategic goals, KPIs, and deliverables.
+// Uses Map to group data hierarchically, ensuring unique entries for each level.
+function processAssessmentData(data) {
+    const strategicGoalsMap = new Map();
+
+    data.forEach(item => {
+        const sgKey = item.strategic_goal;
+        if (!strategicGoalsMap.has(sgKey)) {
+            strategicGoalsMap.set(sgKey, {
+                strategic_goal_number: item.strategic_goal_number,
+                strategic_goal: item.strategic_goal,
+                strategic_goal_weight: item.strategic_goal_weight,
+                strategic_goal_due_date: item.date_self_appraisal_completed,
+                kpis: new Map()
+            });
+        }
+
+        const sg = strategicGoalsMap.get(sgKey);
+        const k_occur = item.kpi_occurrence ? item.kpi_occurrence : 0;
+        const kpiKey = `${item.kpi}_${item.kpi_number}_${k_occur}`;
+        if (!sg.kpis.has(kpiKey)) {
+            sg.kpis.set(kpiKey, {
+                kpi: item.kpi,
+                kpi_number: item.kpi_number,
+                kpi_weight: item.kpi_weight,
+                kpi_due_date: item.date_self_appraisal_completed,
+                deliverables: []
+            });
+        }
+
+        const kpi = sg.kpis.get(kpiKey);
+        const deliverableId = `${sgKey}_${item.kpi}_${item.deliverable}_${item.deliverable_number}`;
+        let deliverable = kpi.deliverables.find(d => d.deliverable_number === item.deliverable_number);
+        if (!deliverable) {
+            deliverable = {
+                deliverable: item.deliverable,
+                deliverable_id: deliverableId,
+                deliverable_number: item.deliverable_number,
+                deliverable_weight: item.deliverable_weight,
+                deliverable_due_date: item.date_self_appraisal_completed,
+                deliverable_self_score: item.deliverable_self_score,
+                deliverable_assessor_score: item.deliverable_assessor_score,
+                post_appraisal_assessor_comment: item.post_appraisal_assessor_comment,
+                doc_evidence: []
+            };
+            kpi.deliverables.push(deliverable);
+        }
+
+        deliverable.doc_evidence.push({
+            doc_evidence: item.doc_evidence,
+            doc_evidence_number: item.doc_evidence_number,
+            doc_evidence_weight: item.doc_evidence_weight,
+            doc_evidence_due_date: item.date_self_appraisal_completed,
+            doc_evidence_self_confirmation: item.doc_evidence_self_confirmation,
+            doc_evidence_assessor_confirmation: item.doc_evidence_assessor_confirmation
+        });
+    });
+
+    return Array.from(strategicGoalsMap.values()).map(sg => ({
+        ...sg,
+        kpis: Array.from(sg.kpis.values())
+    }));
+}
+
+// Navigate to Document Evidence
+// Opens the document evidence modal and displays evidence for the selected deliverable.
+// Assumes selectedDeliverable is set via deliverable row click in displayDeliverables.
+function navigateToDocumentEvidence() {
+    const modal = document.getElementById('document-evidence-modal');
+    if (!modal) {
+        console.error('Document evidence modal not found.');
+        return;
+    }
+
+    if (!selectedDeliverable || !selectedDeliverable.doc_evidence) {
+        displayDocumentEvidence([]); // Display empty state
+    } else {
+        displayDocumentEvidence(selectedDeliverable.doc_evidence);
+    }
+
+    modal.style.display = 'block';
+}
+
+// Attach event listener to the button (add this in your script, ideally after DOM is loaded)
+document.addEventListener('DOMContentLoaded', () => {
+    const navigateButton = document.querySelector('.navigate-evidence-btn');
+    if (navigateButton) {
+        navigateButton.addEventListener('click', navigateToDocumentEvidence);
+    } else {
+        console.error('Navigate to Document Evidence button not found.');
+    }
+});
+
+// Navigate to Document Evidence
+// Opens the document evidence modal and displays evidence for the selected deliverable.
+// Assumes selectedDeliverable is set via deliverable row click in displayDeliverables.
+function navigateToDocumentEvidence() {
+    const modal = document.getElementById('document-evidence-modal');
+    if (!modal) {
+        console.error('Document evidence modal not found.');
+        return;
+    }
+
+    if (!selectedDeliverable || !selectedDeliverable.doc_evidence) {
+        displayDocumentEvidence([]); // Display empty state
+    } else {
+        displayDocumentEvidence(selectedDeliverable.doc_evidence);
+    }
+
+    modal.style.display = 'block';
+}
+
+// Display Strategic Goals
+// Renders a list of strategic goals with weights, due dates, and status indicators.
+// Creates clickable tiles that trigger KPI display and store selections in local storage.
+function displayStrategicGoals(strategicGoals) {
+    const listContainer = document.getElementById('strategic-goals-list');
+    listContainer.innerHTML = '';
+
+    strategicGoals.forEach(item => {
+        const tile = document.createElement('div');
+        tile.className = 'sg-tile';
+
+        const header = document.createElement('div');
+        header.className = 'sg-header';
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-bullseye sg-icon';
+        const weight = document.createElement('div');
+        weight.className = 'sg-weight';
+        weight.textContent = `Weight: ${item.strategic_goal_weight ? (item.strategic_goal_weight * 100).toFixed(0) + '%' : 'N/A'}`;
+        header.appendChild(icon);
+        header.appendChild(weight);
+
+        const content = document.createElement('div');
+        content.className = 'sg-content';
+        content.innerHTML = `<strong>${item.strategic_goal_number}.</strong> ${item.strategic_goal}`;
+
+        const dueDate = document.createElement('div');
+        dueDate.className = 'sg-due-date';
+        const statusIndicator = document.createElement('div');
+        statusIndicator.className = 'due-date-indicator';
+        const dateText = document.createElement('span');
+
+        if (item.strategic_goal_due_date) {
+            const dueDateObj = new Date(item.strategic_goal_due_date);
+            const workDaysLeft = calculateWorkingDays(new Date(), dueDateObj);
+            if (workDaysLeft < 0) {
+                statusIndicator.classList.add('due-date-urgent');
+                dateText.textContent = `Overdue: ${dueDateObj.toLocaleDateString('en-ZA')}`;
+            } else if (workDaysLeft <= 7) {
+                statusIndicator.classList.add('due-date-warning');
+                dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString('en-ZA')}`;
+            } else {
+                statusIndicator.classList.add('due-date-normal');
+                dateText.textContent = `${workDaysLeft}d left: ${dueDateObj.toLocaleDateString('en-ZA')}`;
+            }
+        } else {
+            statusIndicator.style.display = 'none';
+            dateText.textContent = 'No due date';
+        }
+
+        dueDate.appendChild(statusIndicator);
+        dueDate.appendChild(dateText);
+        tile.appendChild(header);
+        tile.appendChild(content);
+        tile.appendChild(dueDate);
+
+        tile.addEventListener('click', function() {
+            document.querySelectorAll('.sg-tile').forEach(t => t.classList.remove('selected'));
+            tile.classList.add('selected');
+            localStorage.setItem(`strategic_goal_${currentChatPartnerCode}`, item.strategic_goal);
+            displayKPIs(item.kpis || []);
+        });
+
+        listContainer.appendChild(tile);
+    });
+}
+// Display KPIs
+// Shows a list of KPIs for a selected strategic goal, with weights and due dates.
+// Renders clickable rows that trigger deliverable display and highlight selections.
+function displayKPIs(kpis) {
+    const kpiContainer = document.getElementById('kpi-container');
+    kpiContainer.innerHTML = '';
+
+    const kpiHeader = document.createElement('div');
+    kpiHeader.className = 'kpi-header';
+    kpiHeader.textContent = 'Key Performance Indicators - Click to View Deliverables';
+    kpiContainer.appendChild(kpiHeader);
+
+    if (kpis.length === 0) {
+        const noKpiMessage = document.createElement('div');
+        noKpiMessage.textContent = 'No KPIs available.';
+        noKpiMessage.style.textAlign = 'center';
+        noKpiMessage.style.color = 'var(--text-secondary)';
+        kpiContainer.appendChild(noKpiMessage);
+        return;
+    }
+
+    kpis.forEach(kpi => {
+        const row = document.createElement('div');
+        row.className = 'kpi-row';
+
+        const weightTile = document.createElement('div');
+        weightTile.className = 'kpi-weight-tile';
+        weightTile.textContent = kpi.kpi_weight ? (kpi.kpi_weight * 100).toFixed(0) + '%' : '-';
+
+        const descTile = document.createElement('div');
+        descTile.className = 'kpi-desc-tile';
+        descTile.textContent = `${kpi.kpi_number} ${kpi.kpi}`;
+
+        const dueDateTile = document.createElement('div');
+        dueDateTile.className = 'kpi-due-date-tile';
+        if (kpi.kpi_due_date) {
+            const dueDate = new Date(kpi.kpi_due_date);
+            const workDaysLeft = calculateWorkingDays(new Date(), dueDate);
+            dueDateTile.style.backgroundColor = getColorForDueDate(workDaysLeft);
+            dueDateTile.textContent = workDaysLeft < 0 
+                ? `Overdue: ${formatDate(kpi.kpi_due_date)}`
+                : `${workDaysLeft} days: ${formatDate(kpi.kpi_due_date)}`;
+        } else {
+            dueDateTile.textContent = 'No Due Date';
+        }
+
+        row.appendChild(weightTile);
+        row.appendChild(descTile);
+        row.appendChild(dueDateTile);
+
+        row.addEventListener('click', () => {
+            document.querySelectorAll('.kpi-row').forEach(r => r.style.backgroundColor = '');
+            row.style.backgroundColor = '#f0f8ff';
+            localStorage.setItem(`kpi_${currentChatPartnerCode}`, kpi.kpi);
+            displayDeliverables(kpi.deliverables || []);
+        });
+
+        kpiContainer.appendChild(row);
+    });
+}
+
+// Display Document Evidence
+// Displays a modal with document evidence details, including weights and confirmations.
+// Creates a table with rows for each evidence item, showing self and assessor confirmations.
+function displayDocumentEvidence(documentEvidence) {
+    const modalContent = document.getElementById('document-evidence-content');
+    modalContent.innerHTML = '';
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'modal-header-row';
+    ['Document Evidence Number', 'Weight', 'Document Evidence', 'Self Confirmation', 'Assessor Confirmation', 'Due Date'].forEach(text => {
+        const headerCell = document.createElement('div');
+        headerCell.className = 'modal-header-cell';
+        headerCell.textContent = text;
+        headerRow.appendChild(headerCell);
+    });
+    modalContent.appendChild(headerRow);
+
+    if (documentEvidence.length === 0) {
+        const emptyRow = document.createElement('div');
+        emptyRow.className = 'modal-deliverable-row';
+        emptyRow.innerHTML = '<div class="modal-deliverable-cell" colspan="6">No document evidence available.</div>';
+        modalContent.appendChild(emptyRow);
+    } else {
+        documentEvidence.forEach(doc => {
+            const docRow = document.createElement('div');
+            docRow.className = 'modal-deliverable-row';
+
+            const numberCell = document.createElement('div');
+            numberCell.className = 'modal-deliverable-cell';
+            numberCell.textContent = doc.doc_evidence_number || 'N/A';
+            docRow.appendChild(numberCell);
+
+            const weightCell = document.createElement('div');
+            weightCell.className = 'modal-deliverable-cell';
+            weightCell.textContent = doc.doc_evidence_weight ? (doc.doc_evidence_weight * 100).toFixed(0) + '%' : 'N/A';
+            docRow.appendChild(weightCell);
+
+            const evidenceCell = document.createElement('div');
+            evidenceCell.className = 'modal-deliverable-cell';
+            evidenceCell.textContent = doc.doc_evidence || 'No evidence';
+            docRow.appendChild(evidenceCell);
+
+            const selfConfirmationCell = document.createElement('div');
+            selfConfirmationCell.className = 'modal-deliverable-cell';
+            selfConfirmationCell.textContent = doc.doc_evidence_self_confirmation ? 'Confirmed' : 'Not Confirmed';
+            docRow.appendChild(selfConfirmationCell);
+
+            const assessorConfirmationCell = document.createElement('div');
+            assessorConfirmationCell.className = 'modal-deliverable-cell';
+            const assessorConfirmationSelect = document.createElement('select');
+            assessorConfirmationSelect.className = 'modal-deliverable-select';
+            assessorConfirmationSelect.innerHTML = `
+                <option value="">Select</option>
+                <option value="true" ${doc.doc_evidence_assessor_confirmation ? 'selected' : ''}>Yes</option>
+                <option value="false" ${!doc.doc_evidence_assessor_confirmation && doc.doc_evidence_assessor_confirmation !== null ? 'selected' : ''}>No</option>
+            `;
+            assessorConfirmationCell.appendChild(assessorConfirmationSelect);
+            docRow.appendChild(assessorConfirmationCell);
+
+            const dueDateCell = document.createElement('div');
+            dueDateCell.className = 'modal-deliverable-cell';
+            dueDateCell.textContent = doc.doc_evidence_due_date ? formatDate(doc.doc_evidence_due_date) : 'No due date';
+            docRow.appendChild(dueDateCell);
+
+            modalContent.appendChild(docRow);
+        });
+    }
+}
+
+
+
+function showCustomModal() {
+    document.getElementById('customModal').style.display = 'block';
+}
+
+function closeCustomModal() {
+    document.getElementById('customModal').style.display = 'none';
+}
+
+// Calculate Working Days
+// Counts working days (excluding weekends) between two dates.
+// Iterates through dates, incrementing a counter for non-weekend days.
+function calculateWorkingDays(startDate, endDate) {
+    let count = 0;
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return count;
+}
+
+// Get Color for Due Date
+// Returns a color based on the number of working days left until a due date.
+// Uses green for >20 days, yellow for 10–19, orange for 1–9, and red for overdue.
+function getColorForDueDate(workDaysLeft) {
+    if (workDaysLeft >= 20) return '#4caf50';
+    if (workDaysLeft >= 10) return '#ffeb3b';
+    if (workDaysLeft >= 1) return '#ff9800';
+    return '#f44336';
+}
+
+// Handle Show Password Toggle
+// Toggles the visibility of the password input field between text and password types.
+// Changes the input type based on a checkbox state for user convenience.
+function handleShowPasswordToggle(e) {
+    const passwordInput = document.getElementById('employee-password');
+    passwordInput.type = e.target.checked ? 'text' : 'password';
+}
+
+
+// DOMContentLoaded Event Listener
+// Initializes the application by setting up event listeners and fetching initial data.
+// Loads saved theme, populates subordinate dropdown, and sets up input handlers for chat and modals.
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    const toggleBtn = document.querySelector('.theme-toggle i');
+    toggleBtn.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    currentUserCode = document.getElementById('employee-password').value.trim();
+    currentUser = document.getElementById('signed-in-user').textContent.trim();
+
+    const employeePassword = document.getElementById('employee-password');
+    employeePassword.addEventListener('input', fetchCompanyCode);
+
+    const showPasswordToggle = document.getElementById('show-password');
+    if (showPasswordToggle) showPasswordToggle.addEventListener('change', handleShowPasswordToggle);
+
+    const textbox = document.getElementById('new-textbox');
+    const dropdown = document.getElementById('username-input-dropdown');
+
+    const initialManagerCode = textbox.value.trim();
+    if (initialManagerCode) {
+fetch(`/get_subordinates_by_reports_to/?reports_to=${encodeURIComponent(initialManagerCode)}`, {
+    method: 'GET',
+    credentials: 'include',
+    signal: AbortSignal.timeout(5000)
+})
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        dropdown.innerHTML = '<option value="" disabled selected>Select Subordinate</option>';
+        if (data.subordinates && data.subordinates.length > 0) {
+            data.subordinates.forEach(subordinate => {
+                const option = document.createElement('option');
+                option.value = subordinate.employee_name; 
+                option.text = subordinate.employee_name;
+                dropdown.appendChild(option);
+            });
+        } else {
+            dropdown.innerHTML = '<option value="" disabled selected>No subordinates found</option>';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching subordinates:', error);
+        dropdown.innerHTML = '<option value="" disabled selected>No subordinates found</option>';
+    });
+    }
+
+textbox.addEventListener('input', () => {
+    const enteredValue = textbox.value.trim();
+    if (enteredValue) {
+        fetch(`/get_subordinates_by_reports_to/?reports_to=${encodeURIComponent(enteredValue)}`, {
+            method: 'GET',
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                dropdown.innerHTML = '<option value="" disabled selected>Select Subordinate</option>';
+                if (data.subordinates && data.subordinates.length > 0) {
+                    data.subordinates.forEach(subordinate => {
+                        const option = document.createElement('option');
+                        option.value = subordinate.employee_name; 
+                        option.text = subordinate.employee_name;
+                        dropdown.appendChild(option);
+                    });
+                } else {
+                    dropdown.innerHTML = '<option value="" disabled selected>No subordinates found</option>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching subordinates:', error);
+                dropdown.innerHTML = '<option value="" disabled selected>No subordinates found</option>';
+            });
+    } else {
+        dropdown.innerHTML = '<option value="" disabled selected>Select Subordinate</option>';
+    }
+});
+
+    dropdown.addEventListener('change', function() {
+        const employeeName = this.value.trim();
+        const companyCode = document.getElementById('company_code').value.trim();
+        const reportsTo = document.getElementById('username').value.trim();
+        document.getElementById('username-input').value = employeeName;
+
+        if (!employeeName || !companyCode || !reportsTo) {
+            console.warn("Missing input: Make sure all fields are filled in.");
+            document.getElementById('subordinate_code').value = '';
+            currentChatPartnerCode = null;
+            currentChatPartner = null;
+            localStorage.removeItem('subordinate_code');
+            localStorage.removeItem('subordinate_name');
+            localStorage.removeItem(`strategic_goal_${currentChatPartnerCode}`);
+            localStorage.removeItem(`kpi_${currentChatPartnerCode}`);
+            localStorage.removeItem(`deliverable_${currentChatPartnerCode}`);
+            localStorage.removeItem(`deliverable_number_${currentChatPartnerCode}`);
+            return;
+        }
+
+        const url = `http://localhost:8002/api/get-surbodinate-code/?reports_to=${encodeURIComponent(reportsTo)}&company_code=${encodeURIComponent(companyCode)}&employee_name=${encodeURIComponent(employeeName)}`;
+        
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: AbortSignal.timeout(5000)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success' && data.subordinate_code) {
+                    document.getElementById('subordinate_code').value = data.subordinate_code;
+                    currentChatPartnerCode = data.subordinate_code;
+                    currentChatPartner = employeeName;
+                    localStorage.setItem('subordinate_code', data.subordinate_code);
+                    localStorage.setItem('subordinate_name', employeeName);
+                    console.log('Set currentChatPartnerCode:', currentChatPartnerCode);
+                    updateUniqueChatField();
+                    fetchAssessmentData(data.subordinate_code);
+                } else {
+                    console.warn('No matching subordinate code found.', data);
+                    document.getElementById('subordinate_code').value = '';
+                    currentChatPartnerCode = null;
+                    currentChatPartner = null;
+                    localStorage.removeItem('subordinate_code');
+                    localStorage.removeItem('subordinate_name');
+                    localStorage.removeItem(`strategic_goal_${currentChatPartnerCode}`);
+                    localStorage.removeItem(`kpi_${currentChatPartnerCode}`);
+                    localStorage.removeItem(`deliverable_${currentChatPartnerCode}`);
+                    localStorage.removeItem(`deliverable_number_${currentChatPartnerCode}`);
+                    document.getElementById('strategic-goals-list').innerHTML = '<p>No subordinate code found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                document.getElementById('subordinate_code').value = '';
+                currentChatPartnerCode = null;
+                currentChatPartner = null;
+                localStorage.removeItem('subordinate_code');
+                localStorage.removeItem('subordinate_name');
+                localStorage.removeItem(`strategic_goal_${currentChatPartnerCode}`);
+                localStorage.removeItem(`kpi_${currentChatPartnerCode}`);
+                localStorage.removeItem(`deliverable_${currentChatPartnerCode}`);
+                localStorage.removeItem(`deliverable_number_${currentChatPartnerCode}`);
+                document.getElementById('strategic-goals-list').innerHTML = '<p>Error fetching subordinate code.</p>';
+            });
+    });
+
+    const sendMessageBtn = document.getElementById('send-message-btn');
+    const messageInput = document.getElementById('message-input');
+    const attachmentInput = document.getElementById('attachment-input');
+    const emailAttachmentInput = document.getElementById('email-attachment');
+    const emojiOptions = document.querySelectorAll('.emoji-option');
+
+    if (sendMessageBtn) {
+        sendMessageBtn.addEventListener('click', sendMessage);
+    } else {
+        console.warn('send-message-btn not found');
+    }
+
+    if (messageInput) {
+        messageInput.style.fontSize = '10px'; // Set input font size
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    } else {
+        console.warn('message-input not found');
+    }
+
+    if (attachmentInput) {
+        attachmentInput.addEventListener('change', sendAttachment);
+    } else {
+        console.warn('attachment-input not found');
+    }
+
+    if (emailAttachmentInput) {
+        emailAttachmentInput.addEventListener('change', handleEmailAttachment);
+    } else {
+        console.warn('email-attachment not found');
+    }
+
+    if (emojiOptions.length) {
+        emojiOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                addEmoji(option.dataset.emoji);
+            });
+        });
+    } else {
+        console.warn('emoji-options not found');
+    }
+
+    document.getElementById('employee-password').addEventListener('input', updateUniqueChatField);
+    document.getElementById('subordinate_code').addEventListener('input', updateUniqueChatField);
+
+    setTimeout(fetchCompanyCode, 200);
+});
+
+// Update Unique Chat Field
+// Generates a unique chat identifier by sorting and joining sender and receiver codes.
+// Updates the unique_chat field when employee or subordinate codes change.
+function updateUniqueChatField() {
+    const senderField = document.getElementById("employee-password");
+    const receiverField = document.getElementById("subordinate_code");
+    const uniqueChatField = document.getElementById("unique_chat");
+
+    if (!senderField || !receiverField || !uniqueChatField) return;
+
+    const senderId = senderField.value.trim();
+    const receiverId = receiverField.value.trim();
+
+    if (senderId && receiverId) {
+        uniqueChatField.value = [senderId, receiverId].sort().join('_');
+        console.log("Updated unique_chat:", uniqueChatField.value);
+    } else {
+        uniqueChatField.value = "";
+    }
+}
+
+
+
+
+
+
+let pendingAssessments = [];
+function saveAssessments() {
+    const kpi = JSON.parse(localStorage.getItem('selected_kpi'));
+    const doc = {}; 
+    const selfAppraisalScore = document.querySelector('.modal-deliverable-select');
+    const shortTermActualInput = document.querySelector(`#short-term-actual`);
+    const documentEvidenceRows = document.querySelectorAll('.modal-deliverable-row');
+
+    const docEvidence = [];
+    documentEvidenceRows.forEach(row => {
+        const docEvidenceNumberElement = row.querySelector(`[id^="document-evidence-number-"]`);
+        const docEvidenceDescElement = row.querySelector(`[id^="document-evidence-desc-"]`);
+        const docEvidenceSelfConfirmationSelect = row.querySelector(`[id^="document-evidence-self-confirmation-select-"]`);
+
+        if (docEvidenceNumberElement && docEvidenceDescElement && docEvidenceSelfConfirmationSelect) {
+            const docEvidenceNumber = docEvidenceNumberElement.textContent;
+            const docEvidenceDesc = docEvidenceDescElement.textContent;
+            const docEvidenceSelfConfirmation = docEvidenceSelfConfirmationSelect.value;
+
+            docEvidence.push({
+                doc_evidence_number: docEvidenceNumber,
+                doc_evidence: docEvidenceDesc,
+                doc_evidence_self_confirmation: docEvidenceSelfConfirmation,
+            });
+        }
+    });
+
+    docEvidence.forEach(evidence => {
+        const payload = {
+            employee_code: document.getElementById('employee-password').value.trim(),
+            assessor_employee_code: document.getElementById('appraisor_code').value.trim(),
+            strategic_goal: localStorage.getItem('strategic_goal') || 'N/A',
+            strategic_goal_number: localStorage.getItem('strategic_goal_number') || 'N/A',
+            strategic_goal_weight: localStorage.getItem('strategic_goal_weight') || 0.0,
+            kpi: localStorage.getItem('kpi') || 'N/A',
+            kpi_number: localStorage.getItem('kpi_number') || 'N/A',
+            kpi_weight: kpi ? kpi.kpi_weight || 0.0 : 0.0,
+            deliverable: localStorage.getItem('deliverable') || 'N/A',
+            deliverable_number: localStorage.getItem('deliverable_number') || 'N/A',
+            deliverable_weight: kpi ? kpi.deliverable_weight || 0.0 : 0.0,
+            deliverable_self_score: selfAppraisalScore ? selfAppraisalScore.value : 'N/A',
+            doc_evidence: [evidence],
+            short_term_actual: shortTermActualInput ? parseFloat(shortTermActualInput.value) || 0.0 : 0.0,
+        };
+
+        const existingAssessmentIndex = pendingAssessments.findIndex(assessment => 
+            assessment.deliverable_number === payload.deliverable_number && assessment.doc_evidence[0].doc_evidence_number === payload.doc_evidence[0].doc_evidence_number
+        );
+
+        if (existingAssessmentIndex !== -1) {
+            pendingAssessments[existingAssessmentIndex] = payload;
+        } else {
+            pendingAssessments.push(payload);
+        }
+    });
+
+    document.getElementById('customModal').style.display = 'block';
+    updateAssessmentTable();
+}
+
+function updateAssessmentTable() {
+    const tbody = document.querySelector('#assessmentTable tbody');
+    tbody.innerHTML = '';
+
+    pendingAssessments.forEach((assessment, index) => {
+        const row = document.createElement('tr');
+
+        // Visible columns
+        const cells = [
+            `${assessment.employee_code || 'N/A'}`,
+            `${assessment.assessor_employee_code || 'N/A'}`,
+            assessment.strategic_goal || 'N/A',
+            assessment.strategic_goal_number || 'N/A',
+            assessment.strategic_goal_weight != null ? `${Math.round(assessment.strategic_goal_weight * 100)}%` : 'N/A',
+            assessment.kpi || 'N/A',
+            assessment.kpi_number || 'N/A',
+            assessment.kpi_weight != null ? `${Math.round(assessment.kpi_weight * 100)}%` : 'N/A',
+            assessment.deliverable || 'N/A',
+            assessment.deliverable_number || 'N/A',
+            assessment.deliverable_weight != null ? `${Math.round(assessment.deliverable_weight * 100)}%` : 'N/A',
+            assessment.deliverable_self_score || '0',
+            assessment.doc_evidence ? assessment.doc_evidence.map(doc => `${doc.doc_evidence}`).join(', ') : 'N/A',
+            assessment.doc_evidence ? assessment.doc_evidence.map(doc => `${doc.doc_evidence_number}`).join(', ') : 'N/A',
+            assessment.doc_evidence ? assessment.doc_evidence.map(doc => `${doc.doc_evidence_self_confirmation}`).join(', ') : 'N/A',
+            assessment.short_term_actual != null ? assessment.short_term_actual.toFixed(2) : 'N/A',
+            `<button onclick="deletePendingAssessment(${index})">Delete</button>`
+        ];
+
+        cells.forEach(cellContent => {
+            const td = document.createElement('td');
+            td.innerHTML = cellContent;
+            row.appendChild(td);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById('customModal').style.display = 'block';
+}
+
+function deletePendingAssessment(index) {
+    pendingAssessments.splice(index, 1);
+    updateAssessmentTable();
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performa360 LeadershipMatrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode */
+            --primary: #E3F2FD;
+            --secondary: #BBDEFB;
+            --accent: #1ABB9C;
+            --text: #1E293B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --border: #E2E8F0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --quote1-bg: linear-gradient(135deg, #E6F7FA 0%, #B2E3E8 100%);
+            --quote2-bg: linear-gradient(135deg, #E6FFE6 0%, #B2E8B2 100%);
+            --quote3-bg: linear-gradient(135deg, #FFF7E6 0%, #E8DAB2 100%);
+            --quote4-bg: linear-gradient(135deg, #F5F9FF 0%, #C2D4FF 100%);
+            --text-secondary: #64748B;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode */
+            --primary: #1E3C72;
+            --secondary: #2A5298;
+            --accent: #1ABB9C;
+            --text: #F1F5F9;
+            --bg: #0F172A;
+            --card: #1E293B;
+            --border: #4B5563;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --quote1-bg: linear-gradient(135deg, #2C6B7F 0%, #1A4B5A 100%);
+            --quote2-bg: linear-gradient(135deg, #2C7F2C 0%, #1A5A1A 100%);
+            --quote3-bg: linear-gradient(135deg, #7F6B2C 0%, #5A4B1A 100%);
+            --quote4-bg: linear-gradient(135deg, #2C4B7F 0%, #1A3B5A 100%);
+            --text-secondary: #94A3B8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--gradient);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            padding: 0.75rem 1rem;
+        }
+
+        .navbar-brand {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: url('/static/admin/img/pmh_3.png') center/cover no-repeat;
+            border-radius: 8px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .gatekeeper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .gatekeeper span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .gatekeeper input {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 120px;
+        }
+
+        .logout-container {
+            margin-left: 1rem;
+        }
+
+        .logout-container .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        /* Form */
+        .form-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .field-container {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .field-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .input-small {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-small:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 4px rgba(26, 187, 156, 0.3);
+        }
+
+        .checkbox-label {
+            font-size: 0.85rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Quote Section */
+        .quote-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding: 1rem;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+        }
+
+        .quote-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .quote-container::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .quote-container::-webkit-scrollbar-track {
+            background: var(--border);
+        }
+
+        .quote-tile {
+            flex: 0 0 280px;
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInQuote 0.8s ease-out forwards;
+            animation-delay: calc(0.2s * var(--order));
+            scroll-snap-align: start;
+        }
+
+        .quote-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-tile:nth-child(1) { background: var(--quote1-bg); --order: 1; }
+        .quote-tile:nth-child(2) { background: var(--quote2-bg); --order: 2; }
+        .quote-tile:nth-child(3) { background: var(--quote3-bg); --order: 3; }
+        .quote-tile:nth-child(4) { background: var(--quote4-bg); --order: 4; }
+
+        .quote-text {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--text);
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .quote-text::before {
+            content: '“';
+            font-size: 2rem;
+            color: var(--accent);
+            position: absolute;
+            top: -0.5rem;
+            left: -0.5rem;
+            opacity: 0.5;
+        }
+
+        .quote-text::after {
+            content: '”';
+            font-size: 2rem;
+            color: var(--accent);
+            position: absolute;
+            bottom: -1rem;
+            right: -0.5rem;
+            opacity: 0.5;
+        }
+
+        .quote-author {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeInQuote {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Royal Header */
+        .royal-header {
+            background: var(--gradient);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .royal-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(26, 187, 156, 0.1) 0%, transparent 50%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .assessment-crown h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .imperative-guidance {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text);
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        [data-theme="dark"] .imperative-guidance {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Competency(Grid */
+        .competency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .competency-vault {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            animation: fadeInCard 0.8s ease-out forwards;
+            animation-delay: calc(0.2s * var(--order));
+        }
+
+        .competency-vault:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .competency-vault:nth-child(1) { --order: 1; }
+        .competency-vault:nth-child(2) { --order: 2; }
+        .competency-vault:nth-child(3) { --order: 3; }
+
+        .vault-icon-container {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .competency-vault:hover .vault-icon-container {
+            transform: scale(1.1);
+        }
+
+        .vault-icon {
+            font-size: 1.8rem;
+            color: var(--text);
+        }
+
+        .competency-vault h3 {
+            color: var(--text);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .competency-vault p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeInCard {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .self-modal, .diplomat-modal, .peer-assessment-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .self-content, .diplomat-content, .peer-assessment-modal-content {
+            background: var(--card);
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .self-modal.show .self-content,
+        .diplomat-modal.show .diplomat-content,
+        .peer-assessment-overlay.show .peer-assessment-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .self-modal-header, .modal-scepter, .peer-assessment-header {
+            background: var(--gradient);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text);
+            border-radius: 12px 12px 0 0;
+            flex-shrink: 0;
+        }
+
+        .self-modal-header h2, .modal-scepter h2, .peer-assessment-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .self-close, .regal-close, .peer-assessment-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: color 0.3s ease;
+        }
+
+        .self-close:hover, .regal-close:hover, .peer-assessment-close:hover {
+            color: var(--text);
+        }
+
+        /* Feedback Tile */
+        .royal-feedback-tile, .self-feedback-tile, .peer-assessment-feedback-tile {
+            background: var(--card);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .feedback-tile {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text);
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .feedback-tile:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--secondary);
+        }
+
+        /* Rating */
+        .rating-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            padding: 0.5rem;
+        }
+
+        .rating-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+        }
+
+        .rating-btn.selected {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .selected-rating-btn {
+            background: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Factor Container */
+        .factor-container, .sovereign-rating {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--card);
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+        }
+
+        .factor-type {
+            flex: 1 1 140px;
+            padding: 0.6rem;
+            border-radius: 6px;
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .factor-type:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .factor-type.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Peer Specific Styles */
+        .peername {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .brand-logo {
+                width: 36px;
+                height: 36px;
+            }
+
+            .quote-container {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .competency-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .royal-header {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .self-content, .diplomat-content, .peer-assessment-modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .factor-container, .sovereign-rating {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .factor-type {
+                flex-basis: 120px;
+                font-size: 0.8rem;
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .quote-container {
+                flex-direction: column;
+                overflow-x: hidden;
+                gap: 1rem;
+            }
+
+            .quote-tile {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+
+            .quote-text {
+                font-size: 0.85rem;
+            }
+
+            .quote-author {
+                font-size: 0.8rem;
+            }
+
+            .assessment-crown h1 {
+                font-size: 1.5rem;
+            }
+
+            .input-small {
+                width: 100px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand" style="margin-left: -20px;" href="#">Leadership Matrix</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item gatekeeper">
+                        <span>Welcome</span>
+                        <input type="text" id="username-display" placeholder="" style="width: 120%;background-color: transparent;border: none;" readonly>
+                    </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle between light and dark mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+            <a href="http://127.0.0.1:8002/employee-appraisal/?username=#" class="fixed top-1 right-1 z-50 group">
+                <div class="glass-panel p-3 rounded-xl flex items-center space-x-2 hover:scale-105 transition-transform">
+                    <i class="fa fa-home text-cyan-300 group-hover:text-cyan-200 transition-colors" style="color: white;"></i>
+                </div>
+            </a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Form -->
+    <div class="form-container">
+        <form id="my-form" style="display: none;">
+            <div class="form-row">
+                <div class="field-container">
+                    <label class="field-label" for="username">Employee Name:</label>
+                    <input class="input-small" type="text" id="username" name="username" placeholder="Name">
+                </div>
+                <div class="field-container">
+                    <label class="field-label" for="employee-password">Password:</label>
+                    <input class="input-small" type="password" id="employee-password" name="employee_password" placeholder="Password">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-password"> Show
+                    </label>
+                </div>
+                <div class="field-container">
+                    <label class="field-label" for="company_code">Company Code:</label>
+                    <input class="input-small" type="text" id="company_code" name="company_code" placeholder="Company Code">
+                    <div id="company-code-feedback"></div>
+                </div>
+                <div class="field-container">
+                    <label class="field-label" for="branch_code">Branch Code:</label>
+                    <input class="input-small" type="text" id="branch_code" name="branch_code" placeholder="Branch Code">
+                </div>
+                <div class="field-container">
+                    <label class="field-label" for="region_branch">Region Branch:</label>
+                    <input class="input-small" type="text" id="region_branch" name="region_branch" placeholder="Region Branch">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Header -->
+    <div class="royal-header">
+        <div class="assessment-crown text-center">
+            <h1>Leadership Assessment</h1>
+            <div class="imperative-guidance">
+                <p>Anonymous response precision evaluation framework for transformative leadership development.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quote Section -->
+    <div class="quote-container">
+        <div class="quote-tile">
+            <p class="quote-text">Take care of your employees, and they'll take care of your business.</p>
+            <p class="quote-author">Richard Branson</p>
+        </div>
+        <div class="quote-tile">
+            <p class="quote-text">Culture eats strategy for breakfast. A positive workplace culture drives performance.</p>
+            <p class="quote-author">Peter Drucker</p>
+        </div>
+        <div class="quote-tile">
+            <p class="quote-text">When employees feel valued as people, they become more productive and engaged.</p>
+            <p class="quote-author">Anne M. Mulcahy</p>
+        </div>
+        <div class="quote-tile">
+            <p class="quote-text">To win in the marketplace, you must first win in the workplace.</p>
+            <p class="quote-author">Doug Conant</p>
+        </div>
+    </div>
+
+    <!-- Competency Grid -->
+    <div class="competency-grid">
+        <div class="competency-vault" onclick="openSelfModal()">
+            <div class="vault-icon-container">
+                <i class="fas fa-user-check vault-icon"></i>
+            </div>
+            <h3>Self Assessment</h3>
+            <p>Discover your leadership potential through comprehensive self-evaluation.</p>
+        </div>
+        <div class="competency-vault" onclick="openPeerModal()">
+            <div class="vault-icon-container">
+                <i class="fas fa-users vault-icon"></i>
+            </div>
+            <h3>Peer Assessment</h3>
+            <p>Gain valuable perspectives on leadership capabilities through peer feedback.</p>
+        </div>
+        <div class="competency-vault" onclick="openRoyalModal()">
+            <div class="vault-icon-container">
+                <i class="fas fa-user-tie vault-icon"></i>
+            </div>
+            <h3>Manager Assessment</h3>
+            <p>Evaluate leadership effectiveness with structured managerial analysis.</p>
+        </div>
+    </div>
+
+    <!-- Self Assessment Modal -->
+    <div class="self-modal" id="selfModal">
+        <div class="self-content">
+            <div class="self-modal-header">
+                <h2>Self Assessment</h2>
+                <span class="self-close" onclick="closeSelfModal()" aria-label="Close modal">×</span>
+            </div>
+            <div class="factor-container"></div>
+            <div class="self-feedback-tile">
+                <div class="feedback-tile" contenteditable="true" data-placeholder="Type your feedback here..."></div>
+            </div>
+            <div class="self-actions">
+                <button class="save-btn" onclick="saveSelfAssessment()" aria-label="Save self assessment">
+                    <i class="fas fa-save"></i> Save Assessment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Assessment Modal -->
+    <div class="diplomat-modal" id="royalModal">
+        <div class="diplomat-content">
+            <div class="modal-scepter">
+                <h2>Manager Assessment</h2>
+                <span class="regal-close" onclick="closeRoyalModal()" aria-label="Close modal">×</span>
+            </div>
+            <div class="sovereign-rating"></div>
+            <div class="royal-feedback-tile"></div>
+            <div class="royal-actions">
+                <button class="save-btn" onclick="saveRoyalAssessment()" aria-label="Save manager assessment">
+                    <i class="fas fa-save"></i> Save Assessment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Peer Assessment Modal -->
+    <div class="peer-assessment-overlay" id="peerModal">
+        <div class="peer-assessment-modal-content">
+            <div class="peer-assessment-header">
+                <h2>Peer Assessment</h2>
+                <span class="peer-assessment-close" onclick="closePeerModal()" aria-label="Close modal">×</span>
+            </div>
+            <select class="peername" aria-label="Select peer"></select>
+            <div class="factor-container"></div>
+            <div class="peer-assessment-feedback-tile">
+                <div class="feedback-container"></div>
+            </div>
+            <div class="peer-assessment-actions">
+                <button class="save-btn" onclick="savePeerAssessment()" aria-label="Save peer assessment">
+                    <i class="fas fa-save"></i> Save Assessment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            document.querySelector('.theme-toggle i').className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Apply saved theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.querySelector('.theme-toggle i').className = savedTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        });
+
+        // Get CSRF Token dynamically
+        function getCsrfToken() {
+            const name = 'csrftoken';
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Form Handling
+        function fetchCompanyCode() {
+            const employeeCode = document.getElementById('employee-password').value.trim();
+            if (!employeeCode) {
+                document.getElementById('company_code').value = '';
+                return;
+            }
+
+            fetch(`/get_company_code/?employee_code=${encodeURIComponent(employeeCode)}`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.company_code) {
+                        document.getElementById('company_code').value = data.company_code;
+                        fetchRegionBranch(data.company_code, employeeCode);
+                    } else {
+                        document.getElementById('company_code').value = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    document.getElementById('company_code').value = '';
+                });
+        }
+
+        function fetchRegionBranch(companyCode, employeeCode) {
+            if (!companyCode || !employeeCode) {
+                document.getElementById('branch_code').value = '';
+                document.getElementById('region_branch').value = '';
+                return;
+            }
+
+            fetch(`/get-region-branch/?company_code=${encodeURIComponent(companyCode)}&employee_code=${encodeURIComponent(employeeCode)}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('branch_code').value = data.region_code || '';
+                    document.getElementById('region_branch').value = data.region_branch || '';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('branch_code').value = '';
+                    document.getElementById('region_branch').value = '';
+                });
+        }
+
+        function fetchAndPopulateCompanyCode(username) {
+            if (username && username.length > 2) {
+                fetch(`/seek_company_code/?username=${encodeURIComponent(username)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const companyCodeInput = document.getElementById('company_code');
+                        if (data.company_code) {
+                            companyCodeInput.value = data.company_code;
+                            document.getElementById('company-code-feedback').innerText = '';
+                        } else {
+                            companyCodeInput.value = '';
+                            document.getElementById('company-code-feedback').innerText = data.error || 'User not found';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Company code fetch error:', error);
+                        document.getElementById('company-code-feedback').innerText = 'System error - try again';
+                    });
+            } else {
+                document.getElementById('company_code').value = '';
+                document.getElementById('company-code-feedback').innerText = '';
+            }
+        }
+
+        function handleShowPasswordToggle(e) {
+            document.getElementById('employee-password').type = e.target.checked ? 'text' : 'password';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add input event listeners
+            document.getElementById('employee-password').addEventListener('input', fetchCompanyCode);
+            document.getElementById('show-password').addEventListener('change', handleShowPasswordToggle);
+            document.getElementById('username').addEventListener('input', function() {
+                fetchAndPopulateCompanyCode(this.value.trim());
+            });
+
+            // Add focus event listeners for debugging
+            const inputs = ['employee-password', 'username', 'company_code', 'branch_code', 'region_branch'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('focus', (event) => {
+                    console.log(`Focus event on ${id}:`, event);
+                });
+            });
+
+            // Load username from localStorage
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').value = username;
+                document.getElementById('username-display').value = username;
+                fetchAndPopulateCompanyCode(username);
+            }
+        });
+
+        // Logout
+        function handleLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                fetch('/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCsrfToken(),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/main/';
+                    }
+                })
+                .catch(error => console.error('Logout error:', error));
+            }
+        }
+
+        // Modal Handlers
+        const companyCodeInput = document.getElementById('company_code');
+        let factorTypes = [];
+
+        // Self Assessment
+        function fetchMatchingValuesSelf(companyCode) {
+            fetch(`/fetch-matching-values-self/?company_code=${companyCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    factorTypes = data.map(item => item.factor_type);
+                    populateSelfModal(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function populateSelfModal(data) {
+            const modal = document.getElementById('selfModal');
+            const factorContainer = modal.querySelector('.factor-container');
+            factorContainer.innerHTML = data.map((item, index) => `
+                <div class="factor-type" data-index="${index}">${item.factor_type}</div>
+            `).join('');
+
+            factorContainer.addEventListener('click', async (e) => {
+                const factorType = e.target.closest('.factor-type');
+                if (!factorType) return;
+
+                const index = factorType.getAttribute('data-index');
+                const selectedFactor = factorTypes[index];
+                const feedbackTile = modal.querySelector('.self-feedback-tile');
+
+                try {
+                    const response = await fetch(
+                        `/get-factor-description-self/?company_code=${companyCodeInput.value}&factor_type=${encodeURIComponent(selectedFactor)}`
+                    );
+                    const data = await response.json();
+                    feedbackTile.innerHTML = `
+                        <p class="factor-header"><strong>${selectedFactor}</strong></p>
+                        <hr>
+                        ${data.descriptions?.map((desc, idx) => `
+                            <div class="question-container">
+                                <p class="question-text">${idx + 1}. ${desc}</p>
+                                <div class="rating-container">
+                                    ${Array.from({length: 10}, (_, i) => `
+                                        <button class="rating-btn" data-question-index="${idx}" data-rating="${i + 1}">${i + 1}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('') || '<p>No descriptions available.</p>'}
+                    `;
+
+                    feedbackTile.querySelectorAll('.rating-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => handleSelfRating(e, btn.getAttribute('data-question-index'), btn.getAttribute('data-rating'), btn.closest('.question-container')));
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                    feedbackTile.innerHTML = '<p>Error loading descriptions</p>';
+                }
+            });
+        }
+
+        function handleSelfRating(e, questionIndex, rating, container) {
+            const ratingContainer = container.querySelector('.rating-container');
+            ratingContainer.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }
+
+        function openSelfModal() {
+            const companyCode = companyCodeInput.value.trim();
+            if (companyCode.length === 8) fetchMatchingValuesSelf(companyCode);
+            const modal = document.getElementById('selfModal');
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+
+        function closeSelfModal() {
+            const modal = document.getElementById('selfModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+
+        function saveSelfAssessment() {
+            const ratings = Array.from(document.querySelectorAll('#selfModal .rating-btn.selected'))
+                .map(btn => btn.getAttribute('data-rating'));
+            console.log('Saving self ratings:', ratings);
+        }
+
+        // Manager Assessment
+        function fetchMatchingValues(companyCode) {
+            fetch(`/fetch-matching-values/?company_code=${companyCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    factorTypes = data.map(item => item.factor_type);
+                    populateRoyalModal(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function populateRoyalModal(data) {
+            const sovereignRating = document.querySelector('.sovereign-rating');
+            sovereignRating.innerHTML = data.map((item, index) => `
+                <div class="factor-type" data-index="${index}">${item.factor_type}</div>
+            `).join('');
+
+            sovereignRating.querySelectorAll('.factor-type').forEach(element => {
+                element.addEventListener('click', async (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    const selectedFactor = factorTypes[index];
+                    const feedbackTile = document.querySelector('.royal-feedback-tile');
+
+                    try {
+                        const response = await fetch(
+                            `/get_factor_description/?company_code=${companyCodeInput.value}&factor_type=${encodeURIComponent(selectedFactor)}`
+                        );
+                        const data = await response.json();
+                        feedbackTile.innerHTML = `
+                            <p class="factor-header"><strong>${selectedFactor}</strong></p>
+                            <hr>
+                            ${data.descriptions?.map((desc, idx) => `
+                                <div class="question-container">
+                                    <p class="question-text">${idx + 1}. ${desc}</p>
+                                    <button class="selected-rating-btn">Selected: None</button>
+                                    <div class="rating-container">
+                                        ${Array.from({length: 10}, (_, i) => `
+                                            <button class="rating-btn" data-question-index="${idx}" data-rating="${i + 1}">${i + 1}</button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('') || '<p>No descriptions available.</p>'}
+                        `;
+
+                        feedbackTile.querySelectorAll('.rating-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const container = e.target.closest('.question-container');
+                                handleRating(e, btn.getAttribute('data-question-index'), btn.getAttribute('data-rating'), container.querySelector('.selected-rating-btn'));
+                            });
+                        });
+                    } catch (error) {
+                        console.error('Error:', error);
+                        feedbackTile.innerHTML = '<p>Error loading descriptions</p>';
+                    }
+                });
+            });
+        }
+
+        function handleRating(e, questionIndex, rating, selectedRatingButton) {
+            const ratingContainer = e.target.closest('.rating-container');
+            ratingContainer.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+            e.target.classList.add('selected');
+            selectedRatingButton.textContent = `Selected: ${rating}`;
+        }
+
+        function openRoyalModal() {
+            const companyCode = companyCodeInput.value.trim();
+            if (companyCode.length === 8) fetchMatchingValues(companyCode);
+            const modal = document.getElementById('royalModal');
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+
+        function closeRoyalModal() {
+            const modal = document.getElementById('royalModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+
+        function saveRoyalAssessment() {
+            const ratings = Array.from(document.querySelectorAll('#royalModal .rating-btn.selected'))
+                .map(btn => btn.getAttribute('data-rating'));
+            console.log('Saving royal ratings:', ratings);
+        }
+
+        // Peer Assessment
+        function fetchMatchingValuesPeer(companyCode) {
+            fetch(`/fetch-matching-values-peer/?company_code=${companyCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    factorTypes = data.map(item => item.factor_type);
+                    populatePeerModal(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function populatePeerModal(data) {
+            const modal = document.getElementById('peerModal');
+            const content = modal.querySelector('.peer-assessment-modal-content');
+            content.innerHTML = `
+                <div class="peer-assessment-header">
+                    <h2 id="peerTitle">Peer Assessment</h2>
+                    <span class="peer-assessment-close" onclick="closePeerModal()" aria-label="Close modal">×</span>
+                </div>
+                <select class="peername" aria-label="Select peer"></select>
+                <div class="peer-assessment-actions">
+                    <button class="save-btn" onclick="savePeerAssessment()" aria-label="Save peer assessment">
+                        <i class="fas fa-save"></i> Save Assessment
+                    </button>
+                </div>
+                <div class="factor-container">
+                    ${data.map((item, index) => `
+                        <div class="factor-type" data-index="${index}">
+                            ${item.factor_type}
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="peer-assessment-feedback-tile">
+                    <div class="feedback-container"></div>
+                </div>
+            `;
+
+            modal.querySelector('.factor-container').addEventListener('click', async (e) => {
+                const factorType = e.target.closest('.factor-type');
+                if (!factorType) return;
+
+                const index = factorType.getAttribute('data-index');
+                const selectedFactor = factorTypes[index];
+                const feedbackContainer = modal.querySelector('.feedback-container');
+
+                try {
+                    const response = await fetch(
+                        `/get_factor_description_peer/?company_code=${companyCodeInput.value}&factor_type=${encodeURIComponent(selectedFactor)}`
+                    );
+                    const data = await response.json();
+                    feedbackContainer.innerHTML = `
+                        <p class="factor-header"><strong>${selectedFactor}</strong></p>
+                        <hr>
+                        ${data.descriptions?.map((desc, idx) => `
+                            <div class="question-container">
+                                <p class="question-text">${idx + 1}. ${desc}</p>
+                                <div class="rating-container">
+                                    ${Array.from({length: 10}, (_, i) => `
+                                        <button class="rating-btn" data-question-index="${idx}" data-rating="${i + 1}">${i + 1}</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('') || '<p>No descriptions available.</p>'}
+                    `;
+
+                    feedbackContainer.querySelectorAll('.rating-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => handlePeerRating(e, btn.getAttribute('data-question-index'), btn.getAttribute('data-rating'), btn.closest('.question-container')));
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                    feedbackContainer.innerHTML = '<p>Error loading descriptions</p>';
+                }
+            });
+        }
+
+        function handlePeerRating(e, questionIndex, rating, container) {
+            const ratingContainer = container.querySelector('.rating-container');
+            ratingContainer.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }
+
+        function openPeerModal() {
+            const companyCode = companyCodeInput.value.trim();
+            if (companyCode.length === 8) fetchMatchingValuesPeer(companyCode);
+            const modal = document.getElementById('peerModal');
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+
+        function closePeerModal() {
+            const modal = document.getElementById('peerModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+
+        function savePeerAssessment() {
+            const ratings = Array.from(document.querySelectorAll('#peerModal .rating-btn.selected'))
+                .map(btn => btn.getAttribute('data-rating'));
+            console.log('Saving peer ratings:', ratings);
+        }
+
+        // Close modals on overlay click
+        window.onclick = function(e) {
+            if (e.target.classList.contains('self-modal')) closeSelfModal();
+            if (e.target.classList.contains('diplomat-modal')) closeRoyalModal();
+            if (e.target.classList.contains('peer-assessment-overlay')) closePeerModal();
+        };
+    </script>
+</body>
+</html>

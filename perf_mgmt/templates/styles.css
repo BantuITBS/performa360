@@ -1,0 +1,46 @@
+/* Ensure the body and html take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Main content area to push footer down */
+main {
+    padding-bottom: 70px; /* Increased height to accommodate footer padding */
+    text-align: center; /* Center main content text */
+    display: flex; /* Use flexbox for better centering */
+    flex-direction: column; /* Align children in a column */
+    justify-content: center; /* Center vertically */
+}
+
+/* Textbox styles */
+.textbox {
+    background-color: #40E0D0; /* Turquoise background */
+    color: white; /* White text */
+    padding: 10px; /* Padding inside the textbox */
+    margin: 0px auto; /* Center the textbox with auto margins */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    width: 100%; /* Take up full width */
+    margin-top: auto; /* This pushes it towards the bottom of the page */
+    font-size: 12px; /* Adjust this value to reduce the font size */
+    font-family: 'Playfair Display', serif; /* Apply the Playfair Display font */
+}
+
+/* Footer styles */
+footer {
+    position: fixed; /* Fix the footer to the bottom */
+    left: 50%; /* Center it horizontally */
+    bottom: 0;
+    transform: translateX(-50%); /* Adjust for centering */
+    width: auto; /* Auto width to allow text to dictate width */
+    background-color: #f8f8f8; /* Background color */
+    text-align: center; /* Center footer text */
+    font-size: 0.8em; /* Increased font size for better readability */
+    padding: 1px 5px; /* Slightly larger padding around the footer */
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for separation */
+}
+
+/* Ensure the footer text is smaller and has a margin */
+footer p {
+    margin: 0; /* Remove default margin */
+}

@@ -1,0 +1,527 @@
+h3,h4,body,label, #signup-form, .input-group, label, input, select, button, small {
+                font-family: 'Merriweather', serif;
+            }
+/* General Box Sizing */
+* {
+    box-sizing: border-box; /* Include padding and border in width/height */
+}
+
+/* Body Styling */
+body {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 110vh;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    overflow-y: auto;
+    margin-left: 40px;
+    font-size: 12px;
+}
+
+/* Error Container Styling */
+.error-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    float: right; /* Use float: left to align to the left */
+}
+
+.error-message {
+    color: #d9534f; /* Red color for error */
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    max-width: 90%; /* Prevent overflow */
+    padding: 10px;
+    border: 1px solid #d9534f;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+/* Container Styles */
+.container {
+    max-height: 82.5vh; 
+    overflow-y: auto; 
+    padding: 0.55cm; 
+    width: 100%; 
+}
+
+.title-box {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    text-align: center; /* Center the text inside the box */
+    width: 100%; /* Ensure it takes the full width of its container */
+    margin-bottom: 20px; /* Add some spacing below the title */
+}
+
+h3, h4 {
+    font-size: 17px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+
+h4 {
+    font-size: 12px;
+    color: white;
+}
+
+/* Input Fields and Labels */
+input[type="text"], select {
+    width: 100%;
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    font-size: 12px; 
+    background-color: #222; 
+    color: white; 
+}
+
+label {
+    display: block;
+    margin-bottom: 3.3px; 
+    font-size: 14px; 
+    font-weight: bold;
+}
+
+/* Permission Container Styling */
+.permission-text-container {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    width: 60%;
+    text-align: center;
+    background-color: transparent;
+    color: teal;
+}
+
+/* Tile Layout */
+.tile-container {
+    display: flex;
+    flex-wrap: nowrap; 
+    justify-content: space-between;
+    align-items: center; 
+    padding: -10px;
+    margin: 0; 
+    gap: 20px; 
+    margin-top: -1cm;
+}
+
+/* Tiles */
+.tile {
+    width: 20%; 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.tile:hover {
+    transform: scale(1.05);
+}
+
+/* Form Styling */
+form {
+    background-color: black; 
+    padding: 16.5px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    max-width: 338px;
+    width: 100%;
+    height: auto;
+    margin-top: 17.9cm;
+    color: white;
+    font-size: 12px;
+   
+}
+
+/* Circular Image */
+.circular-image-container {
+    position: absolute;
+    top: 10px;
+    left: 2px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -10px;
+}
+.circular-image {
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid black;
+}
+/* Dropdown menu */
+.dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 45px; /* Adjust for better positioning */
+    left: 37%;
+    transform: translateX(-50%); /* Center the dropdown */
+    width: 206px; /* Fixed width for consistency */
+    background-color: teal;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Items arranged in a vertical column */
+    justify-content: flex-start; /* Align items at the top */
+    margin-left: 5px; /* Adjusts the left margin */
+    padding: 6px 0; /* Padding to ensure spacing inside */
+}
+/* Show Dropdown on Hover */
+.tile:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(5px);
+}
+/* Hover Box Styling */
+.hover-box {
+    position: fixed;
+    bottom: 300px;
+    right: -5px;
+    left: 20px;
+    color: #ffffff;
+    padding: 10px;
+    display: none;
+    max-width: 400px;
+    background-color: #023F53;
+    font-size: 12px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    line-height: 1.3;
+    text-align: center;
+    max-height: 5cm;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: normal;
+}
+/* Dropdown item styling */
+.dropdown-content a {
+    display: block; /* Ensure each item takes a block level */
+    padding: 6px 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    font-weight: normal;
+    border: 1px solid #ddd; /* Border for each box */
+    margin-bottom: 1px; /* 1px space between items */
+    transition: background-color 0.3s ease;
+    margin-left: 1px;
+
+}
+        /* Styling for the select box */
+        #selectBox {
+            display: none;
+            position: absolute;
+            top: 3.2cm;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 25px;
+            margin-left: 19px; /* Moves the element 0.3cm to the right */
+            width: 320px;
+        }
+/* Dropdown container: Arrange items horizontally */
+.horizontal-menu {
+    display: flex; /* Flexbox for horizontal alignment */
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center; /* Vertically center items */
+    gap: 1px; /* Space between items */
+    padding: 5px; /* Padding for better layout */
+    margin-top: 10px; /* Adjust spacing from button */
+    margin-left: 50px; /* Move the entire menu 5px from the left margin */
+    background-color: #023F53; /* Background color */
+    border-radius: 5px; /* Rounded edges */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+/* Dropdown item styling */
+.horizontal-menu a {
+    display: inline-block; /* Ensure items are inline for horizontal layout */
+    padding: 10px 15px; /* Adjust padding for consistent spacing */
+    text-decoration: none; /* Remove underline */
+    font-size: 12px; /* Font size */
+    font-weight: bold; /* Bold text */
+    color: #FFDB58; /* Text color */
+    background-color: transparent; /* Background color */
+    border: 1px solid #FFDB58; /* Border style */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 195px; /* Increased width by 2 cm (approx. 56px) */
+}
+/* Hover effect for dropdown items */
+.horizontal-menu a:hover {
+    background-color: #FFDB58; /* Background color on hover */
+    color: white; /* Text color on hover */
+}
+.tile-container-wrapper {
+    position: fixed;
+    top: 70px; /* Move up by 0.2cm (5px) */
+    left: 0;
+    width: 100%;
+    background-color: white; /* Removed teal background */
+    z-index: 100;
+    font-size: 12px;
+    color: black;
+}
+.tile-container {
+    margin-top: 0;
+    font-size: 12px;
+    color: black;
+}
+/* Tile container layout */
+.tile-container {
+    display: flex; /* Enables flexbox for horizontal alignment */
+    flex-wrap: nowrap; /* Prevents wrapping to the next row */
+    justify-content: space-between; /* Even spacing between tiles */
+    align-items: center; /* Align tiles vertically */
+    padding: -10px; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+    gap: 20px; /* Add spacing between tiles */
+    margin-top: -1cm; /* Moves the container 1 cm upwards */
+}
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    font-size: 12px; 
+    background-color: #222; 
+    color: white; 
+}
+/* Button style */
+.expand-button {
+    padding: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 190px;
+    border-radius: 5px;
+    transition: transform 0.2s ease, color 0.3s ease;
+    font-size: 12px;
+}
+.expand-button:hover {
+    transform: scale(1.05);
+    color: #fff;
+}
+/* Individual expand buttons */
+button.expand-button {
+font-size: 12px; /* Adjust font size */
+border: none;
+cursor: pointer;
+transition: background-color 0.3s ease;
+margin-top: -37px;
+font-weight: normal;
+padding: 10px 23px; /* Add padding for better spacing */
+color: black;
+text-align: center;
+border-radius: 6px; /* Rounded corners */
+}
+input.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 12.8px;
+    background-color: #222;
+    color: white;
+}
+
+.username-input {
+    padding: 8px;
+    font-size: 10px;
+    width: 15%;
+    border: none; /* Removes the border */
+    border-radius: 5px;
+    color: white; /* Ensures the text is visible */
+    text-align: center;
+    display: block;
+    margin: 0 auto; /* Centers the element horizontally */
+    background-color: transparent !important; /* Keeps the background transparent */
+    outline: none; /* Removes the default focus outline */
+    appearance: none; /* Prevents browser-specific styles */
+}
+
+.username-area {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    background-color: black; /* Ensures the section background is transparent */
+    color: white;
+}
+input {
+        color: white; /* Set input text color to white */
+        background-color: black; /* Optional: sets background color to make text more visible */
+    }
+    .button-container {
+        font-size: 10px; /* Set the font size to 9px */
+        width: 110px;   /* Ensure consistent width (adjust as needed) */
+        height: 30px;   /* Ensure consistent height (adjust as needed) */
+        text-align: center;
+        background-color: teal;
+        color: white;
+        border-radius: 5px;
+    }
+    .button-container:hover {
+    background-color: aqua; /* Change to mustard color on hover */
+    color: black; /* Optional: change text color for better contrast */
+}
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .close-btn {
+    position: absolute;
+    top: calc(50% - 1.85cm);  /* Move the button 1cm up from the center */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the button horizontally */
+    background: red;
+    border: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+    .modal-title {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    /* Table Styles */
+    #data-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    #data-table thead {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        color: #333;
+    }
+    #data-table th, #data-table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+    }
+    /* Button Styles */
+    .submit-btn, .open-btn {
+        background-color: aqua;
+        color: black;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .submit-btn {
+        margin-top: 10px;
+    }
+
+    form {
+    background-color: black;
+    padding: 16.5px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    max-width: 588px;
+    width: 100%;
+    margin-top: 5cm auto 40px auto; /* Push the form down by 5 cm and keep bottom margin at 40px */
+    color: white;
+    font-size: 12px;
+
+    position: absolute; /* Keeps the form positioned relative to its parent or the viewport */
+    left: 50%; /* Centers the form horizontally */
+    transform: translateX(-50%); /* Adjust for exact centering */
+
+}
+
+.container {
+    overflow-y: auto; 
+    padding: 0.55cm;
+    width: 100%; 
+    height: auto; /* Allows container height to adapt */
+}
+html {
+    height: auto;
+}
+        /* Ensure static layout */
+        .tile-container-wrapper {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: rgb(226, 232, 234);
+            z-index: 100;
+            font-size: 12px;
+            color: black;
+        }
+
+        .tile-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 0 auto;
+            max-width: 1200px; /* Center tiles in a container */
+        }
+
+        .tile {
+            margin: 0px;
+            text-align: center;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #text-message {
+            display: none;
+            background-color: teal;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }

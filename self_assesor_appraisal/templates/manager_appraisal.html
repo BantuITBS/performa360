@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Survey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">    
+    <head>  
+    {% load static %}
+    
+    <style>
+    .survey-label,.survey-input,h3,h2,body,label,label, select, button,.topic,.username-input,.question, small {
+                    font-family: 'Merriweather', serif;
+                }
+        body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        font-size: 12px;
+
+        background-color: black;
+        }
+
+/* wrap your content in a div with class "white-background" */
+
+        .back-button:hover {
+            background-color: turquoise;
+        }
+        .topics {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .topic {
+        flex: 1 1 calc(25% - 20px); /* Make each topic take up 25% of the width, minus gap */
+        min-width: 90px; /* Minimum width to prevent topics from being too small */
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        background-color: teal;
+        transition: background-color 0.3s;
+        box-sizing: border-box; /* Ensure padding and borders are included in total width */
+        font-size: 11px;
+        color: white;
+        top: 2.5cm; /* Moves the element 2cm to the top */
+        }
+
+        .topic:hover {
+            background-color: turquoise;
+        }
+        .questions {
+            margin-top: 20px;
+            border-top: 2px solid #ccc;
+            padding-top: 10px;
+            background-color: black;
+            color: white; /* Rich black text */
+            font-weight: normal; /* Not bold */
+            width: 100%;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .question label {
+            margin-right: 10px;
+        }
+        textarea {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            resize: none;
+        }
+        h3 {
+            color: white; /* Mustard text color */
+            text-align: center;
+            margin-top: -15px;
+        }
+
+        button, .back-button  {
+            margin: 20px auto; /* Center the button */
+            padding: 8px 13px;
+            font-size: 12px;
+            background-color: #FFDB58; /* Mustard background color */
+            border-radius: 10px;
+            display: block; /* Makes the button a block element */
+            text-align: center; /* Centers text within the button */
+        }
+.username-input {
+    padding: 6px;
+    font-size: 14px;
+    width: 11%;
+    border: none; /* Removes the border */
+    border-radius: 5px;
+    color: white; /* Ensures the text is visible */
+    text-align: left;
+    display: block;
+    margin: 0 auto; /* Centers the element horizontally */
+    background-color: transparent !important; /* Keeps the background transparent */
+    outline: none; /* Removes the default focus outline */
+    appearance: none; /* Prevents browser-specific styles */
+    margin-right: 1040px;
+}
+
+.username-input:focus {
+    background-color: transparent !important; /* Ensures transparency when focused */
+    color: white; /* Keeps the text color visible */
+    outline: none; /* Removes the focus outline */
+    box-shadow: none; /* Removes any box shadow applied on focus */
+}
+
+.username-input:active {
+    background-color: transparent !important; /* Ensures transparency when active */
+    color: white; /* Keeps the text color visible */
+    outline: none; /* Removes the active outline */
+}
+
+.username-section {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    background-color: transparent; /* Ensures the section background is transparent */
+    margin-right: 1000px;
+}
+
+/* Left Corner Container */
+.left-corner-container {
+    position: absolute;
+    top: 10px; /* Distance from the top */
+    left: 10px; /* Distance from the left */
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    align-items: flex-start; /* Align elements to the start (left) */
+}
+
+.survey-label {
+    color: white;
+    margin-bottom: 5px;
+    text-align: left; /* Ensures text aligns to the left */
+}
+
+.survey-input {
+    text-align: center;
+    padding: 5px;
+    width: 200px;
+    color: white;
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+/* Circular Image Container Styling */
+.circular-image-container {
+    position: absolute; /* Allows absolute positioning relative to the nearest positioned ancestor (usually the body) */
+    top: 6px; /* Distance from the top of the page */
+    left: 4px; /* Distance from the right edge of the page */
+    width: 45px; /* Size of the circular container */
+    height: 45px; /* Size of the circular container */
+    display: flex;
+    justify-content: center; /* Centers the image horizontally inside the container */
+    align-items: center; /* Centers the image vertically inside the container */
+    margin-top: -4px; /* Adjust spacing if needed */
+}
+
+/* Circular Image Styling */
+.circular-image {
+    width: 85%; /* Image will fill the container */
+    height: 85%; /* Image will fill the container */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image fits well inside the circular container */
+    border: 2px solid white; /* Optional: Add a border around the image */
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+    .circular-image-container {
+        width: 35px; /* Adjust size for smaller screens */
+        height: 35px; /* Adjust size for smaller screens */
+    }
+
+    .circular-image {
+        width: 40%; /* Ensures the image fully fits the smaller container */
+        height: 40%; /* Ensures the image fully fits the smaller container */
+    }
+}
+
+
+/* Optional: Adjust horizontal position for the left corner */
+.left-corner-container.move-right {
+    left: 50px; /* Moves the container 50px to the right */
+}
+
+/* Optional for responsiveness */
+@media (max-width: 600px) {
+    .left-corner-container {
+        left: 5px; /* Adjust position for smaller screens */
+        top: 5px; /* Adjust top position for smaller screens */
+    }
+}
+
+/* Survey Number Container */
+.survey-number-container {
+    position: absolute; /* Position relative to the nearest positioned ancestor (body) */
+    top: 0; /* Place at the very top of the page */
+    right: 3cm; /* 3cm from the right side */
+    text-align: center; /* Center the label and select box */
+    color: white; /* Make text color white */
+    margin-top: 0.6cm; /* Adds space from the top */
+    height: 15px; /* Adjust height */
+    line-height: 15px; /* Align label and select vertically */
+}
+
+/* Optional: Adjust for smaller screen sizes */
+@media (max-width: 600px) {
+    .survey-number-container {
+        right: 1cm; /* Slightly reduce the right margin on smaller screens */
+        margin-top: 1cm; /* Adjust top margin for smaller screens */
+    }
+}
+
+    .response-container {
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .response {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .response h4 {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: bold;
+        flex: 2;
+    }
+
+    .response p {
+        margin: 0 12px 0 0;
+        flex: 4;
+        text-align: left;
+    }
+
+    .response button.edit-button {
+        margin-left: auto;
+        padding: 8px 12px;
+        font-size: 0.9em;
+        background-color: aqua;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .response button.edit-button:hover {
+        background-color: aqua;
+    }
+
+    .topic-header {
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .topics {
+            margin-bottom: 5px;
+        }
+        .topic {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin: 5px 0;
+            margin-top: 1.1px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .topic:hover {
+            background-color: #f0f0f0;
+        }
+        .topic-header {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .response {
+            margin-bottom: 15px;
+        }
+        .edit-button {
+            background-color: teal;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .edit-button:hover {
+            background-color: teal;
+        }
+        .topic-name {
+    font-size: 14px;
+}
+
+.teal-container {
+    background-color: transparent;
+    height: 40px; /* Assuming the height of the topic containers is 40px */
+    width: 96.8vw;
+}
+    </style>
+</head>
+<body>
+    <h3>
+        Appraise your superior.
+        <div>"Your anonymous feedback is valued. Please provide candid and constructive comments to help your company/organisation/institution to improve."</div>
+    </h3>
+
+<!-- Circular Image Container -->
+<div class="circular-image-container">
+    <img src="{{ profile_image }}" alt="Profile Image" class="circular-image">
+</div>
+    
+<!-- Textboxes aligned horizontally -->
+<div class="survey-number-container" style="position: absolute; top: 2cm; left: 50%; transform: translateX(-50%);">
+    </div>
+    <br>
+    <div class="teal-container"> 
+        <br>
+        <div class="topics">
+            <div class="topic" onclick="setAndPopulateTopic(1, 'Communication and Leadership')">Communication and Leadership</div>
+            <div class="topic" onclick="setAndPopulateTopic(2, 'Coaching, Development, and Growth')">Coaching, Development, and Growth</div>
+            <div class="topic" onclick="setAndPopulateTopic(3, 'Delegation, Support, and Empowerment')">Delegation, Support, and Empowerment</div>
+            <div class="topic" onclick="setAndPopulateTopic(4, 'Operational Efficiency and Risk Management')">Operational Efficiency and Risk Management</div>
+            <div class="topic" onclick="setAndPopulateTopic(5, 'Overall Satisfaction and Open Feedback')">Overall Satisfaction and Open Feedback</div>
+        </div>
+    </div>      
+    <div class="questions" id="questionsContainer"></div>
+    <div id="responseContainer"></div>
+
+<!-- Submit button placed after the 11th topic -->
+<!-- Left Corner Container -->
+<div class="left-corner-container">
+    <label for="dateOfSurvey" class="survey-label"></label>
+    <input type="text" id="dateOfSurvey" readonly class="survey-input">
+</div>
+<div id="questionsContainer"></div>
+<script>
+
+    // Track which topics have been completed
+    let completedTopics = [false, false, false, false];
+    let userResponses = {}; // Store responses for each topic (key: topic number)
+
+    const topicNames = {
+    1: "Communication and Leadership",
+    2: "Coaching, Development, and Growth",
+    3: "Delegation, Support, and Empowerment",
+    4: "Operational Efficiency and Risk Management",
+    5: "Overall Satisfaction and Open Feedback"
+};
+
+const questions = {
+    1: [
+        "How effectively does my manager communicate expectations, goals, and feedback?",
+        "How well does my manager articulate the team’s vision, mission, and objectives?",
+        "How has my manager's communication style impacted my ability to do my job effectively?",
+        "How does my manager foster team dynamics, inclusivity, and collaboration?",
+        "How has my manager’s leadership style impacted my job satisfaction?"
+    ],
+    2: [
+        "How effectively does my manager provide feedback, coaching, and guidance for my development?",
+        "How well does my manager help me set realistic goals and develop action plans?",
+        "How does my manager encourage ownership of learning and facilitate knowledge sharing?",
+        "How has my manager supported my career growth and development, including new challenges and responsibilities?",
+        "How has my manager recognized and rewarded outstanding performance?"
+    ],
+    3: [
+        "How well does my manager delegate tasks, provide necessary support, and empower me?",
+        "How does my manager support work-life balance, well-being, and inclusion initiatives?",
+        "How has my manager ensured access to resources for achieving goals and fostering equity?",
+        "How effectively does my manager promote autonomy while offering guidance when needed?"
+    ],
+    4: [
+        "How effectively does my manager streamline processes and optimize workflows?",
+        "How well does my manager manage budgets, allocate resources, and ensure cost-effectiveness?",
+        "How effectively does my manager ensure compliance with organizational policies and regulatory requirements?",
+        "How does my manager identify and mitigate risks, resolve issues, and implement corrective actions?",
+        "How does my manager foster a culture of continuous improvement, encouraging suggestions and innovative ideas?"
+    ],
+    5: [
+        "How satisfied am I with my manager’s overall performance?",
+        "What are my manager’s greatest strengths, and how have they positively impacted the team?",
+        "What areas need improvement, and what suggestions do I have for their growth?",
+        "How likely am I to recommend my manager to others, and why?",
+        "Do I have any additional comments or feedback about my manager's performance?"
+    ]
+};
+
+    // Function to set the topic name and populate questions
+    function setAndPopulateTopic(topicNumber, topicName) {
+        setTopicName(topicNumber, topicName); // Dynamically set the topic name
+        populateQuestions(topicNumber);      // Populate questions for the selected topic
+    }
+
+    // Set the topic name dynamically
+    function setTopicName(topicNumber, topicName) {
+        const topicHeader = document.getElementById('questionsContainer');
+        topicHeader.innerHTML = `<h2>${topicName}</h2>`; // Display the topic name at the top
+    }
+
+    // Populate the questions for the selected topic
+    function populateQuestions(topicNumber) {
+        const container = document.getElementById('questionsContainer');
+        
+        // Clear previous content but keep the topic name
+        const topicName = container.querySelector('h2')?.outerHTML || '';
+        container.innerHTML = topicName;
+
+        // Dynamically generate questions for the topic
+        questions[topicNumber].forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.innerHTML = ` 
+                <p>${index + 1}. ${question}</p>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="1"> 1
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="2"> 2
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="3"> 3
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="4"> 4
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="5"> 5
+                </label>
+                <textarea class="comment" placeholder="Add your comments here..."></textarea>
+            `;
+            container.appendChild(questionDiv);
+        });
+
+  // Add the "Enter" button for this topic
+        const enterButton = document.createElement('button');
+        enterButton.innerText = "Enter";
+        enterButton.onclick = () => exitTopic(topicNumber);
+        container.appendChild(enterButton);
+    }
+
+    // Adjust displayResponses to show the correct topic name and "Edit" functionality
+    function displayResponses(topicNumber) {
+        const responseContainer = document.getElementById(`responseContainer${topicNumber}`);
+        responseContainer.innerHTML = ''; // Clear previous responses
+
+        // Display the topic name above the responses
+        const topicHeader = document.createElement('div');
+        topicHeader.classList.add('topic-header');
+        topicHeader.innerText = `Topic: ${topicNames[topicNumber] || "Unknown Topic"}`;
+        responseContainer.appendChild(topicHeader);
+
+        // Append each response for the topic
+        const topicResponses = userResponses[topicNumber];
+        topicResponses.forEach(({ question, answer, comment }, index) => {
+            const responseDiv = document.createElement('div');
+            responseDiv.classList.add('response');
+            responseDiv.innerHTML = `
+                <h4>${question}</h4>
+                <p>Answer: ${answer}</p>
+                <p>Description: ${getAnswerDescription(answer)}</p> <!-- Description of answer -->
+                <p>Comment: ${comment || 'No comment'}</p>
+                <button class="edit-button" onclick="editResponse(${topicNumber}, ${index})">Edit</button>
+            `;
+            responseContainer.appendChild(responseDiv);
+        });
+    }
+
+    // Define responses for each question
+    const responses = {
+        1: [
+            "Rarely communicates or provides feedback.",
+            "Occasionally communicates, but often unclearly or inconsistently.",
+            "Usually communicates clear expectations and goals.",
+            "Consistently provides clear and concise communication.",
+            "Always provides timely, clear, and impactful communication."
+        ],
+        2: [
+            "Rarely articulates the team’s vision or objectives.",
+            "Occasionally articulates, but it’s often vague or incomplete.",
+            "Usually communicates a clear and concise vision.",
+            "Consistently articulates a compelling and motivating vision.",
+            "Always inspires with a clear and impactful vision and objectives."
+        ],
+        3: [
+            "Very negatively impacts my effectiveness.",
+            "Somewhat negatively impacts my effectiveness.",
+            "Neutral impact on my effectiveness.",
+            "Somewhat positively impacts my effectiveness.",
+            "Significantly enhances my effectiveness."
+        ],
+        4: [
+            "Rarely fosters team cohesion or inclusivity.",
+            "Occasionally promotes collaboration, but not inclusively.",
+            "Usually fosters teamwork and respects diversity.",
+            "Consistently promotes inclusivity and team collaboration.",
+            "Always creates a culture of respect, inclusivity, and strong team dynamics."
+        ],
+        5: [
+            "Very negatively impacts my satisfaction.",
+            "Somewhat negatively impacts my satisfaction.",
+            "Neutral impact on my satisfaction.",
+            "Somewhat positively impacts my satisfaction.",
+            "Significantly enhances my job satisfaction."
+        ],
+        // Continue similarly for other topics and questions
+    };
+
+    // Dynamically generate questions for the topic
+    questions[topicNumber].forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+        questionDiv.innerHTML = ` 
+            <p>${index + 1}. ${question}</p>
+            <div class="responses">
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="1"> 1
+                    <span class="response">${responses[index + 1][0]}</span>
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="2"> 2
+                    <span class="response">${responses[index + 1][1]}</span>
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="3"> 3
+                    <span class="response">${responses[index + 1][2]}</span>
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="4"> 4
+                    <span class="response">${responses[index + 1][3]}</span>
+                </label>
+                <label>
+                    <input type="radio" name="q${topicNumber}-${index + 1}" value="5"> 5
+                    <span class="response">${responses[index + 1][4]}</span>
+                </label>
+            </div>
+            <textarea class="comment" placeholder="Add your comments here..."></textarea>
+        `;
+        container.appendChild(questionDiv);
+    });
+
+    // Save the edited response
+    function saveEditedResponse(topicNumber, responseIndex) {
+        const selectedAnswer = document.querySelector(`input[name="q${topicNumber}-${responseIndex + 1}"]:checked`);
+        const newComment = document.querySelector(`#questionsContainer .comment`).value;
+
+        if (selectedAnswer) {
+            // Update the response
+            userResponses[topicNumber][responseIndex] = {
+                question: questions[topicNumber][responseIndex],
+                answer: selectedAnswer.value,
+                comment: newComment
+            };
+
+            // Re-display the responses
+            displayResponses(topicNumber);
+        } else {
+            alert("Please select an answer before saving.");
+        }
+    }
+
+    // Adjust exitTopic to display the topic name and position elements correctly
+    function exitTopic(topicNumber) {
+        const container = document.getElementById('questionsContainer');
+        const responseContainerId = `responseContainer${topicNumber}`;
+        let responseContainer = document.getElementById(responseContainerId);
+
+        if (!responseContainer) {
+            // Create response container dynamically if it doesn't exist
+            responseContainer = document.createElement('div');
+            responseContainer.id = responseContainerId;
+            responseContainer.classList.add('response-container');
+            container.appendChild(responseContainer);
+        }
+
+        // Gather and validate responses
+        const responses = [];
+        let allAnswered = true;
+        questions[topicNumber].forEach((question, index) => {
+            const selectedAnswer = document.querySelector(`input[name="q${topicNumber}-${index + 1}"]:checked`);
+            if (selectedAnswer) {
+                responses.push({
+                    question,
+                    answer: selectedAnswer.value,
+                    comment: document.querySelector(`textarea.comment`).value
+                });
+            } else {
+                allAnswered = false;
+            }
+        });
+
+        if (allAnswered) {
+            userResponses[topicNumber] = responses; // Save responses
+            completedTopics[topicNumber - 1] = true;
+            displayResponses(topicNumber);
+
+            // Check if all topics are completed
+            if (completedTopics.every(completed => completed)) {
+                document.getElementById('submitSurveyButton').style.display = 'block';
+            }
+        } else {
+            alert('Please answer all the questions before clicking Enter.');
+        }
+    }
+
+    // Submit Survey
+    function submitSurvey() {
+        const username = document.getElementById('username').value;
+        const surveyDate = document.getElementById('survey_date').value;  // Only use survey_date
+        const reviewCycle = parseInt(document.getElementById('review_cycle').value);
+        const data = [];
+
+        Object.keys(userResponses).forEach((topic) => {
+            const topicResponses = userResponses[topic];
+            topicResponses.forEach(({ question, answer, comment }) => {
+                data.push({
+                    username,
+                    survey_date: surveyDate,  // Use survey_date instead of start_date/end_date
+                    review_cycle: reviewCycle,
+                    topic,
+                    question,
+                    answer,
+                    comment
+                });
+            });
+        });
+
+        fetch('/submit-user-survey/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Include CSRF token for security
+            },
+            body: JSON.stringify({ responses: data })
+        })
+            .then(response => response.json())
+            .then(data => alert(data.message || "Survey submitted successfully!"))
+            .catch(error => console.error("Error submitting survey:", error));
+    }
+
+    // Helper function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            document.cookie.split(';').forEach(cookie => {
+                const trimmedCookie = cookie.trim();
+                if (trimmedCookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(trimmedCookie.substring(name.length + 1));
+                }
+            });
+        }
+        return cookieValue;
+    }
+</script>
+<div id="questionsContainer"></div>
+<div id="responseContainer"></div>
+
+<!-- Submit Button -->
+<button id="submitSurveyButton" style="display: none;" onclick="submitSurvey()">Submit Survey</button>
+</head>
+</body>
+<a href="http://127.0.0.1:8002/" style="position: fixed;font-weight: bold; font-size: 10px; top: 5px; right: 5px; color: aqua; display: flex; flex-direction: column; align-items: center;">
+    <i class="fa fa-home"></i>
+    Home
+  </a>
+</html>

@@ -1,0 +1,1572 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performa360 Performance Management Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Colors */
+            --primary: #2c5282;
+            --primary-light: #3182ce;
+            --primary-dark: #1a365d;
+            --secondary: #48bb78;
+            --accent: #9f7aea;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --gradient-start: #1E3A8A;
+            --gradient-end: #3B82F6;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --text-color: #2d3748;
+            --text-secondary: #4a5568;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            
+            /* Application Colors */
+            --setting: #f59e0b;
+            --goals: #10b981;
+            --pulse: #3b82f6;
+            --self: #ec4899;
+            --assessor: #8b5cf6;
+            --skills: #f97316;
+            --leadership: #ef4444;
+            --dashboards: #3182ce;
+            
+            /* Glassmorphic Variables */
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --glass-blur: blur(12px);
+            --glass-text: rgba(255, 255, 255, 0.9);
+            --connection-line: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --primary: #3182ce;
+            --primary-light: #63b3ed;
+            --primary-dark: #2c5282;
+            --secondary: #68d391;
+            --dark: #e2e8f0;
+            --light: #1a202c;
+            --accent: #b794f4;
+            --gradient-start: #2B6CB0;
+            --gradient-end: #4299e1;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #e2e8f0;
+            --text-secondary: #a0aec0;
+            --bg-color: #1a202c;
+            --card-bg: #2d3748;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            
+            --glass-bg: rgba(26, 32, 44, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-text: rgba(255, 255, 255, 0.9);
+            --connection-line: rgba(255, 255, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        header {
+            position: relative;
+            padding: 6rem 2rem;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2070&q=80') center/cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, white, #e6fffa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        /* Container & Sections */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 6rem;
+            scroll-margin-top: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-light);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Application Sections */
+        .app-section {
+            margin-bottom: 4rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .app-section:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .app-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .app-title:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .app-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        .app-subtitle {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .app-subtitle i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.3em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .feature-list li:before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-size: 0.8em;
+        }
+
+        .app-why {
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .why-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .why-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .why-content {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .video-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+
+        .video-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+            color: white;
+        }
+
+        .video-link i {
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.2s ease;
+        }
+
+        .video-link:hover i {
+            transform: translateX(3px);
+        }
+
+        .app-visuals {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 30px;
+            background: var(--bg-color);
+            height: 100%;
+            justify-content: center;
+        }
+
+        .app-visual {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            flex: 1;
+            display: flex;
+        }
+
+        .app-visual:hover {
+            transform: scale(1.02);
+        }
+
+        .app-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            position: relative;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            min-height: 700px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flow-diagram svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .node {
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+            transition: all 0.3s ease;
+        }
+
+        .node-text {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            fill: white;
+        }
+
+        .connection {
+            stroke: var(--connection-line);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 0;
+            animation: dash 0.5s linear forwards;
+        }
+
+        @keyframes dash {
+            from { stroke-dashoffset: 100; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Ecosystem Flow Tiles */
+        .ecosystem-flow {
+            width: 100%;
+            margin-top: 2rem;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .tile-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: nowrap;
+            width: 99vw;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .tile {
+            width: 5cm;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            overflow: hidden;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-weight: bold;
+            text-align: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tile-text {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.8rem;
+            font-size: 0.8rem;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            align-self: center;
+            flex-shrink: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: 16px;
+            margin: 4rem 0;
+        }
+
+        .cta-title {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-desc {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background: #f7fafc;
+        }
+
+        .cta-button i {
+            margin-left: 0.5rem;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border: none;
+            outline: none;
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-visuals {
+                order: 2;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 4rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .section-icon {
+                margin-bottom: 1rem;
+            }
+            
+            .app-visuals {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .app-visual img {
+                height: auto;
+            }
+            
+            .flow-diagram {
+                min-height: 500px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .app-visuals {
+                flex-direction: column;
+            }
+            
+            .tile {
+                width: 80vw;
+            }
+        }
+
+.tile {
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(var(--gradient-angle), var(--gradient-colors)) border-box;
+}
+
+.tile:nth-child(1) {
+    --gradient-angle: 135deg;
+    --gradient-colors: #00C9FF 0%, #92FE9D 100%;
+}
+
+.tile:nth-child(2) {
+    --gradient-angle: 135deg;
+    --gradient-colors: #FF9A9E 0%, #FAD0C4 100%;
+}
+
+
+/* etc... for each tile */
+    </style>
+</head>
+<body>
+    <header class="gradient-bg glass-panel">
+        <div class="header-content">
+            <h1>The Performa360 Suite</h1>
+            <p class="tagline">A dynamic network of applications, integrated with Performa360Chat and AI-driven insights, feeding into Dashboards for comprehensive performance analytics with SMART goals and RACI accountability.</p>
+            <a href="#flow" class="cta-button">Explore the Ecosystem <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top: -80px;">
+        <!-- Ecosystem Flow Section -->
+        <section id="flow" class="section">
+            
+<section class="ecosystem-flow">
+    <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary);">Pathway to Access</h3>
+    <div class="tile-row">
+        <div class="tile" style="border: 2px solid transparent; border-radius: 12px; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%) border-box;">
+            <div class="tile-content">
+                <img src="{% static 'admin/img/Perfoma360_main.JPG' %}" alt="Home Page" />
+                <div class="tile-text">Home Page</div>
+            </div>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="tile" style="border: 2px solid transparent; border-radius: 12px; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #FF9A9E 0%, #FAD0C4 100%) border-box;">
+            <div class="tile-content">
+                <img src="{% static 'admin/img/Perfoma360_reg.JPG' %}" alt="Registration" />
+                <div class="tile-text">Create company profile, set review periods and cycles</div>
+            </div>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="tile" style="border: 2px solid transparent; border-radius: 12px; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #A18CD1 0%, #FBC2EB 100%) border-box;">
+            <div class="tile-content">
+                <img src="{% static 'admin/img/Perfoma360_portal.JPG' %}" alt="Portal Login" />
+                <div class="tile-text">Log into the Performa360 portal with company credentials</div>
+            </div>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="tile" style="border: 2px solid transparent; border-radius: 12px; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #FFC3A0 0%, #FFAFBD 100%) border-box;">
+            <div class="tile-content">
+                <img src="{% static 'admin/img/Perfoma360_create_user.JPG' %}" alt="User Creation" />
+                <div class="tile-text">Create employees and manage users with permissions</div>
+            </div>
+        </div>
+        <div class="arrow">➔</div>
+        <div class="tile" style="border: 2px solid transparent; border-radius: 12px; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #84FAB0 0%, #8FD3F4 100%) border-box;">
+            <div class="tile-content">
+                <img src="{% static 'admin/img/Perfoma360_login.JPG' %}" alt="Employee Login" />
+                <div class="tile-text">Login using your assigned employee code</div>
+            </div>
+        </div>
+    </div>
+</section>
+<br>
+<section class="section">
+    <div class="flow-diagram-container">
+        <h2 class="integration-header" style="text-align: center; margin-bottom: 1.5rem; color: var(--primary); font-size: 1.8rem; font-weight: 600; line-height: 1.3; max-width: 900px; margin-left: auto; margin-right: auto;">
+            Schematic integration of the Performa360 Suite of Applications to deliver a comprehensive Performance Management Hub experience.
+        </h2>
+        
+        <div class="flow-diagram glass-panel" style="margin-top: 0.5rem;">
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
+                        <polygon points="0 0, 12 4, 0 8" fill="url(#arrow-gradient)" stroke="none"/>
+                    </marker>
+                    <linearGradient id="arrow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#4a6cf7" />
+                        <stop offset="100%" stop-color="#2541b2" />
+                    </linearGradient>
+                    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+                        <feGaussianBlur stdDeviation="5" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                    <linearGradient id="node-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.3)" />
+                        <stop offset="100%" stop-color="rgba(255,255,255,0.1)" />
+                    </linearGradient>
+                    <filter id="node-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)" />
+                    </filter>
+                </defs>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="425" y="50" width="160" height="150" rx="20" fill="var(--setting)" class="node"/>
+                    <rect x="425" y="50" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="500" y="120" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="500" y="150" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Setting</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="175" y="250" width="160" height="150" rx="20" fill="var(--goals)" class="node"/>
+                    <rect x="175" y="250" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="250" y="320" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="250" y="350" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Goal Cascading</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="425" y="250" width="160" height="150" rx="20" fill="var(--pulse)" class="node"/>
+                    <rect x="425" y="250" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="500" y="320" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="500" y="350" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Experience Pulse</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="675" y="250" width="165" height="150" rx="20" fill="var(--leadership)" class="node"/>
+                    <rect x="675" y="250" width="165" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="750" y="320" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="750" y="350" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Leadership Matrix</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="75" y="450" width="160" height="150" rx="20" fill="var(--self)" class="node"/>
+                    <rect x="75" y="450" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="150" y="520" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="150" y="550" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Self Appraisal</text>
+                    <text x="150" y="575" font-size="12" fill="rgba(255,255,255,0.8)" text-anchor="middle" class="node-subtext">perfoma360Chat</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="325" y="450" width="160" height="150" rx="20" fill="var(--assessor)" class="node"/>
+                    <rect x="325" y="450" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="400" y="520" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="400" y="550" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Assessor Appraisal</text>
+                    <text x="400" y="575" font-size="12" fill="rgba(255,255,255,0.8)" text-anchor="middle" class="node-subtext">perfoma360Chat</text>
+                </g>
+                <g class="node-group" filter="url(#node-shadow)">
+                    <rect x="575" y="450" width="150" height="150" rx="20" fill="var(--skills)" class="node"/>
+                    <rect x="575" y="450" width="150" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="650" y="520" font-size="24" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="650" y="550" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">SkillForge Pro</text>
+                    <text x="650" y="575" font-size="12" fill="rgba(255,255,255,0.8)" text-anchor="middle" class="node-subtext">perfoma360Chat</text>
+                </g>
+                <g class="node-group" filter="url(#glow)">
+                    <rect x="425" y="650" width="160" height="150" rx="20" fill="var(--dashboards)" class="node"/>
+                    <rect x="425" y="650" width="160" height="150" rx="20" fill="url(#node-gradient)" opacity="0.5" class="node-highlight"/>
+                    <text x="500" y="720" font-size="26" fill="white" text-anchor="middle" font-family="FontAwesome" class="node-icon"></text>
+                    <text x="500" y="750" font-size="14" fill="white" text-anchor="middle" font-weight="600" class="node-text">Dashboards</text>
+                    <g transform="translate(504 780)" text-anchor="middle" font-family="FontAwesome" font-size="16">
+                        <text x="-60" y="0" fill="#3498db" class="dashboard-icon"></text>
+                        <text x="-30" y="0" fill="#f1c40f" class="dashboard-icon"></text>
+                        <text x="0" y="0" fill="#9b59b6" class="dashboard-icon"></text>
+                        <text x="30" y="0" fill="#e74c3c" class="dashboard-icon"></text>
+                        <text x="60" y="0" fill="#2ecc71" class="dashboard-icon"></text>
+                    </g>
+                </g>
+                <path d="M475,200 Q350,225 250,250" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M500,200 L500,250" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M525,200 Q650,225 750,250" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M190,400 L95,450" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M230,525 L325,525" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M500,525 L575,525" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M470,400 Q500,550 500,650" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M750,400 Q900,500 575,700" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M350,600 Q250,650 425,650" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+                <path d="M650,600 Q550,650 500,650" stroke="url(#arrow-gradient)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" class="connection"/>
+            </svg>
+        </div>
+    </div>
+</section>
+
+        <!-- Settings Application -->
+        <section class="section">
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Settings</h3>
+                        <p class="app-desc">
+                            <strong>Orchestrate Success with Precision</strong><br>
+                            The Performa360 Settings Application empowers HR leaders to configure high-level goals and feedback systems with unmatched flexibility. Designed for strategic alignment, this solution streamlines performance management through data-driven insights.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-sliders-h"></i> What It Delivers</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <h4 class="feature-title">Strategic Goal Configuration</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Dynamic drag-and-drop goal alignment</li>
+                                    <li>Centralized goal database with custom objectives</li>
+                                    <li>Weight assignment & department syncing</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <h4 class="feature-title">Custom Feedback Frameworks</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Tailored assessment frequencies</li>
+                                    <li>Multiple response types (ratings, text, etc.)</li>
+                                    <li>360-degree feedback with peer reviews</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h4 class="feature-title">Secure Integration</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Real-time API connectivity</li>
+                                    <li>CSRF token validation</li>
+                                    <li>Bulk update safeguards</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Significance of this App?</h4>
+                            <p class="why-content">
+                                Empowers HR to align goals, optimize feedback, and drive performance with precision through intuitive design and robust functionality.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Configuration.JPG' %}" alt="Configuration Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Configuration_goals.JPG' %}" alt="Goal Management">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Cascading -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_KPICascadeMap_main.JPG' %}" alt="Cascading Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_KPICascadeMap.JPG' %}" alt="Goal Mapping">
+                        </div>
+                    </div>
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Goals Cascading</h3>
+                        <p class="app-desc">
+                            <strong>Cascade with Clarity and Impact</strong><br>
+                            Revolutionizes how HR leaders translate high-level goals into actionable outcomes across departments with dynamic mind-maps and SMART KPI tracking.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-project-diagram"></i> Key Features</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-sitemap"></i>
+                                    </div>
+                                    <h4 class="feature-title">Visual Cascading</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Interactive mind-maps with RACI roles</li>
+                                    <li>Departmental alignment visualization</li>
+                                    <li>Dynamic goal translation to SMART KPIs</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </div>
+                                    <h4 class="feature-title">KPI Management</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Custom measurable targets</li>
+                                    <li>Flexible units of measure</li>
+                                    <li>Contextual data integration</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-plug"></i>
+                                    </div>
+                                    <h4 class="feature-title">System Integration</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Real-time organizational data sync</li>
+                                    <li>Local storage persistence</li>
+                                    <li>Scalable architecture</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Strategic Value</h4>
+                            <p class="why-content">
+                                Ensures organizational alignment through visual goal translation and measurable KPIs, and deliverables driving performance at every level with accountability.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Pulse -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Experience Pulse</h3>
+                        <p class="app-desc">
+                            <strong>Amplifies Engagement </strong><br>
+                            Transforms how HR leaders gauge employee engagement through real-time sentiment analysis with SMART questions and glassmorphic dashboards.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-heartbeat"></i> Core Capabilities</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <h4 class="feature-title">Sentiment Analysis</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>SMART pulse surveys</li>
+                                    <li>1-10 rating scales & open-text inputs</li>
+                                    <li>text responses</li>
+                                    <li>multiple choice questions</li>
+                                    <li>binary option questions</li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-poll"></i>
+                                    </div>
+                                    <h4 class="feature-title">Dynamic Interface</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Modal-based survey system</li>
+                                    <li>API-driven question loading</li>
+                                    <li>Glassmorphic design</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h4 class="feature-title">Cultural Analytics</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>RACI-aligned dashboards</li>
+                                    <li>Talent retention insights</li>
+                                    <li>Data-informed decisions</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Business Impact</h4>
+                            <p class="why-content">
+                                Harnesses real-time feedback to drive engagement and build thriving workplace culture through actionable insights and stunning visualizations.
+                                Cultivates Continuous improvement culture
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_ExperiencePulse.JPG' %}" alt="Pulse Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_ExperiencePulse_modal.JPG' %}" alt="Survey Modal">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Self Appraisal -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_SelfAppraisal_main.JPG' %}" alt="Appraisal Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_SelfAppraisal_goals.JPG' %}" alt="Goal Tracking">
+                        </div>
+                    </div>
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Self Appraisal</h3>
+                        <p class="app-desc">
+                            <strong>Elevate Performance with Structured Self-Assessment</strong><br>
+                            Empowers employees to drive their performance through SMART-aligned self-assessments with RACI accountability and chat-enabled feedback.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-user-edit"></i> Key Features</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <h4 class="feature-title">Self-Assessment</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Strategic Goals & KPIs linked deliverables self scoring</li>
+                                    <li>Document evidence submission confirmation and attachment as evidence of work</li>
+                                    <li>Short/long-term targets updating and tracking in real time</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <h4 class="feature-title">Interactive Feedback</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Real-time perfoma360Chat collaboration</li>
+                                    <li>Threaded replies & attachments strictly linked to strategic goals, kpis, and their deliverables</li>
+                                    <li>Context-specific metadata</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-network-wired"></i>
+                                    </div>
+                                    <h4 class="feature-title">RACI Integration</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Clear responsibility assignment</li>
+                                    <li>Cross-departmental alignment</li>
+                                    <li>Structured metrics flow</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Transformational Value</h4>
+                            <p class="why-content">
+                                Combines SMART-driven assessments with real-time collaboration to empower employee ownership of growth while providing managers actionable insights.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessor Appraisal -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Assessor Appraisal</h3>
+                        <p class="app-desc">
+                            <strong>Empowers Managers with Data-Driven Evaluations</strong><br>
+                            Equips managers with a robust platform to conduct structured, data-driven performance evaluations of surbodinates, real-time chat, and secure API data handling to track performance alignment to organizational goals.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-user-check"></i> Core Capabilities</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <h4 class="feature-title">Structured Assessments</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Score Surbodinates deliverables against their own self assesments as pulse for expectations alignment or lack thereof.</li>
+                                    <li>Document evidence validation</li>
+                                    <li>Progress tracking</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <h4 class="feature-title">Real-Time Collaboration</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Chat with threaded replies by responding to surbodinates issues specific to deliverables or initiating engagement</li>
+                                    <li>File attachments</li>
+                                    <li>Metadata filtering</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <h4 class="feature-title">Secure Data Management</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>API-driven data fetching</li>
+                                    <li>Persistent chat history</li>
+                                    <li>Organizational alignment</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Business Impact</h4>
+                            <p class="why-content">
+                                Redefines evaluations with SMART-driven assessments and real-time collaboration, fostering clarity and aligning performance with organizational success.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_AssessorAppraisal_main.JPG' %}" alt="Assessor Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_AssessorAppraisal_del.JPG' %}" alt="Deliverable Review">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SkillForge Pro -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">SkillForge Pro</h3>
+                        <p class="app-desc">
+                            <strong>Empower Professional Growth with embedded AI-Driven Insights and course and semminar recommendations for upskilling, and re-skilling</strong><br>
+                            SkillForge Pro transforms professional development with structured learning, real-time mentorship, and personalized AI insights, aligning individual growth with organizational objectives.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-graduation-cap"></i> Core Capabilities</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <h4 class="feature-title">Structured Learning</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Course tracking with visuals</li>
+                                    <li>SMART goal progress tracking</li>
+                                    <li>Dynamic visualizations</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <h4 class="feature-title">Real-Time Mentorship</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Performa360Chat integration</li>
+                                    <li>Dynamic mentor connectivity</li>
+                                    <li>Contextual and persistent chat history</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <h4 class="feature-title">AI Recommendations</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Personalized upskilling</li>
+                                    <li>Progress tracking sliders</li>
+                                    <li>Secure API integration</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Transformational Value</h4>
+                            <p class="why-content">
+                                Fosters continuous learning and collaboration with AI-driven insights and an engaging interface, aligning personal development with organizational success.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Skills_Goals_main.JPG' %}" alt="SkillForge Dashboard">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Skills_Goals_chat.JPG' %}" alt="Training Progress">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboards Section -->
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Management Dashboard</h3>
+                        <p class="app-desc">
+                            The Performa360 Management Dashboard is a strategic command center for leadership, offering a panoramic view of organizational health and performance metrics. Tailored for executives, it provides actionable insights into leadership effectiveness, goal alignment, skill gaps, and employee experience.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-chart-bar"></i> Key Features</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                    <h4 class="feature-title">Leadership Health Matrix</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Visualizes metrics like Leadership Effectiveness</li>
+                                    <li>Goal Alignment </li>
+                                    <li>Skill Gap Index and Experience Pulse </li>
+                                    <li>Year-on-year improvement tracking</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <h4 class="feature-title">Strategic Insights</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Bar graphs for goal misalignment</li>
+                                    <li>Doughnut charts for performance status</li>
+                                    <li>Line charts for KPI trends</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-filter"></i>
+                                    </div>
+                                    <h4 class="feature-title">Customizable Filters</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Department and review cycle filters</li>
+                                    <li>Date range selection</li>
+                                    <li>Cross-departmental analysis</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Strategic Value</h4>
+                            <p class="why-content">
+                                Enables Managers to monitor organizational health, align strategies, and drive performance with data-driven insights and dynamic visualizations.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards.jpg' %}" alt="Leadership Health Matrix">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_exec.jpg' %}" alt="Strategic Insight Grid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_hr1.jpg' %}" alt="Leadership 360 Insights">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_hr2.jpg' %}" alt="KPI Cascade Map">
+                        </div>
+                    </div>
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 HR Dashboard</h3>
+                        <p class="app-desc">
+                            The Performa360 HR Dashboard is designed for HR professionals, focusing on workforce analytics, leadership insights, and organizational alignment. It provides a comprehensive suite of tools to monitor employee performance, skill development, and engagement trends.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-users"></i> Key Features</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-radar"></i>
+                                    </div>
+                                    <h4 class="feature-title">Leadership 360 Insights</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Radar charts for leadership competencies</li>
+                                    <li>Word clouds for qualitative feedback</li>
+                                    <li>Holistic leadership impact view</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-project-diagram"></i>
+                                    </div>
+                                    <h4 class="feature-title">KPI Cascade Map</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Sankey diagram for objective flow</li>
+                                    <li>Alignment tracking (12% improvement)</li>
+                                    <li>Bottleneck identification</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <h4 class="feature-title">Workforce Analytics</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Gender donuts and tenure waterfalls</li>
+                                    <li>Department treemaps</li>
+                                    <li>Engagement trend lines</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Business Impact</h4>
+                            <p class="why-content">
+                                Empowers HR to optimize workforce performance, identify skill gaps, and enhance engagement through actionable analytics and intuitive visualizations.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Performa360 Staff Dashboard</h3>
+                        <p class="app-desc">
+                            The Performa360 Staff Dashboard empowers employees to take ownership of their performance and career development. It offers a personalized, intuitive interface to track individual progress, compare against peers, and set goals.
+                        </p>
+                        <h4 class="app-subtitle"><i class="fas fa-user"></i> Core Capabilities</h4>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </div>
+                                    <h4 class="feature-title">Personalized Metrics</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Performance score (8.5/10)</li>
+                                    <li>Peer rank (#3 of 20)</li>
+                                    <li>Tenure tracking (5 years)</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-bullseye"></i>
+                                    </div>
+                                    <h4 class="feature-title">Goal and Skill Visualizations</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Gantt charts for goal timelines</li>
+                                    <li>Heatmaps for skill proficiency</li>
+                                    <li>KPI progress bars (90% delivery)</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-header">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <h4 class="feature-title">Feedback and Milestones</h4>
+                                </div>
+                                <ul class="feature-list">
+                                    <li>Diverging bar charts for assessments</li>
+                                    <li>Milestone timelines</li>
+                                    <li>Interactive review cycle filters</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Transformational Value</h4>
+                            <p class="why-content">
+                                Fosters employee ownership of growth through personalized insights and interactive tools, aligning individual goals with organizational success.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_staff1.jpg' %}" alt="Goal Timeline">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_staff2.jpg' %}" alt="Skill Proficiency Matrix">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-section">
+                <div class="app-grid">
+                    <div class="app-content">
+                        <h3 class="app-title">Unified Design and Functionality</h3>
+                        <p class="app-desc">
+                            Each application in the Performa360 ecosystem is designed with a modern, responsive interface using Tailwind CSS and Plotly.js for dynamic visualizations. Narrative tiles occupy half the page width, providing detailed insights in a clean, readable format. The accompanying visuals, vertically aligned and full-height, utilize the remaining space to present data in an engaging, impactful manner. The consistent naming convention ("Performa360") reinforces brand unity, while customizable filters and real-time data fetching ensure relevance and precision across all user levels.
+                        </p>
+                        <div class="app-why">
+                            <h4 class="why-title"><i class="fas fa-lightbulb"></i> Why It Matters</h4>
+                            <p class="why-content">
+                                Seamlessly integrates data-driven insights with user-friendly design, ensuring stakeholders at all levels can make informed decisions efficiently.
+                            </p>
+                        </div>
+                        <a href="https://via.placeholder.com/video" class="video-link">Watch Demo <i class="fas fa-play"></i></a>
+                    </div>
+                    <div class="app-visuals">
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_unified1.jpg' %}" alt="Unified Interface">
+                        </div>
+                        <div class="app-visual">
+                            <img src="{% static 'admin/img/Perfoma360_Dashboards_unified2.jpg' %}" alt="Dynamic Visualizations">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="cta-section">
+        <h2 class="cta-title">Transform Performance Today</h2>
+        <p class="cta-desc">Unlock the power of Performa360's AI-driven ecosystem for unparalleled insights and growth.</p>
+        <a href="#" class="cta-button">Request a Full Demo <i class="fas fa-calendar-alt"></i></a>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+
+        // Set initial theme
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.app-section').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

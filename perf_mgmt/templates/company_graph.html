@@ -1,0 +1,805 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Management Hub Admin Dashboard - Performa360</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Light Theme */
+            --bg-primary: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border-light: #E2E8F0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88));
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --bg-primary: #0F172A;
+            --bg-card: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-light: #334155;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --glass-bg: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(30, 41, 59, 0.88));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .compact-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .compact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .chart-container {
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .metric-label {
+            font-size: 12px; /* Set to 12px as requested */
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .no-data {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 5px,
+                var(--border-light) 5px,
+                var(--border-light) 10px
+            );
+            border-radius: 1rem;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .platform-name {
+            color: #1ABB9C;
+            background: rgba(26, 187, 156, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .platform-name:hover {
+            background: rgba(26, 187, 156, 0.2);
+        }
+
+        .highlight-word {
+            color: #1ABB9C;
+        }
+
+        .decorative-underline::after {
+            content: '';
+            display: block;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent 0 2px, #1ABB9C 2px 4px);
+            margin-top: 0.5rem;
+        }
+
+        /* Compact Table */
+        .compact-table {
+            font-size: 0.75rem; /* Smaller font */
+            line-height: 1.2;
+        }
+
+        .compact-table th, .compact-table td {
+            padding: 0.5rem; /* Tighter padding */
+        }
+    </style>
+    
+    <script>
+    // Executive Chart Config
+    const executiveChartConfig = {
+        fontFamily: "'Inter', sans-serif",
+        colorAxis: 'var(--text-secondary)',
+        gridColor: 'var(--border-light)',
+        tooltipBackground: 'var(--bg-card)',
+        tooltipBorder: '1px solid var(--border-light)'
+    };
+    
+    // Enhanced Combined Chart
+    {% if trend_labels %}
+    new Chart(document.getElementById('combinedChart'), {
+        type: 'line',
+        data: {
+            labels: {{ trend_labels|safe }},
+            datasets: [{
+                label: 'Revenue',
+                data: {{ revenue_values|safe }},
+                borderColor: 'var(--accent-blue)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                backgroundColor: ctx => {
+                    const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                    gradient.addColorStop(0, 'rgba(42, 92, 255, 0.1)');
+                    gradient.addColorStop(1, 'rgba(42, 92, 255, 0)');
+                    return gradient;
+                },
+                pointRadius: 0,
+                pointHoverRadius: 6
+            },
+            {
+                type: 'bar',
+                label: 'New Companies',
+                data: {{ company_growth|safe }},
+                backgroundColor: 'rgba(0, 194, 181, 0.15)',
+                borderColor: 'var(--accent-teal)',
+                borderWidth: 1,
+                borderRadius: 8,
+                categoryPercentage: 0.8
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: executiveChartConfig.colorAxis,
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: executiveChartConfig.tooltipBackground,
+                    borderColor: executiveChartConfig.tooltipBorder,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 14 },
+                    padding: 12,
+                    cornerRadius: 8
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: executiveChartConfig.colorAxis }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: executiveChartConfig.gridColor },
+                    ticks: { 
+                        color: executiveChartConfig.colorAxis,
+                        callback: value => `$${value / 1000}k` 
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+    
+    // Executive Donut Chart
+    {% if region_dist_values %}
+    new Chart(document.getElementById('regionChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ region_dist_labels|safe }},
+            datasets: [{
+                data: {{ region_dist_values|safe }},
+                backgroundColor: ['var(--accent-blue)', 'var(--accent-teal)', 'var(--accent-purple)'],
+                borderWidth: 0,
+                spacing: 8
+            }]
+        },
+        options: {
+            cutout: '80%',
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: executiveChartConfig.colorAxis,
+                        padding: 16,
+                        boxWidth: 8
+                    }
+                },
+                tooltip: {
+                    bodyColor: executiveChartConfig.colorAxis,
+                    displayColors: false
+                }
+            }
+        }
+    });
+    {% endif %}
+    
+    // Enhanced Table Styling
+    document.querySelectorAll('.executive-table').forEach(table => {
+        table.style.borderCollapse = 'separate';
+        table.style.borderSpacing = '0 8px';
+    });
+    </script>
+</head>
+<body>
+    <header class="bg-gradient-to-r from-slate-900 to-blue-900 shadow-2xl fixed w-full z-20 border-b border-blue-800/50">
+        <div class="max-w-8xl mx-auto px-6 py-3">
+            <div class="flex items-center justify-between space-x-6">
+                <!-- Branding Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-teal-400 rounded-lg shadow-lg"></div>
+                    <h1 class="text-xl font-semibold tracking-tight text-white platform-name">
+                        <span class="bg-gradient-to-r from-blue-400 to-teal-300 bg-clip-text text-transparent">
+                            Performance Management Hub
+                        </span>
+                        <span class="decorative-underline block h-0.5 w-12 mt-1 bg-gradient-to-r from-blue-500 to-teal-400 rounded-full"></span>
+                    </h1>
+                </div>
+    
+                <!-- Filter Controls -->
+                <form class="flex-1 flex items-center space-x-4 max-w-4xl" method="GET">
+                    <!-- Company Select -->
+                    <div class="relative flex-1">
+                        <select name="company" id="company-filter" 
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 backdrop-blur-sm text-gray-100 rounded-lg 
+                                       border border-slate-700 hover:border-blue-400 focus:border-blue-400 
+                                       focus:ring-2 focus:ring-blue-400/30 transition-all cursor-pointer appearance-none">
+                            <option value="all">All Companies</option>
+                            {% for company in all_companies %}
+                            <option value="{{ company }}" {% if company == current_filters.company %}selected{% endif %}>
+                                {{ company }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <i class="fas fa-building absolute left-3 top-3 text-slate-400 text-sm"></i>
+                    </div>
+    
+                    <!-- Region Select -->
+                    <div class="relative flex-1">
+                        <select name="region" id="region-filter" 
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 backdrop-blur-sm text-gray-100 rounded-lg 
+                                       border border-slate-700 hover:border-teal-400 focus:border-teal-400 
+                                       focus:ring-2 focus:ring-teal-400/30 transition-all cursor-pointer appearance-none">
+                            <option value="all">All Regions</option>
+                            {% for region in all_regions %}
+                            <option value="{{ region.region_branch }}" data-company="{{ region.company }}"
+                                    {% if region.region_branch == current_filters.region %}selected{% endif %}>
+                                {{ region.region_branch }} ({{ region.company }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <i class="fas fa-map-marker-alt absolute left-3 top-3 text-slate-400 text-sm"></i>
+                    </div>
+    
+                    <!-- Date Range -->
+                    <div class="flex items-center space-x-2 flex-1">
+                        <div class="relative flex-1">
+                            <input type="date" name="start_date" 
+                                   class="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 backdrop-blur-sm text-gray-100 rounded-lg 
+                                          border border-slate-700 hover:border-blue-400 focus:border-blue-400 
+                                          focus:ring-2 focus:ring-blue-400/30 transition-all"
+                                   value="{{ current_filters.start_date|date:'Y-m-d' }}">
+                            <i class="fas fa-calendar-alt absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        </div>
+                        <span class="text-slate-400">–</span>
+                        <div class="relative flex-1">
+                            <input type="date" name="end_date" 
+                                   class="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 backdrop-blur-sm text-gray-100 rounded-lg 
+                                          border border-slate-700 hover:border-blue-400 focus:border-blue-400 
+                                          focus:ring-2 focus:ring-blue-400/30 transition-all"
+                                   value="{{ current_filters.end_date|date:'Y-m-d' }}">
+                            <i class="fas fa-calendar-day absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        </div>
+                    </div>
+    
+                    <!-- Apply Button -->
+                    <button type="submit" 
+                            class="bg-blue-600/30 hover:bg-blue-600/50 text-blue-100 px-4 py-2.5 rounded-lg 
+                                   hover:shadow-lg hover:scale-[1.02] transition-all flex items-center space-x-2">
+                        <i class="fas fa-filter text-sm"></i>
+                        <span>Apply</span>
+                    </button>
+                </form>
+    
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" 
+                        class="bg-blue-600/30 hover:bg-blue-600/50 text-blue-100 px-4 py-2.5 rounded-lg 
+                               hover:shadow-lg hover:scale-[1.02] transition-all flex items-center space-x-2">
+                    <i class="fas fa-moon text-sm"></i>
+                    <span>Toggle Theme</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-28 px-6 pb-8 max-w-8xl mx-auto">
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+            <div class="compact-card p-4 bg-gradient-to-br from-blue-900 to-blue-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-building fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Total Companies</div>
+                        <div class="metric-value">{{ total_companies }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compact-card p-4 bg-gradient-to-br from-purple-900 to-purple-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-map-marker-alt fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Companies with Regions</div>
+                        <div class="metric-value">{{ companies_with_regions }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compact-card p-4 bg-gradient-to-br from-teal-900 to-teal-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-users fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Total Users</div>
+                        <div class="metric-value">{{ total_users }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compact-card p-4 bg-gradient-to-br from-emerald-900 to-emerald-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-dollar-sign fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Monthly Revenue (USD)</div>
+                        <div class="metric-value">${{ total_monthly_revenue|floatformat:2 }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compact-card p-4 bg-gradient-to-br from-rose-900 to-rose-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-chart-line fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Expected Revenue (USD)</div>
+                        <div class="metric-value">${{ total_expected_revenue|floatformat:2 }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compact-card p-4 bg-gradient-to-br from-indigo-900 to-indigo-800 text-white">
+                <div class="flex items-center">
+                    <i class="fas fa-globe fa-lg mr-3"></i>
+                    <div>
+                        <div class="metric-label">Avg Regions/Company</div>
+                        <div class="metric-value">{{ avg_regions_per_company|floatformat:1 }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualization Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Revenue & Company Growth -->
+            <div class="compact-card p-6 lg:col-span-2">
+                <h2 class="text-xl font-bold mb-4">Revenue & Company Growth</h2>
+                <div class="chart-container h-96">
+                    {% if trend_labels %}
+                        <canvas id="combinedChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No revenue or company growth data available</div>
+                    {% endif %}
+                </div>
+                <div class="mt-4 bg-slate-50 dark:bg-slate-800 p-4 rounded-xl">
+                    <div class="flex items-center">
+                        <i class="fas fa-lightbulb text-emerald-500 mr-2"></i>
+                        <div>
+                            <span class="font-semibold">Key Insight:</span>
+                            <p class="text-sm">Revenue peaked in {{ peak_month }} with ${{ peak_revenue|floatformat:2 }} USD, representing {{ peak_percentage }}% of annual revenue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Region Distribution -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Region Distribution</h2>
+                <div class="chart-container h-64">
+                    {% if region_dist_values|length > 0 and region_dist_values|length == region_dist_labels|length %}
+                        <canvas id="regionChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No region data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Payment Cycles -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Payment Cycles</h2>
+                <div class="chart-container h-64">
+                    {% if payment_cycle_labels %}
+                        <canvas id="paymentCycleChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No payment cycle data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Companies per Country -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Companies per Country</h2>
+                <div class="chart-container h-64">
+                    {% if country_labels %}
+                        <canvas id="countryChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No country data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Companies per Continent -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Companies per Continent</h2>
+                <div class="chart-container h-64">
+                    {% if continent_labels %}
+                        <canvas id="continentChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No continent data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Companies per City -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Companies per City</h2>
+                <div class="chart-container h-64">
+                    {% if city_labels %}
+                        <canvas id="cityChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No city data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Companies per Industry -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Companies per Industry</h2>
+                <div class="chart-container h-64">
+                    {% if industry_labels %}
+                        <canvas id="industryChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No industry data available</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Company Activity Status -->
+            <div class="compact-card p-6">
+                <h2 class="text-xl font-bold mb-4">Company Activity Status</h2>
+                <div class="chart-container h-64">
+                    {% if company_status_labels %}
+                        <canvas id="companyStatusChart"></canvas>
+                    {% else %}
+                        <div class="no-data">No company status data available</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Details Table -->
+        <div class="mt-6 compact-card p-6">
+            <h2 class="text-xl font-bold mb-4">Company Details</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full compact-table text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-800">
+                            <th class="p-2 text-left">Company</th>
+                            <th class="p-2 text-left">Regions</th>
+                            <th class="p-2 text-left">Users</th>
+                            <th class="p-2 text-left">Total Payable</th>
+                            <th class="p-2 text-left">Monthly Installment</th>
+                            <th class="p-2 text-left">Currency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in company_details %}
+                            <tr class="border-b border-slate-200 dark:border-slate-700">
+                                <td class="p-2">{{ company.name }}</td>
+                                <td class="p-2">{{ company.regions|join:", " }}</td>
+                                <td class="p-2">{{ company.users }}</td>
+                                <td class="p-2">{{ company.currency }} {{ company.total_payable|floatformat:2 }}</td>
+                                <td class="p-2">{{ company.currency }} {{ company.monthly_installment|floatformat:2 }}</td>
+                                <td class="p-2">{{ company.currency }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="p-2 text-center">No companies found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.setAttribute(
+                'data-theme',
+                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+            themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark'
+                ? '<i class="fas fa-sun mr-2"></i> Light Mode'
+                : '<i class="fas fa-moon mr-2"></i> Dark Mode';
+        });
+
+        // Dynamic Region Dropdown
+        const companyFilter = document.getElementById('company-filter');
+        const regionFilter = document.getElementById('region-filter');
+        const allRegions = Array.from(regionFilter.options).slice(1); // Exclude "All Regions"
+
+        companyFilter.addEventListener('change', () => {
+            const selectedCompany = companyFilter.value;
+            regionFilter.innerHTML = '<option value="all">All Regions</option>';
+            if (selectedCompany === 'all') {
+                allRegions.forEach(option => regionFilter.appendChild(option.cloneNode(true)));
+            } else {
+                allRegions
+                    .filter(option => option.dataset.company === selectedCompany)
+                    .forEach(option => regionFilter.appendChild(option.cloneNode(true)));
+            }
+        });
+
+        // Chart Configurations
+        const chartConfig = {
+            fontFamily: "'Inter', sans-serif",
+            colorAxis: 'var(--text-secondary)',
+            gridColor: 'var(--border-light)',
+            tooltipBackground: 'var(--bg-card)',
+            tooltipBorder: '1px solid var(--border-light)',
+            tooltipShadow: 'var(--shadow-sm)'
+        };
+
+        {% if trend_labels %}
+        new Chart(document.getElementById('combinedChart'), {
+            type: 'line',
+            data: {
+                labels: {{ trend_labels|safe }},
+                datasets: [{
+                    label: 'Monthly Revenue',
+                    data: {{ revenue_values|safe }},
+                    borderColor: '#3B82F6',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: ctx => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
+                        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+                        return gradient;
+                    }
+                },
+                {
+                    type: 'bar',
+                    label: 'New Companies',
+                    data: {{ company_growth|safe }},
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: '#10B981',
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { color: chartConfig.colorAxis, usePointStyle: true } },
+                    tooltip: {
+                        backgroundColor: chartConfig.tooltipBackground,
+                        borderColor: chartConfig.tooltipBorder,
+                        borderWidth: 1,
+                        titleColor: 'var(--text-primary)',
+                        bodyColor: 'var(--text-secondary)',
+                        padding: 12
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: chartConfig.colorAxis } },
+                    y: { beginAtZero: true, grid: { color: chartConfig.gridColor }, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if region_dist_values|length > 0 and region_dist_values|length == region_dist_labels|length %}
+        new Chart(document.getElementById('regionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: {{ region_dist_labels|safe }},
+                datasets: [{
+                    data: {{ region_dist_values|safe }},
+                    backgroundColor: ['#EF4444', '#10B981', '#3B82F6'],
+                    borderWidth: 2,
+                    borderColor: 'var(--bg-card)'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'right', labels: { color: chartConfig.colorAxis } },
+                    tooltip: {
+                        backgroundColor: chartConfig.tooltipBackground,
+                        borderColor: chartConfig.tooltipBorder
+                    }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if payment_cycle_labels %}
+        new Chart(document.getElementById('paymentCycleChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ payment_cycle_labels|safe }},
+                datasets: [{
+                    data: {{ payment_cycle_values|safe }},
+                    backgroundColor: '#3B82F6',
+                    borderRadius: 8,
+                    categoryPercentage: 0.8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { grid: { display: false }, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if country_labels %}
+        new Chart(document.getElementById('countryChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ country_labels|safe }},
+                datasets: [{
+                    label: 'Companies',
+                    data: {{ country_values|safe }},
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: '#3B82F6',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Companies per Country', color: 'var(--text-primary)' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if continent_labels %}
+        new Chart(document.getElementById('continentChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ continent_labels|safe }},
+                datasets: [{
+                    label: 'Companies',
+                    data: {{ continent_values|safe }},
+                    backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                    borderColor: '#10B981',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Companies per Continent', color: 'var(--text-primary)' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if city_labels %}
+        new Chart(document.getElementById('cityChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ city_labels|safe }},
+                datasets: [{
+                    label: 'Companies',
+                    data: {{ city_values|safe }},
+                    backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                    borderColor: '#EF4444',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Companies per City', color: 'var(--text-primary)' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if industry_labels %}
+        new Chart(document.getElementById('industryChart'), {
+            type: 'bar',
+            data: {
+                labels: {{ industry_labels|safe }},
+                datasets: [{
+                    label: 'Companies',
+                    data: {{ industry_values|safe }},
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: '#3B82F6',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Companies per Industry', color: 'var(--text-primary)' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: chartConfig.colorAxis } }
+                }
+            }
+        });
+        {% endif %}
+
+        {% if company_status_labels %}
+        new Chart(document.getElementById('companyStatusChart'), {
+            type: 'pie',
+            data: {
+                labels: {{ company_status_labels|safe }},
+                datasets: [{
+                    data: {{ company_status_values|safe }},
+                    backgroundColor: ['#4BC0C0', '#FF6384']
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: chartConfig.colorAxis } },
+                    title: { display: true, text: 'Company Activity Status (%)', color: 'var(--text-primary)' }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
