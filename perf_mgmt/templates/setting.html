@@ -3035,435 +3035,1070 @@
     </div>
 </body>
 
-<!-- Strategic Goals Modal -->
-<div id="sg-modal-overlay" class="sg-modal-overlay">
-    <div class="sg-modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <h2 class="modal-title">Strategic Goal Configuration Modal</h2>
-            <button class="modal-close" onclick="sgCloseModal()">×</button>
-        </div>
-        
-        <div class="modal-body">
-            <!-- Left Column - Targets and Risks -->
-            <div class="milestones-targets-container">
-                <!-- Header Section -->
-                <div class="container-header">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i class="fas fa-bullseye" style="font-size: 24px; color: #ffffff;"></i>
-                        <h2 style="margin: 0; font-size: 20px; font-weight: 600;">Milestones & Targets</h2>
-                    </div>
-                    <div>
-                        <button class="add-milestone-btn" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                            <i class="fas fa-plus"></i> Add Milestone
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Content Section -->
-                <div class="container-content">
-                    <!-- Progress Overview -->
-                    <div class="progress-overview">
-                        <div class="progress-item">
-                            <div class="progress-circle" style="background: conic-gradient(#198754 75%, #e9ecef 0%);">
-                                <span style="font-weight: 600; color: #198754;"></span>
-                            </div>
-                            <span style="font-size: 14px; color: #6c757d;">Short-term</span>
-                        </div>
-                        <div class="progress-item">
-                            <div class="progress-circle" style="background: conic-gradient(#0d6efd 50%, #e9ecef 0%);">
-                                <span style="font-weight: 600; color: #0d6efd;"></span>
-                            </div>
-                            <span style="font-size: 14px; color: #6c757d;">Medium-term</span>
-                        </div>
-                        <div class="progress-item">
-                            <div class="progress-circle" style="background: conic-gradient(#6c757d 25%, #e9ecef 0%);">
-                                <span style="font-weight: 600; color: #6c757d;"></span>
-                            </div>
-                            <span style="font-size: 14px; color: #6c757d;">Long-term</span>
-                        </div>
-                    </div>
-<br>                   
-                    <!-- Targets Configuration -->
-                    <div class="target-configuration">
-                        <!-- Long-term Target Tile -->
-                        <div class="target-tile" style="border-left-color: #6c757d;">
-                            <div class="sg-form-group">
-                                <label class="sg-form-label">
-                                    <i class="fas fa-long-arrow-alt-right" style="color: #6c757d; margin-right: 8px;"></i> 
-                                    Long-term Target
-                                    <select id="long-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
-                                        <option value="">Auto set deadline</option>
-                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
-                                        <option value="one-month">One month</option>
-                                        <option value="cycle-quarter">Cycle quarter</option>
-                                        <option value="cycle-mid-term">Cycle mid-term</option>
-                                        <option value="cycle-third-quarter">Cycle third quarter</option>
-                                        <option value="cycle-end-date">Cycle end-date</option>
-                                        <option value="review-period-quarter">Review period quarter</option>
-                                        <option value="review-period-mid-term">Review period mid-term</option>
-                                        <option value="review-period-third-quarter">Review period third quarter</option>
-                                        <option value="period-end-date">Review Period end-date</option>
-                                    </select>
-                                </label>
-                                <div class="target-container">
-                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
-                                        <input type="number" id="long-term-target" class="modern-input" placeholder="Target Value">
-                                        <select id="long-term-target-uom" class="beautiful-select2">
-                                            <option value="">UoM</option>
-                                        </select>
-                                        <input type="date" id="long-term-target-end-date" class="modern-input">
-                                    </div>
-                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
-                                        <input type="number" id="long-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
-                                        <input type="number" id="long-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
-                                        <select id="long-term-budget-uom" class="beautiful-select2">
-                                            <option value="">Currency</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-<br>
-                        <!-- Medium-term Target Tile -->
-                        <div class="target-tile" style="border-left-color: #0d6efd;">
-                            <div class="sg-form-group">
-                                <label class="sg-form-label">
-                                    <i class="fas fa-arrow-right" style="color: #0d6efd; margin-right: 8px;"></i> 
-                                    Medium-term Target
-                                    <select id="medium-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
-                                        <option value="">Auto set deadline</option>
-                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
-                                        <option value="one-month">One month</option>
-                                        <option value="cycle-quarter">Cycle quarter</option>
-                                        <option value="cycle-mid-term">Cycle mid-term</option>
-                                        <option value="cycle-third-quarter">Cycle third quarter</option>
-                                        <option value="cycle-end-date">Cycle end-date</option>
-                                        <option value="review-period-quarter">Review period quarter</option>
-                                        <option value="review-period-mid-term">Review period mid-term</option>
-                                        <option value="review-period-third-quarter">Review period third quarter</option>
-                                        <option value="period-end-date">Review Period end-date</option>
-                                    </select>
-                                </label>
-                                <div class="target-container">
-                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
-                                        <input type="number" id="medium-term-target" class="modern-input" placeholder="Target Value">
-                                        <select id="medium-term-target-uom" class="beautiful-select2">
-                                            <option value="">UoM</option>
-                                        </select>
-                                        <input type="date" id="medium-term-target-end-date" class="modern-input">
-                                    </div>
-                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
-                                        <input type="number" id="medium-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
-                                        <input type="number" id="medium-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
-                                        <select id="medium-term-budget-uom" class="beautiful-select2">
-                                            <option value="">Currency</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-<br>
-                        <!-- Short-term Target Tile -->
-                        <div class="target-tile" style="border-left-color: #198754;">
-                            <div class="sg-form-group">
-                                <label class="sg-form-label">
-                                    <i class="fas fa-arrow-right" style="color: #198754; margin-right: 8px;"></i> 
-                                    Short-term Target
-                                    <select id="short-term-target-type" class="beautiful-select2" style="margin-left: 10px; flex-grow: 1;">
-                                        <option value="">Auto set deadline</option>
-                                        <option value="specify-end-of-cycle">Specify end of cycle</option>
-                                        <option value="one-month">One month</option>
-                                        <option value="cycle-quarter">Cycle quarter</option>
-                                        <option value="cycle-mid-term">Cycle mid-term</option>
-                                        <option value="cycle-third-quarter">Cycle third quarter</option>
-                                        <option value="cycle-end-date">Cycle end-date</option>
-                                        <option value="review-period-quarter">Review period quarter</option>
-                                        <option value="review-period-mid-term">Review period mid-term</option>
-                                        <option value="review-period-third-quarter">Review period third quarter</option>
-                                        <option value="period-end-date">Review Period end-date</option>
-                                    </select>
-                                </label>
-                                <div class="target-container">
-                                    <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
-                                        <input type="number" id="short-term-target" class="modern-input" placeholder="Target Value">
-                                        <select id="short-term-target-uom" class="beautiful-select2">
-                                            <option value="">UoM</option>
-                                        </select>
-                                        <input type="date" id="short-term-target-end-date" class="modern-input">
-                                    </div>
-                                    <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
-                                        <input type="number" id="short-term-target-required-budget" class="modern-input" placeholder="Req. Budget">
-                                        <input type="number" id="short-term-target-actual-budget" class="modern-input" placeholder="Actual Budget">
-                                        <select id="short-term-budget-uom" class="beautiful-select2">
-                                            <option value="">Currency</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Footer Section -->
-                <div class="container-footer">
-                    <div style="font-size: 14px; color: #6c757d;">
-                        <i class="fas fa-info-circle" style="margin-right: 8px;"></i> Targets help track progress toward strategic objectives
-                    </div>
-                </div>
-<br>
-<!-- Risk Assessment Section -->
-<div class="risk-assessment-section" style="margin-top: 30px;">
-<!-- Section Header (Reduced Width by 10%) -->
-<div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; width: 90%; margin-left: auto; margin-right: auto;">
-    <div class="icon-wrapper" style="background: rgba(220, 53, 69, 0.1); width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-        <i class="fas fa-shield-alt" style="font-size: 25px; color: #dc3545;"></i>
-    </div>
-    <div>
-        <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 1.1rem;">Risk Management Framework</h3>
-        <p style="color: #6c757d; line-height: 1.5; font-size: 0.9rem;">
-            Proactively identify and mitigate potential risks that could impact your strategic objectives. 
-            Assess risk severity, assign ownership, and document mitigation strategies to ensure 
-            organizational resilience and goal achievement.
-        </p>
-    </div>
-</div>
-<br>
-<!-- Risk Assessment Indicators (Reduced Width by 10%) -->
-<div class="risk-indicators" style="display: flex; gap: 12px; margin-bottom: 25px; width: 90%; margin-left: auto; margin-right: auto;">
-    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 5px;">
-        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
-            <i class="fas fa-thermometer-quarter"></i>
-        </div>
-        <div>
-            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Risk Exposure</div>
-            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
-        </div>
-    </div>
-    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
-            <i class="fas fa-clock"></i>
-        </div>
-        <div>
-            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Response Time</div>
-            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
-        </div>
-    </div>
-    <div class="indicator" style="flex: 1; background: #f8f9fa; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-        <div class="indicator-icon" style="color: #dc3545; font-size: 18px;">
-            <i class="fas fa-user-shield"></i>
-        </div>
-        <div>
-            <div class="indicator-label" style="font-size: 11px; color: #6c757d;">Ownership</div>
-            <div class="indicator-value" style="font-weight: 600; font-size: 14px;"></div>
-        </div>
-    </div>
-</div>
-<br>
-<!-- Risk Assessment Tile (Reduced Width by 10%) -->
-<div class="target-tile" style="border-left-color: #dc3545; width: 90%; margin-left: auto; margin-right: auto;">
-    <div class="sg-form-group">
-        <label class="sg-form-label" style="font-size: 0.95rem;">
-            <i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 6px; font-size: 16px;"></i> 
-            Risk Assessment
-        </label>
-        <div class="target-container">
-            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px;">
-                <select id="risk-assessment-type" class="beautiful-select2" style="padding: 10px 12px;">
-                    <option value="">Select Risk Type</option>
-                    <option value="financial">Financial Risk</option>
-                    <option value="operational">Operational Risk</option>
-                    <option value="strategic">Strategic Risk</option>
-                    <option value="compliance">Compliance Risk</option>
-                </select>
-                <select id="risk-severity" class="beautiful-select2" style="padding: 10px 12px;">
-                    <option value="">Severity Level</option>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="critical">Critical</option>
-                </select>
-            </div>
-            <div class="budget-input-group" style="grid-template-columns: 1fr; margin-top: 10px;">
-                <textarea id="risk-mitigation" class="modern-input" placeholder="Mitigation Strategy" rows="2" style="padding: 10px 12px;"></textarea>
-            </div>
-            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                <select id="risk-owner" class="beautiful-select2" style="padding: 10px 12px;">
-                    <option value="">Risk Owner</option>
-                    <option value="finance">Finance Department</option>
-                    <option value="operations">Operations Team</option>
-                    <option value="it">IT Department</option>
-                    <option value="management">Senior Management</option>
-                </select>
-                <input type="date" id="risk-mitigation-date" class="modern-input" placeholder="Target Mitigation Date" style="padding: 10px 12px;">
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-            <!-- Right Column - Strategic Goal Form -->
-            <div class="sg-form-column">
-                <div class="instructions">
-                    <h3><i class="fas fa-drag-icon"></i> How to Prioritize Goals</h3>
-                    <ul>
-                        <li>Drag and drop goal types to order them based on priority or select the only priority as the highest priority</li>
-                        <li>Goals at the top have higher strategic importance</li>
-                        <li>Click on a goal to configure its details</li>
-                    </ul>
-                </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Goal Configuration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="sg-type-select">
-                        <i class="fas fa-drag-icon"></i> Goal Type (Drag to reorder priority)
-                    </label>
-                    <div class="goal-types-container" id="goalTypesContainer">
-                        <div class="goal-type-card" draggable="true" data-type="Internal Business Processes">
-                            <i class="fas fa-cogs"></i> Internal Business Processes
-                        </div>
-                        <div class="goal-type-card" draggable="true" data-type="Financial Perspective">
-                            <i class="fas fa-seedling"></i> Financial Perspective
-                        </div>
-                        <div class="goal-type-card" draggable="true" data-type="Customer Perspective">
-                            <i class="fas fa-shield-alt"></i> Customer Perspective
-                        </div>
-                        <div class="goal-type-card" draggable="true" data-type="Learning & Growth">
-                            <i class="fas fa-users"></i> Learning & Growth
-                        </div>
-                    </div>
-                    <div class="priority-textboxes">
-                        <input type="text" class="priority-textbox highest-priority" value="Highest Priority" readonly>
-                        <input type="text" class="priority-textbox high-priority" value="High Priority" readonly>
-                        <input type="text" class="priority-textbox medium-priority" value="Medium Priority" readonly>
-                        <input type="text" class="priority-textbox lowest-priority" value="Lowest Priority" readonly>
-                    </div>
-                    <button id="reset-button" class="refresh-icon" title="Refresh">
-                        <span class="text">Reset</span>
-                        <span class="icon">↻</span>
-                    </button>
-                </div>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
+        .sg-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .sg-modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .sg-form-group {
+            margin-bottom: 25px;
+        }
+
+        .sg-form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-size: 1rem;
+        }
+
+        .sg-form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .sg-form-select:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+
+        .framework-buttons-container {
+            margin: 30px 0;
+        }
+
+        .framework-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .framework-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .framework-btn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2d3748;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .framework-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .framework-btn i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .framework-btn span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .raci-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .smart-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .framework-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .framework-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: modalSlideUp 0.4s ease;
+        }
+
+        .framework-modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .framework-modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .framework-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .framework-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .framework-modal-body {
+            padding: 30px;
+        }
+
+        .framework-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .framework-intro i {
+            font-size: 3rem;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+
+        .framework-intro h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .framework-intro p {
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .framework-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .framework-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #6a11cb;
+        }
+
+        .framework-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .framework-section h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .framework-section h4 i {
+            color: #6a11cb;
+        }
+
+        .framework-section .section-content {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .sg-form-group {
+            margin-bottom: 20px;
+        }
+
+        .sg-form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .sg-form-select, .beautiful-select2, .modern-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .sg-form-select:focus, .beautiful-select2:focus, .modern-input:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+
+        .target-tile {
+            border-left: 4px solid;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .target-input-group, .budget-input-group {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .goal-types-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .goal-type-card {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .goal-type-card:hover {
+            background: #e9ecef;
+        }
+
+        .priority-textboxes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .priority-textbox {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #f8f9fa;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        #reset-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .risk-assessment-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .risk-indicators {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .indicator {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .indicator-icon {
+            color: #dc3545;
+            font-size: 16px;
+        }
+
+        .indicator-label {
+            font-size: 10px;
+            color: #6c757d;
+        }
+
+        .indicator-value {
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .framework-modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            background: #f8f9fa;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .add-target-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            background: #f8f9fa;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        #openStrategicGoalsRetrieveModal, .save-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            height: 40px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        #openStrategicGoalsRetrieveModal {
+            background: linear-gradient(135deg, #1abb9c 0%, #149f83 100%);
+        }
+
+        #openStrategicGoalsRetrieveModal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 187, 156, 0.3);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .framework-buttons {
+                flex-direction: column;
+            }
+            
+            .framework-modal-content {
+                width: 95%;
+            }
+            
+            .framework-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .priority-textboxes {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Strategic Goals Modal -->
+    <div id="sg-modal-overlay" class="sg-modal-overlay">
+        <div class="sg-modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title">Strategic Goal Configuration</h2>
+                <button class="modal-close" onclick="sgCloseModal()">×</button>
+            </div>
+            
+            <div class="modal-body">
                 <div class="sg-form-group">
-                    <label class="sg-form-label" for="sg-goal-select">
+                    <label class="sg-form-label" for="strategic-goal-select">
                         <i class="fas fa-bullseye"></i> Strategic Goal
                     </label>
-                    <select id="sg-goal-select" class="sg-form-select">
-                        <option value="">Select</option>
+                    <select id="strategic-goal-select" class="sg-form-select">
+                        <option value="">Select a Strategic Goal</option>
+                        <option value="increase-revenue">Increase Revenue by 20%</option>
+                        <option value="improve-efficiency">Improve Operational Efficiency</option>
+                        <option value="expand-market">Expand Market Presence</option>
+                        <option value="enhance-customer">Enhance Customer Satisfaction</option>
                     </select>
                 </div>
 
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="sg-weight-input">
-                        <i class="fas fa-balance-scale"></i> Weight Allocation
-                    </label>
-                    <input list="sg-weight-options" class="sg-form-select" id="sg-weight-input">
-                    <datalist id="sg-weight-options">
-                        <option value="0%">0%</option>
-                        <option value="5%">5%</option>
-                        <option value="10%">10%</option>
-                        <option value="15%">15%</option>
-                        <option value="20%">20%</option>
-                        <option value="25%">25%</option>
-                        <option value="30%">30%</option>
-                        <option value="35%">35%</option>
-                        <option value="40%">40%</option>
-                        <option value="45%">45%</option>
-                        <option value="50%">50%</option>
-                        <option value="55%">55%</option>
-                        <option value="60%">60%</option>
-                        <option value="65%">65%</option>
-                        <option value="70%">70%</option>
-                        <option value="75%">75%</option>
-                        <option value="80%">80%</option>
-                        <option value="85%">85%</option>
-                        <option value="90%">90%</option>
-                        <option value="95%">95%</option>
-                        <option value="100%">100%</option>
-                    </datalist>
-                </div>
-
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="individual-goal-select">
-                        <i class="fas fa-user-tie"></i> Individual Based Strategic Goal
-                    </label>
-                    <select id="individual-goal-select" class="beautiful-select2">
-                        <option value="">Select Individual Goal</option>
-                        <option value="kpi">Key Performance Indicator</option>
-                        <option value="development">Professional Development</option>
-                        <option value="innovation">Innovation Contribution</option>
-                        <option value="leadership">Leadership Objective</option>
-                    </select>
-                </div>
-
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="informed-select">
-                        <i class="fas fa-info-circle"></i> Informed
-                    </label>
-                    <select id="informed-select" class="beautiful-select2" multiple="multiple">
-                        <option value="stakeholders">Key Stakeholders</option>
-                        <option value="team">Team Members</option>
-                        <option value="management">Senior Management</option>
-                        <option value="board">Board of Directors</option>
-                    </select>
-                </div>
-
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="dependencies-input">
-                        <i class="fas fa-project-diagram"></i> Dependencies
-                    </label>
-                    <textarea id="dependencies-input" class="modern-input" placeholder="List any dependencies or prerequisites" rows="2"></textarea>
-                </div>
-
-                <div class="date-picker-card" style="width: 200%;">
-                    <label for="sg-date-picker" class="sg-form-label">
-                        <i class="fas fa-calendar-alt"></i> Due Date
-                    </label>
-                    <div class="date-input-group" style="width: 190%;">
-                        <input type="date" id="sg-date-picker" class="date-input">
-                        <button type="button" id="end-of-review-btn" class="date-action-btn">
-                            <span>End of Appraisal Period</span>
-                            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
+                <div class="framework-buttons-container" id="frameworkButtons">
+                    <div class="framework-buttons">
+                        <button class="framework-btn raci-btn" onclick="openRACIModal()">
+                            <i class="fas fa-users-cog"></i>
+                            <span>RACI Framework</span>
+                            <div class="tooltip">Assign roles: Responsible, Accountable, Consulted, and Informed for clear task ownership.</div>
+                        </button>
+                        
+                        <button class="framework-btn smart-btn" onclick="openSMARTModal()">
+                            <i class="fas fa-bullseye"></i>
+                            <span>SMART Framework</span>
+                            <div class="tooltip">Set goals that are Specific, Measurable, Achievable, Relevant, and Time-bound.</div>
                         </button>
                     </div>
                 </div>
-             
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="departmentSelect">
-                        <i class="fas fa-building"></i> Primary Goal Owner (Department)
-                    </label>
-                    <select id="departmentSelect" class="sg-form-select" style="color: black;">
-                        <option value="">Select departments</option>
-                    </select>
-                    <div class="tags-container" id="tags-container">
-                        <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
-                    </div>
-                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button id="openStrategicGoalsRetrieveModal" class="btn">
+                    <i class="fas fa-download"></i> Retrieve
+                </button>
+                <button class="save-btn" onclick="saveStrategicGoals()">
+                    <i class="fas fa-save"></i> Save & View Table
+                </button>
+            </div>
+        </div>
+    </div>
 
-                <div class="sg-form-group">
-                    <label class="sg-form-label" for="departmentSelect">
-                        <i class="fas fa-building"></i> Secondary Goal Owner(s) (Department(s))
-                    </label>
-                    <select id="departmentSelect1" class="sg-form-select" style="color: black;">
-                        <option value="">Select departments</option>
-                    </select>
-                    <div class="tags-container" id="tags-container1">
-                        <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
+    <!-- RACI Modal -->
+    <div id="raci-modal" class="framework-modal">
+        <div class="framework-modal-content">
+            <div class="framework-modal-header">
+                <h3><i class="fas fa-users-cog"></i> RACI Framework</h3>
+                <button class="framework-modal-close" onclick="closeRACIModal()">×</button>
+            </div>
+            <div class="framework-modal-body">
+                <div class="framework-intro">
+                    <i class="fas fa-users-cog"></i>
+                    <h4>Define Clear Roles and Responsibilities</h4>
+                    <p>The RACI framework helps you assign clear roles and responsibilities for your strategic goal. Identify who is Responsible, Accountable, Consulted, and Informed to ensure everyone understands their role in achieving success.</p>
+                </div>
+                
+                <div class="framework-sections">
+                    <div class="framework-section">
+                        <h4><i class="fas fa-user-tie"></i> Individual Based Strategic Goal</h4>
+                        <div class="section-content">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="individual-goal-select">
+                                    Select Individual Goal
+                                </label>
+                                <select id="individual-goal-select" class="beautiful-select2">
+                                    <option value="">Select Individual Goal</option>
+                                    <option value="kpi">Key Performance Indicator</option>
+                                    <option value="development">Professional Development</option>
+                                    <option value="innovation">Innovation Contribution</option>
+                                    <option value="leadership">Leadership Objective</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-info-circle"></i> Informed</h4>
+                        <div class="section-content">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="informed-select">
+                                    Select Informed Parties
+                                </label>
+                                <select id="informed-select" class="beautiful-select2" multiple="multiple">
+                                    <option value="stakeholders">Key Stakeholders</option>
+                                    <option value="team">Team Members</option>
+                                    <option value="management">Senior Management</option>
+                                    <option value="board">Board of Directors</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-project-diagram"></i> Dependencies</h4>
+                        <div class="section-content">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="dependencies-input">
+                                    List Dependencies or Prerequisites
+                                </label>
+                                <textarea id="dependencies-input" class="modern-input" placeholder="List any dependencies or prerequisites" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-building"></i> Primary Goal Owner</h4>
+                        <div class="section-content">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="departmentSelect">
+                                    Select Primary Department
+                                </label>
+                                <select id="departmentSelect" class="sg-form-select" style="color: black;">
+                                    <option value="">Select departments</option>
+                                </select>
+                                <div class="tags-container" id="tags-container">
+                                    <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-building"></i> Secondary Goal Owner(s)</h4>
+                        <div class="section-content">
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="departmentSelect1">
+                                    Select Secondary Departments
+                                </label>
+                                <select id="departmentSelect1" class="sg-form-select" style="color: black;">
+                                    <option value="">Select departments</option>
+                                </select>
+                                <div class="tags-container" id="tags-container1">
+                                    <div class="tag"><span class="tag-remove" onclick="removeTag(this)">×</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="framework-modal-footer">
+                <button class="btn btn-secondary" onclick="closeRACIModal()">Back to Main</button>
+                <button class="btn btn-primary" onclick="saveRACI()">Save RACI</button>
+            </div>
         </div>
-<div class="modal-actions" style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 24px; background: #f8f9fa; border-top: 1px solid #e2e8f0;">
-    <button id="openStrategicGoalsRetrieveModal" class="btn btn-primary" style="padding: 8px 16px; border-radius: 4px; background: #1abb9c; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; height: 40px;">
-        <i class="fas fa-download" style="font-size: 14px;"></i> Retrieve
-    </button>
-    <button class="btn btn-primary" onclick="saveStrategicGoals()" style="padding: 8px 16px; border-radius: 4px; background: #1abb9c; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; height: 40px;">
-        <i class="fas fa-save" style="font-size: 14px;"></i> Save & View Table
-    </button>
-</div>
     </div>
-</div>
 
+    <!-- SMART Modal -->
+    <div id="smart-modal" class="framework-modal">
+        <div class="framework-modal-content">
+            <div class="framework-modal-header">
+                <h3><i class="fas fa-bullseye"></i> SMART Framework</h3>
+                <button class="framework-modal-close" onclick="closeSMARTModal()">×</button>
+            </div>
+            <div class="framework-modal-body">
+                <div class="framework-intro">
+                    <i class="fas fa-bullseye"></i>
+                    <h4>Create Well-Defined, Achievable Goals</h4>
+                    <p>The SMART framework ensures your strategic goals are Specific, Measurable, Achievable, Relevant, and Time-bound. This approach increases the likelihood of success by creating clear, actionable objectives.</p>
+                </div>
+                
+                <div class="framework-sections">
+                    <div class="framework-section">
+                        <h4><i class="fas fa-drag-icon"></i> Goal Prioritization</h4>
+                        <div class="section-content">
+                            <div class="instructions">
+                                <h3>How to Prioritize Goals</h3>
+                                <ul>
+                                    <li>Drag and drop goal types to order them based on priority or select the only priority as the highest priority</li>
+                                    <li>Goals at the top have higher strategic importance</li>
+                                    <li>Click on a goal to configure its details</li>
+                                </ul>
+                            </div>
+
+                            <div class="sg-form-group">
+                                <label class="sg-form-label" for="sg-type-select">
+                                    Goal Type (Drag to reorder priority)
+                                </label>
+                                <div class="goal-types-container" id="goalTypesContainer">
+                                    <div class="goal-type-card" draggable="true" data-type="Internal Business Processes">
+                                        <i class="fas fa-cogs"></i> Internal Business Processes
+                                    </div>
+                                    <div class="goal-type-card" draggable="true" data-type="Financial Perspective">
+                                        <i class="fas fa-seedling"></i> Financial Perspective
+                                    </div>
+                                    <div class="goal-type-card" draggable="true" data-type="Customer Perspective">
+                                        <i class="fas fa-shield-alt"></i> Customer Perspective
+                                    </div>
+                                    <div class="goal-type-card" draggable="true" data-type="Learning & Growth">
+                                        <i class="fas fa-users"></i> Learning & Growth
+                                    </div>
+                                </div>
+                                <div class="priority-textboxes">
+                                    <input type="text" class="priority-textbox highest-priority" value="Highest Priority" readonly>
+                                    <input type="text" class="priority-textbox high-priority" value="High Priority" readonly>
+                                    <input type="text" class="priority-textbox medium-priority" value="Medium Priority" readonly>
+                                    <input type="text" class="priority-textbox lowest-priority" value="Lowest Priority" readonly>
+                                </div>
+                                <button id="reset-button" class="refresh-icon" title="Refresh">
+                                    <span class="text">Reset</span>
+                                    <span class="icon">↻</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-bullseye"></i> Targets & Milestones</h4>
+                        <div class="section-content">
+                            <div class="target-configuration" id="targetConfiguration">
+                                <!-- Long-term Target Tile -->
+                                <div class="target-tile" style="border-left-color: #6c757d;">
+                                    <div class="sg-form-group">
+                                        <label class="sg-form-label">
+                                            <i class="fas fa-long-arrow-alt-right" style="color: #6c757d; margin-right: 8px;"></i> 
+                                            Long-term Target
+                                        </label>
+                                        <div class="target-container">
+                                            <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
+                                                <input type="number" class="modern-input target-value" placeholder="Target Value">
+                                                <select class="beautiful-select2 target-uom">
+                                                    <option value="">UoM</option>
+                                                </select>
+                                                <input type="date" class="modern-input target-end-date">
+                                            </div>
+                                            <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
+                                                <input type="number" class="modern-input target-required-budget" placeholder="Req. Budget">
+                                                <input type="number" class="modern-input target-actual-budget" placeholder="Actual Budget">
+                                                <select class="beautiful-select2 target-budget-uom">
+                                                    <option value="">Currency</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="add-target-btn" onclick="addTargetTile()">
+                                <i class="fas fa-plus"></i> Add Target
+                            </button>
+                            <div class="container-footer">
+                                <div style="font-size: 11px; color: #6c757d;">
+                                    <i class="fas fa-info-circle" style="margin-right: 8px;"></i> Targets help track progress toward strategic objectives
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-section">
+                        <h4><i class="fas fa-shield-alt"></i> Risk Management</h4>
+                        <div class="section-content">
+                            <div class="risk-assessment-section">
+                                <div class="section-header">
+                                    <h3 style="color: #dc3545; margin-bottom: 5px; font-size: 1.1rem;">Risk Management Framework</h3>
+                                    <p style="color: #6c757d; line-height: 1.5; font-size: 0.9rem;">
+                                        Proactively identify and mitigate potential risks that could impact your strategic objectives. 
+                                        Assess risk severity, assign ownership, and document mitigation strategies to ensure 
+                                        organizational resilience and goal achievement.
+                                    </p>
+                                </div>
+                                
+                                <div class="risk-indicators">
+                                    <div class="indicator">
+                                        <div class="indicator-icon">
+                                            <i class="fas fa-thermometer-quarter"></i>
+                                        </div>
+                                        <div>
+                                            <div class="indicator-label">Risk Exposure</div>
+                                            <div class="indicator-value"></div>
+                                        </div>
+                                    </div>
+                                    <div class="indicator">
+                                        <div class="indicator-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div>
+                                            <div class="indicator-label">Response Time</div>
+                                            <div class="indicator-value"></div>
+                                        </div>
+                                    </div>
+                                    <div class="indicator">
+                                        <div class="indicator-icon">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <div class="indicator-label">Ownership</div>
+                                            <div class="indicator-value"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="target-tile" style="border-left-color: #dc3545;">
+                                    <div class="sg-form-group">
+                                        <label class="sg-form-label" style="font-size: 0.95rem;">
+                                            <i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 6px; font-size: 16px;"></i> 
+                                            Risk Assessment
+                                        </label>
+                                        <div class="target-container">
+                                            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                                                <select id="risk-assessment-type" class="beautiful-select2" style="padding: 10px 12px;">
+                                                    <option value="">Select Risk Type</option>
+                                                    <option value="financial">Financial Risk</option>
+                                                    <option value="operational">Operational Risk</option>
+                                                    <option value="strategic">Strategic Risk</option>
+                                                    <option value="compliance">Compliance Risk</option>
+                                                </select>
+                                                <select id="risk-severity" class="beautiful-select2" style="padding: 10px 12px;">
+                                                    <option value="">Severity Level</option>
+                                                    <option value="low">Low</option>
+                                                    <option value="medium">Medium</option>
+                                                    <option value="high">High</option>
+                                                    <option value="critical">Critical</option>
+                                                </select>
+                                            </div>
+                                            <div class="budget-input-group" style="grid-template-columns: 1fr; margin-top: 10px;">
+                                                <textarea id="risk-mitigation" class="modern-input" placeholder="Mitigation Strategy" rows="2" style="padding: 10px 12px;"></textarea>
+                                            </div>
+                                            <div class="target-input-group" style="grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                                                <select id="risk-owner" class="beautiful-select2" style="padding: 10px 12px;">
+                                                    <option value="">Risk Owner</option>
+                                                    <option value="finance">Finance Department</option>
+                                                    <option value="operations">Operations Team</option>
+                                                    <option value="it">IT Department</option>
+                                                    <option value="management">Senior Management</option>
+                                                </select>
+                                                <input type="date" id="risk-mitigation-date" class="modern-input" placeholder="Target Mitigation Date" style="padding: 10px 12px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="framework-modal-footer">
+                <button class="btn btn-secondary" onclick="closeSMARTModal()">Back to Main</button>
+                <button class="btn btn-primary" onclick="saveSMART()">Save SMART</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Strategic Goal Modal Functions
+        function sgCloseModal() {
+            document.getElementById('sg-modal-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // RACI Modal Functions
+        function openRACIModal() {
+            document.getElementById('raci-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRACIModal() {
+            document.getElementById('raci-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function saveRACI() {
+            alert('RACI framework saved successfully!');
+            closeRACIModal();
+        }
+
+        // SMART Modal Functions
+        function openSMARTModal() {
+            document.getElementById('smart-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSMARTModal() {
+            document.getElementById('smart-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function saveSMART() {
+            alert('SMART framework saved successfully!');
+            closeSMARTModal();
+        }
+
+        function saveStrategicGoals() {
+            alert('Strategic goals saved successfully!');
+        }
+
+        // Add new target tile
+        function addTargetTile() {
+            const targetConfiguration = document.getElementById('targetConfiguration');
+            const newTile = document.createElement('div');
+            newTile.className = 'target-tile';
+            newTile.style.borderLeftColor = '#6c757d';
+            newTile.innerHTML = `
+                <div class="sg-form-group">
+                    <label class="sg-form-label">
+                        <i class="fas fa-long-arrow-alt-right" style="color: #6c757d; margin-right: 8px;"></i> 
+                        Long-term Target
+                    </label>
+                    <div class="target-container">
+                        <div class="target-input-group" style="grid-template-columns: 1fr 100px 120px;">
+                            <input type="number" class="modern-input target-value" placeholder="Target Value">
+                            <select class="beautiful-select2 target-uom">
+                                <option value="">UoM</option>
+                            </select>
+                            <input type="date" class="modern-input target-end-date">
+                        </div>
+                        <div class="budget-input-group" style="grid-template-columns: 1fr 1fr 100px;">
+                            <input type="number" class="modern-input target-required-budget" placeholder="Req. Budget">
+                            <input type="number" class="modern-input target-actual-budget" placeholder="Actual Budget">
+                            <select class="beautiful-select2 target-budget-uom">
+                                <option value="">Currency</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+            targetConfiguration.appendChild(newTile);
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const sgModal = document.getElementById('sg-modal-overlay');
+            const raciModal = document.getElementById('raci-modal');
+            const smartModal = document.getElementById('smart-modal');
+            
+            if (event.target === sgModal) {
+                sgCloseModal();
+            }
+            if (event.target === raciModal) {
+                closeRACIModal();
+            }
+            if (event.target === smartModal) {
+                closeSMARTModal();
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                sgCloseModal();
+                closeRACIModal();
+                closeSMARTModal();
+            }
+        });
+
+        // Initialize the modal to show on page load
+        window.onload = function() {
+            document.getElementById('sg-modal-overlay').style.display = 'flex';
+        };
+
+        // Simple tag removal function
+        function removeTag(element) {
+            element.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
 
 <div id="retrieve-modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;justify-content:center;align-items:center;">
   <div id="retrieve-modal-content" style="background:#fff;border-radius:8px;width:95%;max-width:1400px;max-height:90vh;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.15);" onclick="event.stopPropagation()">   

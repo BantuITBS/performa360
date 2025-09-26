@@ -1,12 +1,13 @@
 import os
 from pathlib import Path
+from decouple import config
 
 # Path settings
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security and general settings
-SECRET_KEY = 'django-insecure-43a7i-yjqn=s6@ezgq1wzeq@v#ol_9i1unlr_7krkdv8#rlq_z'
-DEBUG = True
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 APPEND_SLASH = False
 
@@ -15,7 +16,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8002",
     "http://localhost:8002",
 ]
-CORS_ALLOW_CREDENTIALS = True  # Allow cookies to be sent with requests
+CORS_ALLOW_CREDENTIALS = True
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
@@ -34,14 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',  # For additional Django management commands
-    'rest_framework',     # For Django REST Framework
-    'corsheaders',        # For CORS handling
-    'perf_mgmt',          # Your app
+    'django_extensions',
+    'rest_framework',
+    'corsheaders',
+    'perf_mgmt',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be first
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_COOKIE_AGE = 3600  # 1 hour
+SESSION_COOKIE_AGE = 3600
 
 ROOT_URLCONF = 'perf_mgmt.urls'
 
@@ -76,14 +77,13 @@ WSGI_APPLICATION = 'perf_mgmt.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'performa360',
-        'USER': 'takawira',
-        'PASSWORD': 'MAZAtaka@45',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
-
 
 # Media Files
 MEDIA_URL = '/media/'
@@ -134,12 +134,8 @@ LOGGING = {
 }
 
 # OpenAI integration
-OPENAI_API_KEY = "sk-..."  # Replace with your real key
+OPENAI_API_KEY = config('OPENAI_API_KEY')
 
-# ---- Optional: Install required packages if missing ----
-# These should be installed in your virtual environment
-# pip install django django_extensions djangorestframework corsheaders phonenumbers spacy openai pillow mysqlclient python-decouple
-
-# SpaCy model note: Load en_core_web_md in your code after installation:
-# import spacy
-# nlp = spacy.load("en_core_web_md")
+# SpaCy model note
+# Run: python -m spacy download en_core_web_md
+# Usage: import spacy; nlp = spacy.load("en_core_web_md")
