@@ -1,1 +1,18 @@
-".env" 
+# Django/Python
+.env
+*.pyc
+__pycache__/
+/djangoenv/
+*.log
+*.sqlite3
+/media/
+/staticfiles/
+
+# IDEs and editors
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
