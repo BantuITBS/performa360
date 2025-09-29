@@ -9,6 +9,7 @@ __pycache__/
 /staticfiles/
 
 # Large media files
+*.mp4
 *.avi
 *.mov
 *.wmv
